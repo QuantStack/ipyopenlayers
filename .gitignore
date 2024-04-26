@@ -153,3 +153,5 @@ ipyopenlayers/nbextension/index.*
 
 # Packed lab extensions
 ipyopenlayers/labextension
+
+.yarn
