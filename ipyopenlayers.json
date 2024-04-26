@@ -1,0 +1,5 @@
+{
+  "load_extensions": {
+    "ipyopenlayers/extension": true
+  }
+}
