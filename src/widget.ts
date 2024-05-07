@@ -15,7 +15,7 @@ import { Map } from 'ol';
 import OSM from 'ol/source/OSM';
 import TileLayer from 'ol/layer/Tile';
 import View from 'ol/View';
-
+import XYZ from 'ol/source/XYZ';
 import 'ol/ol.css';
 
 
@@ -48,8 +48,8 @@ export class MapModel extends DOMWidgetModel {
   static model_name = 'MapModel';
   static model_module = MODULE_NAME;
   static model_module_version = MODULE_VERSION;
-  static view_name = 'MapView'; // Set to null if no view
-  static view_module = MODULE_NAME; // Set to null if no view
+  static view_name = 'MapView'; 
+  static view_module = MODULE_NAME; 
   static view_module_version = MODULE_VERSION;
 }
 
@@ -80,17 +80,14 @@ export class MapView extends DOMWidgetView {
     });
   }
 
-  layers_changed() {
+  layers_changed(){  
     const layers = this.model.get('layers') as TileLayerModel[];
-
     this.layer_views.update(layers);
   }
 
   remove_layer_view(child_view: TileLayerView) {
-    // TODO Implement layer removal
-    console.log('Trying to remove TileLayerView', child_view);
-
-    child_view.remove();
+      this.map.removeLayer(child_view.tileLayer);
+      child_view.remove();
   }
 
   async add_layer_model(child_model: TileLayerModel) {
@@ -112,6 +109,8 @@ export class MapView extends DOMWidgetView {
 
   layer_views: ViewList<TileLayerView>;
 }
+
+
 
 
 export class TileLayerModel extends WidgetModel {
@@ -136,17 +135,44 @@ export class TileLayerModel extends WidgetModel {
   static model_name = 'TileLayerModel';
   static model_module = MODULE_NAME;
   static model_module_version = MODULE_VERSION;
-  static view_name = 'TileLayerView'; // Set to null if no view
-  static view_module = MODULE_NAME; // Set to null if no view
+  static view_name = 'TileLayerView'; 
+  static view_module = MODULE_NAME; 
   static view_module_version = MODULE_VERSION;
 }
 
 export class TileLayerView extends WidgetView {
   render() {
     super.render();
+    // TODO Support url setting
+    const url= this.model.get('url')
+
+    this.tileLayer = new TileLayer({
+      source: new XYZ({
+        url: url
+      })
+    });
+
+    this.url_changed();
+    this.model.on('change:url', this.url_changed, this);
+  }
+
+  url_changed() {
+      // TODO React on url change!!
+      const newUrl = this.model.get('url');
+      if (newUrl) {
+        const newSource = new XYZ({
+          url: newUrl
+        });
+        console.log('changed')
+        this.tileLayer.setSource(newSource);
+  
+      }}  
+
+  tileLayer: TileLayer<OSM>;
+
 
     // TODO Support url setting
-
+   /*
     this.tileLayer = new TileLayer({
       source: new OSM(),
     });
@@ -157,7 +183,15 @@ export class TileLayerView extends WidgetView {
 
   url_changed() {
     // TODO React on url change!!
-  }
+    const newUrl = this.model.get('url');
+    if (newUrl) {
+      const newSource = new XYZ({
+        url: newUrl
+      });
 
-  tileLayer: TileLayer<OSM>;
+      this.tileLayer.setSource(newSource);
+}
+}
+  tileLayer: TileLayer<OSM>;*/
+
 }
