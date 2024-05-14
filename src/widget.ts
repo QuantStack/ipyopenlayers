@@ -177,13 +177,11 @@ export class TileLayerView extends WidgetView {
   }
 
   url_changed() {
-      // TODO React on url change!!
       const newUrl = this.model.get('url');
       if (newUrl) {
         const newSource = new XYZ({
           url: newUrl
         });
-        console.log('changed')
         this.tileLayer.setSource(newSource);
   
       }}  

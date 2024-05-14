@@ -23,15 +23,6 @@ class TileLayer(Widget):
     _view_module_version = Unicode(module_version).tag(sync=True)
     url = Unicode('https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png').tag(sync=True)
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.observe(self._on_url_change, 'url')
-
-    def _on_url_change(self, change):
-        if 'new' in change:
-            new_url = change['new']
-            print('1')
-            self.send({'event': 'url_changed', 'new_url': new_url})
             
 
 class Map(DOMWidget):
@@ -56,7 +47,7 @@ class Map(DOMWidget):
     def remove_layer(self, layer):
         self.layers = [x for x in self.layers if x != layer]
 
-    def substitute(self, old, new):
+    def substitute_layer(self, old, new):
         if old.model_id not in self._layer_ids:
             print("Could not substitute layer: layer not in layergroup.")
         self.layers = tuple(
@@ -64,7 +55,7 @@ class Map(DOMWidget):
         )
 
 
-    def clear_layer(self):
+    def clear_layers(self):
         self.layers = []
 
         
