@@ -162,7 +162,6 @@ export class TileLayerView extends WidgetView {
         const newSource = new XYZ({
           url: newUrl
         });
-        console.log('changed')
         this.tileLayer.setSource(newSource);
   
       }}  
