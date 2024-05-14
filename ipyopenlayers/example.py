@@ -47,7 +47,7 @@ class Map(DOMWidget):
     def remove_layer(self, layer):
         self.layers = [x for x in self.layers if x != layer]
 
-    def substitute(self, old, new):
+    def substitute_layer(self, old, new):
         if old.model_id not in self._layer_ids:
             print("Could not substitute layer: layer not in layergroup.")
         self.layers = tuple(
