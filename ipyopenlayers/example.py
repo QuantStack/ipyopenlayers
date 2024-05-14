@@ -55,7 +55,7 @@ class Map(DOMWidget):
         )
 
 
-    def clear_layer(self):
+    def clear_layers(self):
         self.layers = []
 
         
