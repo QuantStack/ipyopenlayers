@@ -23,15 +23,6 @@ class TileLayer(Widget):
     _view_module_version = Unicode(module_version).tag(sync=True)
     url = Unicode('https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png').tag(sync=True)
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.observe(self._on_url_change, 'url')
-
-    def _on_url_change(self, change):
-        if 'new' in change:
-            new_url = change['new']
-            print('1')
-            self.send({'event': 'url_changed', 'new_url': new_url})
             
 
 class Map(DOMWidget):
