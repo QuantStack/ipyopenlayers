@@ -23,6 +23,7 @@ import { MODULE_NAME, MODULE_VERSION } from './version';
 
 // Import the CSS
 import '../css/widget.css';
+const DEFAULT_LOCATION = [0.0, 0.0];
 
 export class MapModel extends DOMWidgetModel {
   defaults() {
@@ -36,6 +37,8 @@ export class MapModel extends DOMWidgetModel {
       _view_module_version: MapModel.view_module_version,
       value: 'Hello World',
       layers: [],
+      center: DEFAULT_LOCATION,
+
     };
   }
 
@@ -67,6 +70,11 @@ export class MapView extends DOMWidgetView {
       this.remove_layer_view,
       this
     );
+    this.control_views = new ViewList(
+      this.add_control_model,
+      this.remove_control_view,
+      this
+    );
 
     this.layers_changed();
     this.model.on('change:layers', this.layers_changed, this);
@@ -89,6 +97,18 @@ export class MapView extends DOMWidgetView {
       this.map.removeLayer(child_view.tileLayer);
       child_view.remove();
   }
+
+  leaflet_events() {
+    this.obj.on('moveend', (e) => {
+      if (!this.dirty) {
+        this.dirty = true;
+        const c = e.target.getCenter();
+        this.model.set('center', [c.lat, c.lng]);
+        this.dirty = false;
+      }
+    );
+  }
+
 
   async add_layer_model(child_model: TileLayerModel) {
     const view = await this.create_child_view<TileLayerView>(child_model, {
@@ -169,29 +189,5 @@ export class TileLayerView extends WidgetView {
       }}  
 
   tileLayer: TileLayer<OSM>;
-
-
-    // TODO Support url setting
-   /*
-    this.tileLayer = new TileLayer({
-      source: new OSM(),
-    });
-
-    this.url_changed();
-    this.model.on('change:url', this.url_changed, this);
-  }
-
-  url_changed() {
-    // TODO React on url change!!
-    const newUrl = this.model.get('url');
-    if (newUrl) {
-      const newSource = new XYZ({
-        url: newUrl
-      });
-
-      this.tileLayer.setSource(newSource);
-}
-}
-  tileLayer: TileLayer<OSM>;*/
 
 }
