@@ -18,13 +18,11 @@ import View from 'ol/View';
 import XYZ from 'ol/source/XYZ';
 import 'ol/ol.css';
 
-
 import { MODULE_NAME, MODULE_VERSION } from './version';
-
-// Import the CSS
 import '../css/widget.css';
-const DEFAULT_LOCATION = [0.0, 0.0];
+import { useGeographic } from 'ol/proj';
 
+const DEFAULT_LOCATION = [0.0, 0.0];
 export class MapModel extends DOMWidgetModel {
   defaults() {
     return {
@@ -37,6 +35,7 @@ export class MapModel extends DOMWidgetModel {
       _view_module_version: MapModel.view_module_version,
       value: 'Hello World',
       layers: [],
+      zoom: 2,
       center: DEFAULT_LOCATION,
 
     };
@@ -58,6 +57,7 @@ export class MapModel extends DOMWidgetModel {
 
 export class MapView extends DOMWidgetView {
   render() {
+    useGeographic();
     this.el.classList.add('custom-widget');
 
     this.mapContainer = document.createElement('div');
@@ -70,21 +70,24 @@ export class MapView extends DOMWidgetView {
       this.remove_layer_view,
       this
     );
-    this.control_views = new ViewList(
-      this.add_control_model,
-      this.remove_control_view,
-      this
-    );
+
 
     this.layers_changed();
     this.model.on('change:layers', this.layers_changed, this);
+    this.model.on('change:zoom', this.zoom_changed, this)
+    this.model.on('change:center', this.center_changed, this);
 
     this.map = new Map({
       target: this.mapContainer,
       view: new View({
-        center: [0, 0],
-        zoom: 2,
+        center: this.model.get('center'),        
+        zoom : this.model.get('zoom'),
       }),
+      layers: [
+        new TileLayer({
+            source: new OSM()
+        })
+    ]
     });
   }
 
@@ -92,23 +95,23 @@ export class MapView extends DOMWidgetView {
     const layers = this.model.get('layers') as TileLayerModel[];
     this.layer_views.update(layers);
   }
+  zoom_changed() {
+    const newZoom = this.model.get('zoom');
+    if (newZoom !== undefined && newZoom !== null) {
+        this.map.getView().setZoom(newZoom);
+    }
+}
+  center_changed() {
+    const newCenter = this.model.get('center');
+    if (newCenter !== undefined && newCenter !== null) {
+        this.map.getView().setCenter(newCenter);
+    }
+}
 
   remove_layer_view(child_view: TileLayerView) {
       this.map.removeLayer(child_view.tileLayer);
       child_view.remove();
   }
-
-  leaflet_events() {
-    this.obj.on('moveend', (e) => {
-      if (!this.dirty) {
-        this.dirty = true;
-        const c = e.target.getCenter();
-        this.model.set('center', [c.lat, c.lng]);
-        this.dirty = false;
-      }
-    );
-  }
-
 
   async add_layer_model(child_model: TileLayerModel) {
     const view = await this.create_child_view<TileLayerView>(child_model, {
@@ -129,8 +132,6 @@ export class MapView extends DOMWidgetView {
 
   layer_views: ViewList<TileLayerView>;
 }
-
-
 
 
 export class TileLayerModel extends WidgetModel {
@@ -163,7 +164,6 @@ export class TileLayerModel extends WidgetModel {
 export class TileLayerView extends WidgetView {
   render() {
     super.render();
-    // TODO Support url setting
     const url= this.model.get('url')
 
     this.tileLayer = new TileLayer({
@@ -186,6 +186,7 @@ export class TileLayerView extends WidgetView {
   
       }}  
 
+  
   tileLayer: TileLayer<OSM>;
 
 }
