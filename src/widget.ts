@@ -21,8 +21,11 @@ import 'ol/ol.css';
 import { MODULE_NAME, MODULE_VERSION } from './version';
 import '../css/widget.css';
 import { useGeographic } from 'ol/proj';
+import * as olControl from 'ol/control';
+
 
 const DEFAULT_LOCATION = [0.0, 0.0];
+
 export class MapModel extends DOMWidgetModel {
   defaults() {
     return {
@@ -71,12 +74,6 @@ export class MapView extends DOMWidgetView {
       this
     );
 
-
-    this.layers_changed();
-    this.model.on('change:layers', this.layers_changed, this);
-    this.model.on('change:zoom', this.zoom_changed, this)
-    this.model.on('change:center', this.center_changed, this);
-
     this.map = new Map({
       target: this.mapContainer,
       view: new View({
@@ -89,6 +86,17 @@ export class MapView extends DOMWidgetView {
         })
     ]
     });
+
+    this.layers_changed();
+    this.model.on('change:layers', this.layers_changed, this);
+    this.model.on('change:zoom', this.zoom_changed, this)
+    this.model.on('change:center', this.center_changed, this);
+    this.model.on('change:zoom_slider', this.addZoomSliderControl, this);
+    this.model.on('change:scale_line', this.addScaleLineControl, this);
+    this.model.on('change:full_screen', this.addFullScreenControl, this);
+    this.model.on('change:mouse_position', this.addMousePositionControl, this);
+    
+    
   }
 
   layers_changed(){  
@@ -126,6 +134,42 @@ export class MapView extends DOMWidgetView {
     return view;
   }
 
+  addZoomControl() {
+    const nv_zoom_slider = this.model.get('zoom_slider');
+    if (nv_zoom_slider !== undefined && nv_zoom_slider !== null) {
+      this.map.addControl(new olControl.Zoom());
+    }
+  }
+  
+  addZoomSliderControl() {
+    const nv_zoom_slider = this.model.get('zoom_slider');
+    if (nv_zoom_slider !== undefined && nv_zoom_slider !== null) {
+      this.map.addControl(new olControl.ZoomSlider());
+    }
+  }
+  
+  addScaleLineControl() {
+    const nv_scale_line = this.model.get('scale_line');
+    if (nv_scale_line !== undefined && nv_scale_line !== null) {
+      this.map.addControl(new olControl.ScaleLine());
+    }
+  }
+  
+  addFullScreenControl() {
+    const nv_full_screen = this.model.get('full_screen');
+    if (nv_full_screen !== undefined && nv_full_screen !== null) {
+      this.map.addControl(new olControl.FullScreen());
+    }
+  }
+
+  addMousePositionControl() {
+    const mousePositionEnabled = this.model.get('mouse_position');
+    if (mousePositionEnabled !== undefined && mousePositionEnabled !== null) {
+      this.map.addControl(new olControl.MousePosition());
+    }
+  }
+  
+  
   mapContainer: HTMLDivElement;
 
   map: Map;

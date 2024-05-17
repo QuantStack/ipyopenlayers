@@ -8,9 +8,11 @@
 TODO: Add module docstring
 """
 
-from ipywidgets import DOMWidget, Widget, widget_serialization
-from traitlets import Unicode, List, Instance, CFloat 
+from ipywidgets import DOMWidget, Widget, widget_serialization, HTML
+from traitlets import Unicode, List, Instance, CFloat, Bool,Int, Float
 from ._frontend import module_name, module_version
+import random
+
 def_loc = [0.0, 0.0]
 
 class TileLayer(Widget):
@@ -36,7 +38,12 @@ class Map(DOMWidget):
     center = List(def_loc).tag(sync=True, o=True)
     zoom = CFloat(2).tag(sync=True, o=True)
     layers = List(Instance(TileLayer)).tag(sync=True, **widget_serialization)
-
+    title = Unicode('').tag(sync=True)
+    zoom_slider = Bool(False).tag(sync=True)
+    scale_line = Bool(False).tag(sync=True)
+    full_screen = Bool(False).tag(sync=True)
+    mouse_position= Bool(False).tag(sync=True)
+    
     def __init__(self, center=None, zoom=None, **kwargs):
         super().__init__(**kwargs)
         
@@ -54,5 +61,17 @@ class Map(DOMWidget):
 
     def clear_layers(self):
         self.layers = []
+
+    def add_zoom_slider(self):
+            self.zoom_slider = True
+           
+    def add_scale_line(self):
+        self.scale_line=True
+
+    def add_full_screen(self):
+        self.full_screen=True
+
+    def coordinates(self):
+        self.mouse_position=True
 
 
