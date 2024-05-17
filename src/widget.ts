@@ -15,15 +15,14 @@ import { Map } from 'ol';
 import OSM from 'ol/source/OSM';
 import TileLayer from 'ol/layer/Tile';
 import View from 'ol/View';
-
+import XYZ from 'ol/source/XYZ';
 import 'ol/ol.css';
 
-
 import { MODULE_NAME, MODULE_VERSION } from './version';
-
-// Import the CSS
 import '../css/widget.css';
+import { useGeographic } from 'ol/proj';
 
+const DEFAULT_LOCATION = [0.0, 0.0];
 export class MapModel extends DOMWidgetModel {
   defaults() {
     return {
@@ -36,6 +35,9 @@ export class MapModel extends DOMWidgetModel {
       _view_module_version: MapModel.view_module_version,
       value: 'Hello World',
       layers: [],
+      zoom: 2,
+      center: DEFAULT_LOCATION,
+
     };
   }
 
@@ -48,13 +50,14 @@ export class MapModel extends DOMWidgetModel {
   static model_name = 'MapModel';
   static model_module = MODULE_NAME;
   static model_module_version = MODULE_VERSION;
-  static view_name = 'MapView'; // Set to null if no view
-  static view_module = MODULE_NAME; // Set to null if no view
+  static view_name = 'MapView'; 
+  static view_module = MODULE_NAME; 
   static view_module_version = MODULE_VERSION;
 }
 
 export class MapView extends DOMWidgetView {
   render() {
+    useGeographic();
     this.el.classList.add('custom-widget');
 
     this.mapContainer = document.createElement('div');
@@ -68,29 +71,46 @@ export class MapView extends DOMWidgetView {
       this
     );
 
+
     this.layers_changed();
     this.model.on('change:layers', this.layers_changed, this);
+    this.model.on('change:zoom', this.zoom_changed, this)
+    this.model.on('change:center', this.center_changed, this);
 
     this.map = new Map({
       target: this.mapContainer,
       view: new View({
-        center: [0, 0],
-        zoom: 2,
+        center: this.model.get('center'),        
+        zoom : this.model.get('zoom'),
       }),
+      layers: [
+        new TileLayer({
+            source: new OSM()
+        })
+    ]
     });
   }
 
-  layers_changed() {
+  layers_changed(){  
     const layers = this.model.get('layers') as TileLayerModel[];
-
     this.layer_views.update(layers);
   }
+  zoom_changed() {
+    const newZoom = this.model.get('zoom');
+    if (newZoom !== undefined && newZoom !== null) {
+        this.map.getView().setZoom(newZoom);
+    }
+}
+  center_changed() {
+    const newCenter = this.model.get('center');
+    if (newCenter !== undefined && newCenter !== null) {
+        this.map.getView().setCenter(newCenter);
+    }
+}
 
   remove_layer_view(child_view: TileLayerView) {
-    // TODO Implement layer removal
-    console.log('Trying to remove TileLayerView', child_view);
-
-    child_view.remove();
+      this.map.removeLayer(child_view.tileLayer);
+      child_view.remove();
   }
 
   async add_layer_model(child_model: TileLayerModel) {
@@ -136,19 +156,20 @@ export class TileLayerModel extends WidgetModel {
   static model_name = 'TileLayerModel';
   static model_module = MODULE_NAME;
   static model_module_version = MODULE_VERSION;
-  static view_name = 'TileLayerView'; // Set to null if no view
-  static view_module = MODULE_NAME; // Set to null if no view
+  static view_name = 'TileLayerView'; 
+  static view_module = MODULE_NAME; 
   static view_module_version = MODULE_VERSION;
 }
 
 export class TileLayerView extends WidgetView {
   render() {
     super.render();
-
-    // TODO Support url setting
+    const url= this.model.get('url')
 
     this.tileLayer = new TileLayer({
-      source: new OSM(),
+      source: new XYZ({
+        url: url
+      })
     });
 
     this.url_changed();
@@ -156,8 +177,16 @@ export class TileLayerView extends WidgetView {
   }
 
   url_changed() {
-    // TODO React on url change!!
-  }
+      const newUrl = this.model.get('url');
+      if (newUrl) {
+        const newSource = new XYZ({
+          url: newUrl
+        });
+        this.tileLayer.setSource(newSource);
+  
+      }}  
 
+  
   tileLayer: TileLayer<OSM>;
+
 }
