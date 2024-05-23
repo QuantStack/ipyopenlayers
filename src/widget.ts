@@ -21,7 +21,10 @@ import 'ol/ol.css';
 import { MODULE_NAME, MODULE_VERSION } from './version';
 import '../css/widget.css';
 import { useGeographic } from 'ol/proj';
-import * as olControl from 'ol/control';
+import Overlay from 'ol/Overlay';
+import ImageLayer from 'ol/layer/Image';
+import ImageSource from 'ol/source/Image';
+import ImageStatic from 'ol/source/ImageStatic';
 
 
 const DEFAULT_LOCATION = [0.0, 0.0];
@@ -47,6 +50,7 @@ export class MapModel extends DOMWidgetModel {
   static serializers: ISerializers = {
     ...DOMWidgetModel.serializers,
     layers: { deserialize: unpack_models },
+    OverLayers: { deserialize: unpack_models },
     // Add any extra serializers here
   };
 
@@ -74,6 +78,12 @@ export class MapView extends DOMWidgetView {
       this
     );
 
+    this.Overlayer_views = new ViewList<ImageOverLayerView>(
+      this.add_overlayer_model,
+      this.remove_overlayer_view,
+      this,
+    );
+
     this.map = new Map({
       target: this.mapContainer,
       view: new View({
@@ -84,18 +94,22 @@ export class MapView extends DOMWidgetView {
         new TileLayer({
             source: new OSM()
         })
-    ]
+    ],
+    });
+
+    this.imageElement = document.createElement('img');
+    this.overlay = new Overlay({
+      element: this.imageElement,
+      position: this.model.get('image_bounds'), 
     });
 
     this.layers_changed();
     this.model.on('change:layers', this.layers_changed, this);
+    this.model.on('change:OverLayers', this.OverLayers_changed, this);
+    this.model.on('change:image_bounds', this.update_position_overlay, this);
+
     this.model.on('change:zoom', this.zoom_changed, this)
     this.model.on('change:center', this.center_changed, this);
-    this.model.on('change:zoom_slider', this.addZoomSliderControl, this);
-    this.model.on('change:scale_line', this.addScaleLineControl, this);
-    this.model.on('change:full_screen', this.addFullScreenControl, this);
-    this.model.on('change:mouse_position', this.addMousePositionControl, this);
-    
     
   }
 
@@ -103,6 +117,12 @@ export class MapView extends DOMWidgetView {
     const layers = this.model.get('layers') as TileLayerModel[];
     this.layer_views.update(layers);
   }
+
+  OverLayers_changed() {
+      const OverLayers = this.model.get('OverLayers') as ImageOverLayerModel[];
+      this.Overlayer_views.update(OverLayers);
+    } 
+  
   zoom_changed() {
     const newZoom = this.model.get('zoom');
     if (newZoom !== undefined && newZoom !== null) {
@@ -120,12 +140,19 @@ export class MapView extends DOMWidgetView {
       this.map.removeLayer(child_view.tileLayer);
       child_view.remove();
   }
+  remove_overlayer_view(child_view: ImageOverLayerView){
+    if (child_view.overlay) {
+      this.map.removeOverlay(child_view.overlay);
+    }
+    child_view.remove();
+  }
+
 
   async add_layer_model(child_model: TileLayerModel) {
     const view = await this.create_child_view<TileLayerView>(child_model, {
       map_view: this,
     });
-
+    
     this.map.addLayer(view.tileLayer);
 
     this.displayed.then(() => {
@@ -133,48 +160,52 @@ export class MapView extends DOMWidgetView {
     });
     return view;
   }
+  async add_overlayer_model(child_model: ImageOverLayerModel) {
 
-  addZoomControl() {
-    const nv_zoom_slider = this.model.get('zoom_slider');
-    if (nv_zoom_slider !== undefined && nv_zoom_slider !== null) {
-      this.map.addControl(new olControl.Zoom());
+    const view = await this.create_child_view<ImageOverLayerView>(child_model, {
+      map_view: this,
+    });
+
+    view.overlay = this.overlay;
+    this.map.addOverlay(this.overlay);
+
+    const imageSource = view.imageLayer.getSource() as ImageStatic;
+    const imageUrl = imageSource.getUrl(); 
+
+    if (imageUrl) {
+      this.imageElement.src = imageUrl;
+    } else {
+      console.error('Image URL is undefined');
     }
-  }
-  
-  addZoomSliderControl() {
-    const nv_zoom_slider = this.model.get('zoom_slider');
-    if (nv_zoom_slider !== undefined && nv_zoom_slider !== null) {
-      this.map.addControl(new olControl.ZoomSlider());
-    }
-  }
-  
-  addScaleLineControl() {
-    const nv_scale_line = this.model.get('scale_line');
-    if (nv_scale_line !== undefined && nv_scale_line !== null) {
-      this.map.addControl(new olControl.ScaleLine());
-    }
-  }
-  
-  addFullScreenControl() {
-    const nv_full_screen = this.model.get('full_screen');
-    if (nv_full_screen !== undefined && nv_full_screen !== null) {
-      this.map.addControl(new olControl.FullScreen());
-    }
+
+    this.displayed.then(() => {
+      view.trigger('displayed', this);
+    });
+
+    const imageExtent = imageSource.getImageExtent();
+    this.overlay.setPosition(imageExtent);
+
+    view.on('image_bounds_changed', (nv_image_bounds: number[]) => {
+      this.update_position_overlay(nv_image_bounds);
+    });
+
+
+    return view;
   }
 
-  addMousePositionControl() {
-    const mousePositionEnabled = this.model.get('mouse_position');
-    if (mousePositionEnabled !== undefined && mousePositionEnabled !== null) {
-      this.map.addControl(new olControl.MousePosition());
+  update_position_overlay(nv_image_bounds: number[]) {
+    if (nv_image_bounds !== undefined && nv_image_bounds !== null) {
+      this.overlay.setPosition(nv_image_bounds)
     }
-  }
-  
-  
+}
+
+ 
+  imageElement : HTMLImageElement;
   mapContainer: HTMLDivElement;
-
+  overlay : Overlay
   map: Map;
-
   layer_views: ViewList<TileLayerView>;
+  Overlayer_views :ViewList<ImageOverLayerView>
 }
 
 
@@ -233,4 +264,77 @@ export class TileLayerView extends WidgetView {
   
   tileLayer: TileLayer<OSM>;
 
+}
+
+
+export class ImageOverLayerModel extends DOMWidgetModel {
+  defaults() {
+    return {
+      ...super.defaults(),
+      _model_name: ImageOverLayerModel.model_name,
+      _model_module: ImageOverLayerModel.model_module,
+      _model_module_version: ImageOverLayerModel.model_module_version,
+      _view_name: ImageOverLayerModel.view_name,
+      _view_module: ImageOverLayerModel.view_module,
+      _view_module_version: ImageOverLayerModel.view_module_version,
+      value: 'Hello World'
+    };
+  }
+ 
+ 
+  static serializers: ISerializers = {
+    ...DOMWidgetModel.serializers,
+    // Ajoutez ici tous les sérialiseurs supplémentaires
+  };
+  static model_name = 'ImageOverLayerModel';
+  static model_module = MODULE_NAME;
+  static model_module_version = MODULE_VERSION;
+  static view_name = 'ImageOverLayerView';
+  static view_module = MODULE_NAME;
+  static view_module_version = MODULE_VERSION;
+ }
+ 
+ 
+ export class ImageOverLayerView extends DOMWidgetView {
+  imageLayer :ImageLayer<ImageSource>;
+  overlay: Overlay | null;
+  render() {
+    super.render();
+    this.model_events(); 
+  }
+  initialize(parameters: WidgetView.IInitializeParameters<WidgetModel>) {
+    super.initialize(parameters);
+    this.create_image_layer(); 
+    this.model_events(); 
+  }
+  create_image_layer() {
+    this.imageLayer = new ImageLayer ({
+      source: new ImageStatic({
+        url: this.model.get('image_url'),
+        imageExtent: this.model.get('image_bounds')
+      })
+    });
+  }
+
+  model_events() {
+    this.listenTo(this.model, 'change:image_url', () => {
+      const url = this.model.get('image_url');
+
+      if (url) {
+        const newSource = new ImageStatic({
+          url: this.model.get('image_url'),
+          imageExtent: this.model.get('image_bounds')
+        });
+        this.imageLayer.setSource(newSource)
+    } 
+  });
+  
+    this.listenTo(this.model, 'change:image_bounds', () => {
+      const nv_image_bounds = this.model.get('image_bounds');
+      this.imageLayer.setExtent(nv_image_bounds);
+      this.trigger('image_bounds_changed', nv_image_bounds);
+      
+
+    });
+  }
 }

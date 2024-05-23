@@ -11,7 +11,6 @@ TODO: Add module docstring
 from ipywidgets import DOMWidget, Widget, widget_serialization, HTML
 from traitlets import Unicode, List, Instance, CFloat, Bool,Int, Float
 from ._frontend import module_name, module_version
-import random
 
 def_loc = [0.0, 0.0]
 
@@ -24,7 +23,19 @@ class TileLayer(Widget):
     _view_module = Unicode(module_name).tag(sync=True)
     _view_module_version = Unicode(module_version).tag(sync=True)
     url = Unicode('https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png').tag(sync=True)
-   
+
+class ImageOverLayer (DOMWidget):
+
+   _model_name = Unicode('ImageOverLayerModel').tag(sync=True)
+   _model_module = Unicode(module_name).tag(sync=True)
+   _model_module_version = Unicode(module_version).tag(sync=True)
+   _view_name = Unicode('ImageOverLayerView').tag(sync=True)
+   _view_module = Unicode(module_name).tag(sync=True)
+   _view_module_version = Unicode(module_version).tag(sync=True)
+
+   image_url = Unicode('').tag(sync=True)
+   image_bounds = List([0, 0]).tag(sync=True)
+
 
 class Map(DOMWidget):
     _model_name = Unicode('MapModel').tag(sync=True)
@@ -38,6 +49,8 @@ class Map(DOMWidget):
     center = List(def_loc).tag(sync=True, o=True)
     zoom = CFloat(2).tag(sync=True, o=True)
     layers = List(Instance(TileLayer)).tag(sync=True, **widget_serialization)
+    OverLayers=List(Instance(ImageOverLayer)).tag(sync=True, **widget_serialization)
+
     title = Unicode('').tag(sync=True)
     zoom_slider = Bool(False).tag(sync=True)
     scale_line = Bool(False).tag(sync=True)
@@ -56,22 +69,17 @@ class Map(DOMWidget):
     def add_layer(self, layer):
         self.layers = self.layers + [layer]
 
+    def add_Overlayer(self, Overlayer):
+        self.OverLayers = self.OverLayers + [Overlayer]
+
     def remove_layer(self, layer):
         self.layers = [x for x in self.layers if x != layer]
+    
+    def remove_Overlayer(self, Overlayer):
+        self.OverLayers = [x for x in self.OverLayers if x != Overlayer]
 
     def clear_layers(self):
         self.layers = []
 
-    def add_zoom_slider(self):
-            self.zoom_slider = True
-           
-    def add_scale_line(self):
-        self.scale_line=True
-
-    def add_full_screen(self):
-        self.full_screen=True
-
-    def coordinates(self):
-        self.mouse_position=True
 
 
