@@ -49,7 +49,7 @@ class Map(DOMWidget):
     center = List(def_loc).tag(sync=True, o=True)
     zoom = CFloat(2).tag(sync=True, o=True)
     layers = List(Instance(TileLayer)).tag(sync=True, **widget_serialization)
-    OverLayers=List(Instance(ImageOverLayer)).tag(sync=True, **widget_serialization)
+    over_layers=List(Instance(ImageOverLayer)).tag(sync=True, **widget_serialization)
 
     title = Unicode('').tag(sync=True)
     zoom_slider = Bool(False).tag(sync=True)
@@ -69,17 +69,14 @@ class Map(DOMWidget):
     def add_layer(self, layer):
         self.layers = self.layers + [layer]
 
-    def add_Overlayer(self, Overlayer):
-        self.OverLayers = self.OverLayers + [Overlayer]
+    def add_Overlayer(self, over_layer):
+        self.over_layers = self.over_layers + [over_layer]
 
     def remove_layer(self, layer):
         self.layers = [x for x in self.layers if x != layer]
     
-    def remove_Overlayer(self, Overlayer):
-        self.OverLayers = [x for x in self.OverLayers if x != Overlayer]
+    def remove_Overlayer(self, over_layer):
+        self.over_layers = [x for x in self.over_layers if x != over_layer]
 
     def clear_layers(self):
         self.layers = []
-
-
-
