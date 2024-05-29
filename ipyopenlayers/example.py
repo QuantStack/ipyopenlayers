@@ -51,12 +51,6 @@ class Map(DOMWidget):
     layers = List(Instance(TileLayer)).tag(sync=True, **widget_serialization)
     over_layers=List(Instance(ImageOverLayer)).tag(sync=True, **widget_serialization)
 
-    title = Unicode('').tag(sync=True)
-    zoom_slider = Bool(False).tag(sync=True)
-    scale_line = Bool(False).tag(sync=True)
-    full_screen = Bool(False).tag(sync=True)
-    mouse_position= Bool(False).tag(sync=True)
-    
     def __init__(self, center=None, zoom=None, **kwargs):
         super().__init__(**kwargs)
         
