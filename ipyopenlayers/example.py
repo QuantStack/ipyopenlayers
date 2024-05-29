@@ -69,7 +69,7 @@ class Map(DOMWidget):
     def remove_layer(self, layer):
         self.layers = [x for x in self.layers if x != layer]
     
-    def remove_Overlayer(self, over_layer):
+    def remove_overlayer(self, over_layer):
         self.over_layers = [x for x in self.over_layers if x != over_layer]
 
     def clear_layers(self):
