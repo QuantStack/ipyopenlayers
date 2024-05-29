@@ -46,7 +46,7 @@ export class MapModel extends DOMWidgetModel {
   static serializers: ISerializers = {
     ...DOMWidgetModel.serializers,
     layers: { deserialize: unpack_models },
-    over_layers: { deserialize: unpack_models },
+    overlays: { deserialize: unpack_models },
     // Add any extra serializers here
   };
 
@@ -67,15 +67,15 @@ export class MapView extends DOMWidgetView {
     this.mapContainer.style.height = '500px';
     this.el.appendChild(this.mapContainer);
 
-    this.layer_views = new ViewList(
-      this.add_layer_model,
-      this.remove_layer_view,
+    this.layerViews = new ViewList(
+      this.addLayerModel,
+      this.removeLayerView,
       this,
     );
 
-    this.Overlayer_views = new ViewList<ImageOverLayerView>(
-      this.add_over_layer_model,
-      this.remove_over_layer_view,
+    this.overlayViews = new ViewList<ImageOverLayView>(
+      this.addOverlayModel,
+      this.removeOverlayView,
       this,
     );
 
@@ -92,52 +92,50 @@ export class MapView extends DOMWidgetView {
       ],
     });
 
-    this.layers_changed();
-    this.model.on('change:layers', this.layers_changed, this);
-    this.model.on('change:over_layers', this.OverLayers_changed, this);
-    //this.model.on('change:image_bounds', this.update_position_overlay, this);
-    this.model.on('change:zoom', this.zoom_changed, this);
-    this.model.on('change:center', this.center_changed, this);
+    this.layersChanged();
+    this.model.on('change:layers', this.layersChanged, this);
+    this.model.on('change:overlays', this.overlayChanged, this);
+    this.model.on('change:zoom', this.zoomChanged, this);
+    this.model.on('change:center', this.centerChanged, this);
   }
 
-  layers_changed() {
+  layersChanged() {
     const layers = this.model.get('layers') as TileLayerModel[];
-    this.layer_views.update(layers);
+    this.layerViews.update(layers);
   }
 
-  OverLayers_changed() {
-    const over_layers = this.model.get('over_layers') as ImageOverLayerModel[];
-    this.Overlayer_views.update(over_layers);
-    console.log('OverLayers_changed');
+  overlayChanged() {
+    const overlay = this.model.get('overlays') as ImageOverLayModel[];
+    this.overlayViews.update(overlay);
   }
 
-  zoom_changed() {
+  zoomChanged() {
     const newZoom = this.model.get('zoom');
     if (newZoom !== undefined && newZoom !== null) {
       this.map.getView().setZoom(newZoom);
     }
   }
 
-  center_changed() {
+  centerChanged() {
     const newCenter = this.model.get('center');
     if (newCenter !== undefined && newCenter !== null) {
       this.map.getView().setCenter(newCenter);
     }
   }
 
-  remove_layer_view(child_view: TileLayerView) {
+  removeLayerView(child_view: TileLayerView) {
     this.map.removeLayer(child_view.tileLayer);
     child_view.remove();
   }
 
-  remove_over_layer_view(child_view: ImageOverLayerView) {
+  removeOverlayView(child_view: ImageOverlayView) {
     if (child_view.overlay) {
       this.map.removeOverlay(child_view.overlay);
     }
     child_view.remove();
   }
 
-  async add_layer_model(child_model: TileLayerModel) {
+  async addLayerModel(child_model: TileLayerModel) {
     const view = await this.create_child_view<TileLayerView>(child_model, {
       map_view: this,
     });
@@ -149,8 +147,8 @@ export class MapView extends DOMWidgetView {
     return view;
   }
 
-  async add_over_layer_model(child_model: ImageOverLayerModel) {
-    const view = await this.create_child_view<ImageOverLayerView>(child_model, {
+  async addOverlayModel(child_model: ImageOverlayModel) {
+    const view = await this.create_child_view<ImageOverlayView>(child_model, {
       map_view: this,
     });
     this.map.addOverlay(view.overlay);
@@ -160,17 +158,12 @@ export class MapView extends DOMWidgetView {
     console.log('supposee added');
     return view;
   }
-  /*
-  update_position_overlay(nv_image_bounds: number[]) {
-    if (nv_image_bounds !== undefined && nv_image_bounds !== null) {
-      this.overlay.setPosition(nv_image_bounds);
-    }
-  }*/
+
   imageElement: HTMLImageElement;
   mapContainer: HTMLDivElement;
   map: Map;
-  layer_views: ViewList<TileLayerView>;
-  Overlayer_views: ViewList<ImageOverLayerView>;
+  layerViews: ViewList<TileLayerView>;
+  overlayViews: ViewList<ImageOverlayView>;
 }
 
 export class TileLayerModel extends WidgetModel {
@@ -211,11 +204,11 @@ export class TileLayerView extends WidgetView {
       }),
     });
 
-    this.url_changed();
+    this.urlChanged();
     this.model.on('change:url', this.url_changed, this);
   }
 
-  url_changed() {
+  urlChanged() {
     const newUrl = this.model.get('url');
     if (newUrl) {
       const newSource = new XYZ({
@@ -228,16 +221,16 @@ export class TileLayerView extends WidgetView {
   tileLayer: TileLayer<OSM>;
 }
 
-export class ImageOverLayerModel extends DOMWidgetModel {
+export class ImageOverlayModel extends DOMWidgetModel {
   defaults() {
     return {
       ...super.defaults(),
-      _model_name: ImageOverLayerModel.model_name,
-      _model_module: ImageOverLayerModel.model_module,
-      _model_module_version: ImageOverLayerModel.model_module_version,
-      _view_name: ImageOverLayerModel.view_name,
-      _view_module: ImageOverLayerModel.view_module,
-      _view_module_version: ImageOverLayerModel.view_module_version,
+      _model_name: ImageOverlayModel.model_name,
+      _model_module: ImageOverlayModel.model_module,
+      _model_module_version: ImageOverlayModel.model_module_version,
+      _view_name: ImageOverlayModel.view_name,
+      _view_module: ImageOverlayModel.view_module,
+      _view_module_version: ImageOverlayModel.view_module_version,
       value: 'Hello World',
     };
   }
@@ -247,15 +240,15 @@ export class ImageOverLayerModel extends DOMWidgetModel {
     // Ajoutez ici tous les sérialiseurs supplémentaires
   };
 
-  static model_name = 'ImageOverLayerModel';
+  static model_name = 'ImageOverlayModel';
   static model_module = MODULE_NAME;
   static model_module_version = MODULE_VERSION;
-  static view_name = 'ImageOverLayerView';
+  static view_name = 'ImageOverlayView';
   static view_module = MODULE_NAME;
   static view_module_version = MODULE_VERSION;
 }
 
-export class ImageOverLayerView extends DOMWidgetView {
+export class ImageOverlayView extends DOMWidgetView {
   imageLayer: ImageLayer<ImageSource>;
   overlay: Overlay;
   imageElement: HTMLImageElement;
@@ -268,13 +261,13 @@ export class ImageOverLayerView extends DOMWidgetView {
   initialize(parameters: WidgetView.IInitializeParameters<WidgetModel>) {
     super.initialize(parameters);
     this.imageElement = document.createElement('img');
-    this.create_image_layer();
-    this.create_overlay();
+    this.createImageLayer();
+    this.createOverlay();
     this.model_events();
     console.log('Overlay created in initialize:', this.overlay);
   }
 
-  create_image_layer() {
+  createImageLayer() {
     this.imageLayer = new ImageLayer({
       source: new ImageStatic({
         url: this.model.get('image_url'),
@@ -282,7 +275,7 @@ export class ImageOverLayerView extends DOMWidgetView {
       }),
     });
   }
-  create_overlay() {
+  createOverlay() {
     const imageExtent = this.model.get('image_bounds');
     this.overlay = new Overlay({
       position: imageExtent,
@@ -293,8 +286,6 @@ export class ImageOverLayerView extends DOMWidgetView {
   model_events() {
     this.listenTo(this.model, 'change:image_url', () => {
       const url = this.model.get('image_url');
-      console.log('hne');
-      console.log(url);
       if (url) {
         const newSource = new ImageStatic({
           url: this.model.get('image_url'),
@@ -302,33 +293,29 @@ export class ImageOverLayerView extends DOMWidgetView {
         });
         this.imageLayer.setSource(newSource);
         this.imageElement.src = url;
-        this.update_image_element();
+        this.updateImageElement();
       }
     });
-    this.update_image_element();
+    this.updateImageElement();
     this.listenTo(this.model, 'change:image_bounds', () => {
       const nv_image_bounds = this.model.get('image_bounds');
       this.imageLayer.setExtent(nv_image_bounds);
       this.trigger('image_bounds_changed', nv_image_bounds);
     });
     this.on('image_bounds_changed', (nv_image_bounds: number[]) => {
-      this.update_position_overlay(nv_image_bounds);
+      this.updatePositionOverlay(nv_image_bounds);
     });
   }
-  update_image_element() {
+  updateImageElement() {
     const imageSource = this.imageLayer.getSource() as ImageStatic;
     if (imageSource) {
       const imageUrl = imageSource.getUrl();
       if (imageUrl) {
         this.imageElement.src = imageUrl;
-        console.log(this.imageElement);
-        console.log('imageURL');
-        console.log(this.overlay.getElement);
       }
     }
-    console.log('update_image_element');
   }
-  update_position_overlay(nv_image_bounds: number[]) {
+  updatePositionOverlay(nv_image_bounds: number[]) {
     if (nv_image_bounds && this.overlay) {
       this.overlay.setPosition(nv_image_bounds);
     }

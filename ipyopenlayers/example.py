@@ -24,12 +24,12 @@ class TileLayer(Widget):
     _view_module_version = Unicode(module_version).tag(sync=True)
     url = Unicode('https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png').tag(sync=True)
 
-class ImageOverLayer (DOMWidget):
+class ImageOverLay (DOMWidget):
 
-   _model_name = Unicode('ImageOverLayerModel').tag(sync=True)
+   _model_name = Unicode('ImageOverLayModel').tag(sync=True)
    _model_module = Unicode(module_name).tag(sync=True)
    _model_module_version = Unicode(module_version).tag(sync=True)
-   _view_name = Unicode('ImageOverLayerView').tag(sync=True)
+   _view_name = Unicode('ImageOverLayView').tag(sync=True)
    _view_module = Unicode(module_name).tag(sync=True)
    _view_module_version = Unicode(module_version).tag(sync=True)
 
@@ -49,7 +49,7 @@ class Map(DOMWidget):
     center = List(def_loc).tag(sync=True, o=True)
     zoom = CFloat(2).tag(sync=True, o=True)
     layers = List(Instance(TileLayer)).tag(sync=True, **widget_serialization)
-    over_layers=List(Instance(ImageOverLayer)).tag(sync=True, **widget_serialization)
+    overlays=List(Instance(ImageOverLay)).tag(sync=True, **widget_serialization)
 
     def __init__(self, center=None, zoom=None, **kwargs):
         super().__init__(**kwargs)
@@ -63,14 +63,14 @@ class Map(DOMWidget):
     def add_layer(self, layer):
         self.layers = self.layers + [layer]
 
-    def add_Overlayer(self, over_layer):
-        self.over_layers = self.over_layers + [over_layer]
+    def add_overlay(self, overlay):
+        self.overlays = self.overlays + [overlay]
 
     def remove_layer(self, layer):
-        self.layers = [x for x in self.layers if x != layer]
+        self.layers = [x for x in self.layers if x != lay]
     
-    def remove_overlayer(self, over_layer):
-        self.over_layers = [x for x in self.over_layers if x != over_layer]
+    def remove_overlay(self, overlay):
+        self.overlays = [x for x in self.overlays if x != overlay]
 
     def clear_layers(self):
         self.layers = []
