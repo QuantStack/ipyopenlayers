@@ -67,7 +67,7 @@ class Map(DOMWidget):
         self.overlays = self.overlays + [overlay]
 
     def remove_layer(self, layer):
-        self.layers = [x for x in self.layers if x != lay]
+        self.layers = [x for x in self.layers if x != layer]
     
     def remove_overlay(self, overlay):
         self.overlays = [x for x in self.overlays if x != overlay]
