@@ -3,3 +3,5 @@
 
 export * from './version';
 export * from './widget';
+//export * from './imageoverlay';
+//export * from './tilelayer';
