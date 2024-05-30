@@ -73,7 +73,7 @@ export class MapView extends DOMWidgetView {
       this,
     );
 
-    this.overlayViews = new ViewList<ImageOverLayView>(
+    this.overlayViews = new ViewList<ImageOverlayView>(
       this.addOverlayModel,
       this.removeOverlayView,
       this,
@@ -105,7 +105,7 @@ export class MapView extends DOMWidgetView {
   }
 
   overlayChanged() {
-    const overlay = this.model.get('overlays') as ImageOverLayModel[];
+    const overlay = this.model.get('overlays') as ImageOverlayModel[];
     this.overlayViews.update(overlay);
   }
 
@@ -205,7 +205,7 @@ export class TileLayerView extends WidgetView {
     });
 
     this.urlChanged();
-    this.model.on('change:url', this.url_changed, this);
+    this.model.on('change:url', this.urlChanged, this);
   }
 
   urlChanged() {
@@ -255,7 +255,7 @@ export class ImageOverlayView extends DOMWidgetView {
   render() {
     super.render();
     console.log('Render called');
-    this.update_image_element();
+    this.updateImageElement();
   }
 
   initialize(parameters: WidgetView.IInitializeParameters<WidgetModel>) {
