@@ -43,6 +43,7 @@ export class OpenLayersGeoJSONView extends LayerView {
     this.create_obj();
     this.modelEvents();
   }
+
   create_obj() {
     this.obj = this.vectorLayer;
   }
