@@ -93,7 +93,6 @@ export class MapView extends DOMWidgetView {
     this.layersChanged();
     this.model.on('change:layers', this.layersChanged, this);
     this.model.on('change:overlays', this.overlayChanged, this);
-    //this.model.on('change:controls', this.controlChanged, this);
     this.model.on('change:zoom', this.zoomChanged, this);
     this.model.on('change:center', this.centerChanged, this);
   }
@@ -138,10 +137,7 @@ export class MapView extends DOMWidgetView {
     const view = await this.create_child_view<TileLayerView>(child_model, {
       map_view: this,
     });
-    console.log('add');
     this.map.addLayer(view.tileLayer);
-    console.log('supp add');
-
     this.displayed.then(() => {
       view.trigger('displayed', this);
     });

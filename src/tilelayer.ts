@@ -34,7 +34,6 @@ export class TileLayerModel extends WidgetModel {
 export class TileLayerView extends WidgetView {
   render() {
     super.render();
-    console.log('test');
     const url = this.model.get('url');
 
     this.tileLayer = new TileLayer({
@@ -48,7 +47,6 @@ export class TileLayerView extends WidgetView {
   }
 
   urlChanged() {
-    console.log('test2');
     const newUrl = this.model.get('url');
     if (newUrl) {
       const newSource = new XYZ({
