@@ -14,12 +14,14 @@ import { Map } from 'ol';
 import OSM from 'ol/source/OSM';
 import TileLayer from 'ol/layer/Tile';
 import View from 'ol/View';
-import XYZ from 'ol/source/XYZ';
 import 'ol/ol.css';
 import { MODULE_NAME, MODULE_VERSION } from './version';
 import '../css/widget.css';
 import { useGeographic } from 'ol/proj';
 import Overlay from 'ol/Overlay';
+
+export * from './tilelayer';
+import { TileLayerModel, TileLayerView } from './tilelayer';
 
 const DEFAULT_LOCATION = [0.0, 0.0];
 
@@ -75,7 +77,6 @@ export class MapView extends DOMWidgetView {
       this.removeOverlayView,
       this,
     );
-
     this.map = new Map({
       target: this.mapContainer,
       view: new View({
@@ -92,6 +93,7 @@ export class MapView extends DOMWidgetView {
     this.layersChanged();
     this.model.on('change:layers', this.layersChanged, this);
     this.model.on('change:overlays', this.overlayChanged, this);
+    //this.model.on('change:controls', this.controlChanged, this);
     this.model.on('change:zoom', this.zoomChanged, this);
     this.model.on('change:center', this.centerChanged, this);
   }
@@ -136,7 +138,9 @@ export class MapView extends DOMWidgetView {
     const view = await this.create_child_view<TileLayerView>(child_model, {
       map_view: this,
     });
+    console.log('add');
     this.map.addLayer(view.tileLayer);
+    console.log('supp add');
 
     this.displayed.then(() => {
       view.trigger('displayed', this);
@@ -155,66 +159,12 @@ export class MapView extends DOMWidgetView {
     return view;
   }
 
+
   imageElement: HTMLImageElement;
   mapContainer: HTMLDivElement;
   map: Map;
   layerViews: ViewList<TileLayerView>;
   overlayViews: ViewList<BaseOverlayView>;
-}
-
-export class TileLayerModel extends WidgetModel {
-  defaults() {
-    return {
-      ...super.defaults(),
-      _model_name: TileLayerModel.model_name,
-      _model_module: TileLayerModel.model_module,
-      _model_module_version: TileLayerModel.model_module_version,
-      _view_name: TileLayerModel.view_name,
-      _view_module: TileLayerModel.view_module,
-      _view_module_version: TileLayerModel.view_module_version,
-      value: 'Hello World',
-    };
-  }
-
-  static serializers: ISerializers = {
-    ...WidgetModel.serializers,
-    // Add any extra serializers here
-  };
-
-  static model_name = 'TileLayerModel';
-  static model_module = MODULE_NAME;
-  static model_module_version = MODULE_VERSION;
-  static view_name = 'TileLayerView';
-  static view_module = MODULE_NAME;
-  static view_module_version = MODULE_VERSION;
-}
-
-export class TileLayerView extends WidgetView {
-  render() {
-    super.render();
-    const url = this.model.get('url');
-
-    this.tileLayer = new TileLayer({
-      source: new XYZ({
-        url: url,
-      }),
-    });
-
-    this.urlChanged();
-    this.model.on('change:url', this.urlChanged, this);
-  }
-
-  urlChanged() {
-    const newUrl = this.model.get('url');
-    if (newUrl) {
-      const newSource = new XYZ({
-        url: newUrl,
-      });
-      this.tileLayer.setSource(newSource);
-    }
-  }
-
-  tileLayer: TileLayer<OSM>;
 }
 
 export class BaseOverlayModel extends DOMWidgetModel {

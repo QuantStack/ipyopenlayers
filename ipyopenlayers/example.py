@@ -60,12 +60,12 @@ class Map(DOMWidget):
     layers = List(Instance(TileLayer)).tag(sync=True, **widget_serialization)
     overlays=List(Instance(BaseOverlay)).tag(sync=True, **widget_serialization)
 
+
     def __init__(self, center=None, zoom=None, **kwargs):
         super().__init__(**kwargs)
         
         if center is not None:
             self.center = center
-        
         if zoom is not None:
             self.zoom = zoom
 
