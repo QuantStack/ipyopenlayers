@@ -130,7 +130,6 @@ export class MapView extends DOMWidgetView {
       map_view: this,
     });
     this.map.addLayer(view.tileLayer);
-
     this.displayed.then(() => {
       view.trigger('displayed', this);
     });
