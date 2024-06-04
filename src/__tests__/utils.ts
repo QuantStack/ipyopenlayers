@@ -54,7 +54,7 @@ export class DummyManager extends baseManager.ManagerBase {
   display_view(
     msg: services.KernelMessage.IMessage,
     view: widgets.DOMWidgetView,
-    options: any
+    options: any,
   ) {
     // TODO: make this a spy
     // TODO: return an html element
@@ -68,7 +68,7 @@ export class DummyManager extends baseManager.ManagerBase {
   protected loadClass(
     className: string,
     moduleName: string,
-    moduleVersion: string
+    moduleVersion: string,
   ): Promise<any> {
     if (moduleName === '@jupyter-widgets/base') {
       if ((widgets as any)[className]) {
@@ -106,7 +106,7 @@ export interface Constructor<T> {
 
 export function createTestModel<T extends widgets.WidgetModel>(
   constructor: Constructor<T>,
-  attributes?: any
+  attributes?: any,
 ): T {
   const id = widgets.uuid();
   const widget_manager = new DummyManager();
