@@ -9,6 +9,8 @@ import {
 } from '@jupyter-widgets/base';
 import { TileLayerModel, TileLayerView } from './tilelayer';
 import { BaseOverlayModel, BaseOverlayView } from './baseoverlay';
+import { BaseControlModel, BaseControlView } from './basecontrol';
+export * from './basecontrol';
 
 import { Map } from 'ol';
 import TileLayer from 'ol/layer/Tile';
@@ -42,6 +44,8 @@ export class MapModel extends DOMWidgetModel {
     ...DOMWidgetModel.serializers,
     layers: { deserialize: unpack_models },
     overlays: { deserialize: unpack_models },
+    controls: { deserialize: unpack_models },
+
     // Add any extra serializers here
   };
 
@@ -73,6 +77,12 @@ export class MapView extends DOMWidgetView {
       this.removeOverlayView,
       this,
     );
+
+    this.controlViews = new ViewList<BaseControlView>(
+      this.addControlModel,
+      this.removeControlView,
+      this,
+    );
     this.map = new Map({
       target: this.mapContainer,
       view: new View({
@@ -85,6 +95,7 @@ export class MapView extends DOMWidgetView {
     this.layersChanged();
     this.model.on('change:layers', this.layersChanged, this);
     this.model.on('change:overlays', this.overlayChanged, this);
+    this.model.on('change:controls', this.controlChanged, this);
     this.model.on('change:zoom', this.zoomChanged, this);
     this.model.on('change:center', this.centerChanged, this);
   }
@@ -97,6 +108,11 @@ export class MapView extends DOMWidgetView {
   overlayChanged() {
     const overlay = this.model.get('overlays') as BaseOverlayModel[];
     this.overlayViews.update(overlay);
+  }
+
+  controlChanged() {
+    const control = this.model.get('controls') as BaseOverlayModel[];
+    this.controlViews.update(control);
   }
 
   zoomChanged() {
@@ -125,6 +141,11 @@ export class MapView extends DOMWidgetView {
     child_view.remove();
   }
 
+  removeControlView(child_view: BaseControlView) {
+    this.map.removeControl(child_view.obj);
+    child_view.remove();
+  }
+
   async addLayerModel(child_model: TileLayerModel) {
     const view = await this.create_child_view<TileLayerView>(child_model, {
       map_view: this,
@@ -147,9 +168,27 @@ export class MapView extends DOMWidgetView {
     return view;
   }
 
+  async addControlModel(child_model: BaseControlModel) {
+    console.log('yes');
+    const view = await this.create_child_view<BaseControlView>(child_model, {
+      map_view: this,
+    });
+    console.log(view.obj);
+    this.map.addControl(view.obj);
+    console.log('is');
+
+    this.displayed.then(() => {
+      view.trigger('displayed', this);
+    });
+    console.log('it');
+
+    return view;
+  }
+
   imageElement: HTMLImageElement;
   mapContainer: HTMLDivElement;
   map: Map;
   layerViews: ViewList<TileLayerView>;
   overlayViews: ViewList<BaseOverlayView>;
+  controlViews: ViewList<BaseControlView>;
 }

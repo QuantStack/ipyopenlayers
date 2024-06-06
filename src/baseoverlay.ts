@@ -21,7 +21,6 @@ export class BaseOverlayModel extends DOMWidgetModel {
       _model_module_version: BaseOverlayModel.model_module_version,
       _view_module: BaseOverlayModel.view_module,
       _view_module_version: BaseOverlayModel.view_module_version,
-      overlay_type: '',
       position: [0, 0],
     };
   }

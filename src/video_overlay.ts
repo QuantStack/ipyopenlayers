@@ -6,8 +6,6 @@ import { MODULE_NAME, MODULE_VERSION } from './version';
 import '../css/widget.css';
 import { BaseOverlayModel, BaseOverlayView } from './baseoverlay';
 
-export * from './tilelayer';
-
 export class VideoOverlayModel extends BaseOverlayModel {
   defaults() {
     return {
@@ -18,7 +16,6 @@ export class VideoOverlayModel extends BaseOverlayModel {
       _view_name: VideoOverlayModel.view_name,
       _view_module: VideoOverlayModel.view_module,
       _view_module_version: VideoOverlayModel.view_module_version,
-      overlay_type: 'image',
       image_url: '',
     };
   }
@@ -39,11 +36,11 @@ export class VideoOverlayView extends BaseOverlayView {
   videoElement: HTMLVideoElement;
 
   render() {
+    super.render();
     this.element = document.createElement('div');
     this.videoElement = document.createElement('video');
     this.videoElement.controls = true;
     this.element.appendChild(this.videoElement);
-    super.render();
     this.updateVideoElement();
   }
 

@@ -2,7 +2,6 @@
 // Distributed under the terms of the Modified BSD License.
 import { DOMWidgetModel, ISerializers } from '@jupyter-widgets/base';
 import { BaseOverlayModel, BaseOverlayView } from './baseoverlay';
-
 import 'ol/ol.css';
 import { MODULE_NAME, MODULE_VERSION } from './version';
 import '../css/widget.css';
@@ -17,7 +16,6 @@ export class ImageOverlayModel extends BaseOverlayModel {
       _view_name: ImageOverlayModel.view_name,
       _view_module: ImageOverlayModel.view_module,
       _view_module_version: ImageOverlayModel.view_module_version,
-      overlay_type: 'image',
       image_url: '',
     };
   }
@@ -37,8 +35,9 @@ export class ImageOverlayModel extends BaseOverlayModel {
 
 export class ImageOverlayView extends BaseOverlayView {
   render() {
-    this.element = document.createElement('img');
     super.render();
+    console.log('hello');
+    this.element = document.createElement('img');
     this.updateImageElement();
   }
 
