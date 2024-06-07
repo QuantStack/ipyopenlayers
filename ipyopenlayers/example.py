@@ -62,6 +62,9 @@ class BaseControl(DOMWidget):
    active = Bool(False).tag(sync=True)
 
 class ZoomSlider(BaseControl):
+   _view_name = Unicode('ZoomSliderView').tag(sync=True)
+   _model_name = Unicode('ZoomSliderModel').tag(sync=True)
+   
    control_name = Unicode('zoom_slider').tag(sync=True)
    active = Bool(False).tag(sync=True)
 

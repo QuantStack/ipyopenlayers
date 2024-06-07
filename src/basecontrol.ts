@@ -54,7 +54,7 @@ export class BaseControlView extends DOMWidgetView {
     });
     return this.obj;
   }
- /*
+  /*
   model_events() {
   }
  

@@ -57,7 +57,7 @@ export class ZoomSliderView extends BaseControlView {
     });
     console.log('created obj');
     console.log(this.obj);
-    this.map_view.map.addControl(this.element);
+    //this.map_view.map.addControl(this.element);
   }
 }
 

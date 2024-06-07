@@ -20,7 +20,14 @@ import { MODULE_NAME, MODULE_VERSION } from './version';
 import '../css/widget.css';
 import { useGeographic } from 'ol/proj';
 
+export * from './basecontrol';
+export * from './baseoverlay';
+export * from './imageoverlay';
+export * from './video_overlay';
+export * from './popupoverlay';
+export * from './zoomslider';
 export * from './tilelayer';
+
 const DEFAULT_LOCATION = [0.0, 0.0];
 
 export class MapModel extends DOMWidgetModel {
@@ -169,18 +176,28 @@ export class MapView extends DOMWidgetView {
   }
 
   async addControlModel(child_model: BaseControlModel) {
-    console.log('yes');
+    console.log('Initializing addControlModel...');
     const view = await this.create_child_view<BaseControlView>(child_model, {
       map_view: this,
     });
-    console.log(view.obj);
-    this.map.addControl(view.obj);
-    console.log('is');
 
-    this.displayed.then(() => {
-      view.trigger('displayed', this);
-    });
-    console.log('it');
+    console.log('Child view created:', view);
+    console.log('Object in view:', view.obj);
+
+    // Check if view.obj is defined before trying to add it to the map
+    if (view.obj) {
+      console.log('Adding control to map...');
+      this.map.addControl(view.obj);
+
+      // Trigger the 'displayed' event after the control is added to the map
+      this.displayed.then(() => {
+        console.log('Triggering displayed event for view...');
+        view.trigger('displayed', this);
+        console.log('Control added to map successfully.');
+      });
+    } else {
+      console.error('view.obj is undefined. Control not added to map.');
+    }
 
     return view;
   }
