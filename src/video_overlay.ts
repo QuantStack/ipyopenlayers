@@ -18,7 +18,6 @@ export class VideoOverlayModel extends BaseOverlayModel {
       _view_name: VideoOverlayModel.view_name,
       _view_module: VideoOverlayModel.view_module,
       _view_module_version: VideoOverlayModel.view_module_version,
-      overlay_type: 'image',
       image_url: '',
     };
   }

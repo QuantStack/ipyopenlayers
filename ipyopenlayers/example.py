@@ -25,14 +25,13 @@ class TileLayer(Widget):
     url = Unicode('https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png').tag(sync=True)
 
 class BaseOverlay(DOMWidget): 
-   
-   _model_module = Unicode(module_name).tag(sync=True)
-   _model_module_version = Unicode(module_version).tag(sync=True)
-
-   _view_module = Unicode(module_name).tag(sync=True)
-   _view_module_version = Unicode(module_version).tag(sync=True)
-   overlay_type = Unicode().tag(sync=True)
-   position = List([0, 0]).tag(sync=True)
+    _model_name = Unicode('BaseOverlayModel').tag(sync=True)
+    _model_module = Unicode(module_name).tag(sync=True)
+    _model_module_version = Unicode(module_version).tag(sync=True)
+    _view_name = Unicode('BaseOverlayView').tag(sync=True)
+    _view_module = Unicode(module_name).tag(sync=True)
+    _view_module_version = Unicode(module_version).tag(sync=True)
+    position = List([0, 0]).tag(sync=True)
 
 class ImageOverlay (BaseOverlay):
    _view_name = Unicode('ImageOverlayView').tag(sync=True)
@@ -45,14 +44,12 @@ class VideoOverlay (BaseOverlay):
    _view_name = Unicode('VideoOverlayView').tag(sync=True)
    _model_name = Unicode('VideoOverlayModel').tag(sync=True)
    
-   overlay_type = Unicode('video').tag(sync=True)
    video_url = Unicode('').tag(sync=True)
 
 class PopupOverlay (BaseOverlay):
    _view_name = Unicode('PopupOverlayView').tag(sync=True)
    _model_name = Unicode('PopupOverlayModel').tag(sync=True)
    
-   overlay_type = Unicode('popup').tag(sync=True)
    popup_content = Unicode('').tag(sync=True)
 
 class Map(DOMWidget):

@@ -17,7 +17,6 @@ export class ImageOverlayModel extends BaseOverlayModel {
       _view_name: ImageOverlayModel.view_name,
       _view_module: ImageOverlayModel.view_module,
       _view_module_version: ImageOverlayModel.view_module_version,
-      overlay_type: 'image',
       image_url: '',
     };
   }

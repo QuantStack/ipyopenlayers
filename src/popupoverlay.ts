@@ -17,7 +17,6 @@ export class PopupOverlayModel extends BaseOverlayModel {
       _view_name: PopupOverlayModel.view_name,
       _view_module: PopupOverlayModel.view_module,
       _view_module_version: PopupOverlayModel.view_module_version,
-      overlay_type: 'image',
       image_url: '',
     };
   }

@@ -18,6 +18,11 @@ import { MODULE_NAME, MODULE_VERSION } from './version';
 import '../css/widget.css';
 import { useGeographic } from 'ol/proj';
 
+export * from './baseoverlay';
+export * from './imageoverlay';
+export * from './video_overlay';
+export * from './popupoverlay';
+
 export * from './tilelayer';
 const DEFAULT_LOCATION = [0.0, 0.0];
 
