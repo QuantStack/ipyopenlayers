@@ -57,38 +57,29 @@ class BaseControl(DOMWidget):
    _view_name = Unicode('BaseControlView').tag(sync=True)
    _view_module = Unicode(module_name).tag(sync=True)
    _view_module_version = Unicode(module_version).tag(sync=True)
-
+   
    control_name = Unicode().tag(sync=True)
-   active = Bool(False).tag(sync=True)
 
 class ZoomSlider(BaseControl):
    _view_name = Unicode('ZoomSliderView').tag(sync=True)
    _model_name = Unicode('ZoomSliderModel').tag(sync=True)
    
-   control_name = Unicode('zoom_slider').tag(sync=True)
-   active = Bool(False).tag(sync=True)
+class FullScreen(BaseControl):
+    _view_name = Unicode('FullScreenView').tag(sync=True)
+    _model_name = Unicode('FullScreenModel').tag(sync=True)
 
-
-''''
 
 class ScaleLine(BaseControl):
     _view_name = Unicode('ScaleLineView').tag(sync=True)
     _model_name = Unicode('ScaleLineModel').tag(sync=True)
 
-    control_name = Unicode('scale_line').tag(sync=True)
 
-class FullScreen(BaseControl):
-    _view_name = Unicode('FullScreenView').tag(sync=True)
-    _model_name = Unicode('FullScreenModel').tag(sync=True)
 
-    control_name = Unicode('full_screen').tag(sync=True)
+class MousePosition(BaseControl):
+    _view_name = Unicode('MousePositionView').tag(sync=True)
+    _model_name = Unicode('MousePositionModel').tag(sync=True)
 
-class Coordinates(BaseControl):
-    _view_name = Unicode('CoordinatesView').tag(sync=True)
-    _model_name = Unicode('CoordinatesModel').tag(sync=True)
 
-    control_name = Unicode('coordinates').tag(sync=True)
-'''
 class Map(DOMWidget):
     _model_name = Unicode('MapModel').tag(sync=True)
     _model_module = Unicode(module_name).tag(sync=True)

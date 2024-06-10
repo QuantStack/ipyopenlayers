@@ -39,31 +39,29 @@ export class BaseControlModel extends DOMWidgetModel {
   static view_module_version = MODULE_VERSION;
 }
 
-export class BaseControlView extends DOMWidgetView {
+/*export class BaseControlView extends DOMWidgetView {
   map_view: any;
   element: HTMLElement;
   obj: Control;
+
   render() {
     super.render();
-    this.create_obj();
-    //this.model_events();
+    this.createObj();
   }
-  create_obj() {
-    this.obj = new Control({
-      element: this.element,
-    });
-    return this.obj;
+  createObj() {
+    throw new Error('Not implemented');
   }
-  /*
-  model_events() {
+}
+*/
+export abstract class BaseControlView extends DOMWidgetView {
+  map_view: any;
+  element: HTMLElement;
+  obj: Control;
+
+  render() {
+    super.render();
+    this.createObj();
   }
- 
-  get_controls(): { [key: string]: any } {
-    const controls = this.model.get('controls') as string[];
-    const result: { [key: string]: any } = {};
-    controls.forEach((key: string) => {
-      result[key] = this.model.get(key);
-    });
-    return result;
-  }*/
+
+  abstract createObj(): void;
 }
