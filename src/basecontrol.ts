@@ -39,20 +39,6 @@ export class BaseControlModel extends DOMWidgetModel {
   static view_module_version = MODULE_VERSION;
 }
 
-/*export class BaseControlView extends DOMWidgetView {
-  map_view: any;
-  element: HTMLElement;
-  obj: Control;
-
-  render() {
-    super.render();
-    this.createObj();
-  }
-  createObj() {
-    throw new Error('Not implemented');
-  }
-}
-*/
 export abstract class BaseControlView extends DOMWidgetView {
   map_view: any;
   element: HTMLElement;
