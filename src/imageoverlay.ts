@@ -36,11 +36,12 @@ export class ImageOverlayModel extends BaseOverlayModel {
 
 export class ImageOverlayView extends BaseOverlayView {
   render() {
-    this.element = document.createElement('img');
     super.render();
     this.updateImageElement();
   }
-
+  createElement() {
+    this.element = document.createElement('img');
+  }
   model_events() {
     super.model_events();
     this.listenTo(this.model, 'change:image_url', this.updateImageElement);

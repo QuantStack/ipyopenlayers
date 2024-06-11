@@ -11,8 +11,6 @@ import { MODULE_NAME, MODULE_VERSION } from './version';
 import '../css/widget.css';
 import Overlay from 'ol/Overlay';
 
-export * from './tilelayer';
-
 export class BaseOverlayModel extends DOMWidgetModel {
   defaults() {
     return {
@@ -35,15 +33,17 @@ export class BaseOverlayModel extends DOMWidgetModel {
   static view_module_version = MODULE_VERSION;
 }
 
-export class BaseOverlayView extends DOMWidgetView {
+export abstract class BaseOverlayView extends DOMWidgetView {
   overlay: Overlay;
   element: HTMLElement;
 
   render() {
     super.render();
+    this.createElement();
     this.createOverlay();
     this.model_events();
   }
+  abstract createElement(): void;
 
   createOverlay() {
     const position = this.model.get('position');

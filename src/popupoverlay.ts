@@ -34,9 +34,11 @@ export class PopupOverlayModel extends BaseOverlayModel {
 }
 export class PopupOverlayView extends BaseOverlayView {
   render() {
-    this.element = document.createElement('div');
     super.render();
     this.updatePopupElement();
+  }
+  createElement() {
+    this.element = document.createElement('div');
   }
 
   model_events() {
