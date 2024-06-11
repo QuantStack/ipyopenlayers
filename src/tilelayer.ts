@@ -1,3 +1,5 @@
+// Copyright (c) QuantStack
+// Distributed under the terms of the Modified BSD License.
 import { WidgetModel, WidgetView, ISerializers } from '@jupyter-widgets/base';
 import TileLayer from 'ol/layer/Tile';
 import XYZ from 'ol/source/XYZ';

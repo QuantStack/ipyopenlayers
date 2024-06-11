@@ -3,25 +3,30 @@
 import {
   DOMWidgetModel,
   DOMWidgetView,
-  WidgetModel,
-  WidgetView,
   ISerializers,
   unpack_models,
   ViewList,
 } from '@jupyter-widgets/base';
+import { TileLayerModel, TileLayerView } from './tilelayer';
+import { BaseOverlayModel, BaseOverlayView } from './baseoverlay';
+import { BaseControlModel, BaseControlView } from './basecontrol';
 
 import { Map } from 'ol';
-import OSM from 'ol/source/OSM';
 import TileLayer from 'ol/layer/Tile';
 import View from 'ol/View';
 import 'ol/ol.css';
 import { MODULE_NAME, MODULE_VERSION } from './version';
 import '../css/widget.css';
 import { useGeographic } from 'ol/proj';
-import Overlay from 'ol/Overlay';
 
+export * from './imageoverlay';
+export * from './video_overlay';
+export * from './popupoverlay';
+export * from './zoomslider';
+export * from './fullscreen';
+export * from './scaleline';
+export * from './mouseposition';
 export * from './tilelayer';
-import { TileLayerModel, TileLayerView } from './tilelayer';
 
 const DEFAULT_LOCATION = [0.0, 0.0];
 
@@ -46,6 +51,8 @@ export class MapModel extends DOMWidgetModel {
     ...DOMWidgetModel.serializers,
     layers: { deserialize: unpack_models },
     overlays: { deserialize: unpack_models },
+    controls: { deserialize: unpack_models },
+
     // Add any extra serializers here
   };
 
@@ -77,22 +84,25 @@ export class MapView extends DOMWidgetView {
       this.removeOverlayView,
       this,
     );
+
+    this.controlViews = new ViewList<BaseControlView>(
+      this.addControlModel,
+      this.removeControlView,
+      this,
+    );
     this.map = new Map({
       target: this.mapContainer,
       view: new View({
         center: this.model.get('center'),
         zoom: this.model.get('zoom'),
       }),
-      layers: [
-        new TileLayer({
-          source: new OSM(),
-        }),
-      ],
+      layers: [new TileLayer()],
     });
 
     this.layersChanged();
     this.model.on('change:layers', this.layersChanged, this);
     this.model.on('change:overlays', this.overlayChanged, this);
+    this.model.on('change:controls', this.controlChanged, this);
     this.model.on('change:zoom', this.zoomChanged, this);
     this.model.on('change:center', this.centerChanged, this);
   }
@@ -105,6 +115,11 @@ export class MapView extends DOMWidgetView {
   overlayChanged() {
     const overlay = this.model.get('overlays') as BaseOverlayModel[];
     this.overlayViews.update(overlay);
+  }
+
+  controlChanged() {
+    const control = this.model.get('controls') as BaseOverlayModel[];
+    this.controlViews.update(control);
   }
 
   zoomChanged() {
@@ -133,6 +148,11 @@ export class MapView extends DOMWidgetView {
     child_view.remove();
   }
 
+  removeControlView(child_view: BaseControlView) {
+    this.map.removeControl(child_view.obj);
+    child_view.remove();
+  }
+
   async addLayerModel(child_model: TileLayerModel) {
     const view = await this.create_child_view<TileLayerView>(child_model, {
       map_view: this,
@@ -155,128 +175,25 @@ export class MapView extends DOMWidgetView {
     return view;
   }
 
+  async addControlModel(child_model: BaseControlModel) {
+    const view = await this.create_child_view<BaseControlView>(child_model, {
+      map_view: this,
+    });
+    if (view.obj) {
+      this.map.addControl(view.obj);
+
+      this.displayed.then(() => {
+        view.trigger('displayed', this);
+      });
+    }
+
+    return view;
+  }
 
   imageElement: HTMLImageElement;
   mapContainer: HTMLDivElement;
   map: Map;
   layerViews: ViewList<TileLayerView>;
   overlayViews: ViewList<BaseOverlayView>;
-}
-
-export class BaseOverlayModel extends DOMWidgetModel {
-  defaults() {
-    return {
-      ...super.defaults(),
-      _model_name: BaseOverlayModel.model_name,
-      _model_module: BaseOverlayModel.model_module,
-      _model_module_version: BaseOverlayModel.model_module_version,
-      _view_name: BaseOverlayModel.view_name,
-      _view_module: BaseOverlayModel.view_module,
-      _view_module_version: BaseOverlayModel.view_module_version,
-      value: 'Hello World',
-    };
-  }
-
-  static serializers: ISerializers = {
-    ...DOMWidgetModel.serializers,
-    // Ajoutez ici tous les sérialiseurs supplémentaires
-  };
-
-  static model_name = 'BaseOverlayModel';
-  static model_module = MODULE_NAME;
-  static model_module_version = MODULE_VERSION;
-  static view_name = 'BaseOverlayView';
-  static view_module = MODULE_NAME;
-  static view_module_version = MODULE_VERSION;
-}
-
-export class BaseOverlayView extends DOMWidgetView {
-  overlay: Overlay;
-  element: HTMLElement;
-  videoElement: HTMLVideoElement;
-
-  render() {
-    super.render();
-    this.updateElement();
-  }
-
-  initialize(parameters: WidgetView.IInitializeParameters<WidgetModel>) {
-    super.initialize(parameters);
-    this.initializeElement();
-    this.createOverlay();
-    this.model_events();
-  }
-
-  initializeElement() {
-    const overlayType = this.model.get('overlay_type');
-
-    if (overlayType === 'image') {
-      this.element = document.createElement('img');
-      this.updateImageElement();
-    } else if (overlayType === 'video') {
-      this.element = document.createElement('div');
-      this.videoElement = document.createElement('video');
-      this.videoElement.controls = true;
-      this.videoElement.src = this.model.get('video_url');
-      this.element.appendChild(this.videoElement);
-      this.updateVideoElement();
-    } else if (overlayType === 'popup') {
-      this.element = document.createElement('div');
-      this.updatePopupElement();
-    }
-  }
-
-  createOverlay() {
-    const position = this.model.get('position');
-    this.overlay = new Overlay({
-      position: position,
-      element: this.element,
-    });
-    return this.overlay;
-  }
-
-  model_events() {
-    this.listenTo(this.model, 'change:overlay_type', this.initializeElement);
-    this.listenTo(this.model, 'change:image_url', this.updateImageElement);
-    this.listenTo(this.model, 'change:video_url', this.updateVideoElement);
-    this.listenTo(this.model, 'change:popup_content', this.updatePopupElement);
-    this.listenTo(this.model, 'change:position', this.updatePosition);
-  }
-
-  updateElement() {
-    const overlayType = this.model.get('overlay_type');
-    if (overlayType === 'image') {
-      this.updateImageElement();
-    } else if (overlayType === 'video') {
-      this.updateVideoElement();
-    } else if (overlayType === 'popup') {
-      this.updatePopupElement();
-    }
-  }
-
-  updateImageElement() {
-    const imageUrl = this.model.get('image_url');
-    if (imageUrl) {
-      (this.element as HTMLImageElement).src = imageUrl;
-    }
-  }
-
-  updateVideoElement() {
-    const videoUrl = this.model.get('video_url');
-    if (videoUrl) {
-      this.videoElement.src = this.model.get('video_url');
-    }
-  }
-
-  updatePopupElement() {
-    const popupContent = this.model.get('popup_content');
-    if (popupContent) {
-      this.element.innerHTML = popupContent;
-    }
-  }
-
-  updatePosition() {
-    const position = this.model.get('position');
-    this.overlay.setPosition(position);
-  }
+  controlViews: ViewList<BaseControlView>;
 }
