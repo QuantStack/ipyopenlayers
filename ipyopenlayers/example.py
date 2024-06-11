@@ -51,10 +51,8 @@ class PopupOverlay (BaseOverlay):
    popup_content = Unicode('').tag(sync=True)
 
 class BaseControl(DOMWidget):
-   _model_name = Unicode('BaseControlModel').tag(sync=True)
    _model_module = Unicode(module_name).tag(sync=True)
    _model_module_version = Unicode(module_version).tag(sync=True)
-   _view_name = Unicode('BaseControlView').tag(sync=True)
    _view_module = Unicode(module_name).tag(sync=True)
    _view_module_version = Unicode(module_version).tag(sync=True)
    
