@@ -36,7 +36,6 @@ export class ImageOverlayModel extends BaseOverlayModel {
 export class ImageOverlayView extends BaseOverlayView {
   render() {
     super.render();
-    console.log('hello');
     this.element = document.createElement('img');
     this.updateImageElement();
   }
