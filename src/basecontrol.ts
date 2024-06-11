@@ -6,7 +6,6 @@ import '../css/widget.css';
 import {
   DOMWidgetModel,
   DOMWidgetView,
-  //WidgetView,
   ISerializers,
 } from '@jupyter-widgets/base';
 

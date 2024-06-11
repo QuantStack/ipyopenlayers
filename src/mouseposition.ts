@@ -1,10 +1,6 @@
 // Copyright (c) QuantStack
 // Distributed under the terms of the Modified BSD License.
-import {
-  DOMWidgetModel,
-  //WidgetView,
-  ISerializers,
-} from '@jupyter-widgets/base';
+import { DOMWidgetModel, ISerializers } from '@jupyter-widgets/base';
 import { BaseControlModel, BaseControlView } from './basecontrol';
 import MousePosition from 'ol/control/MousePosition.js';
 
@@ -38,11 +34,6 @@ export class MousePositionModel extends BaseControlModel {
   static view_module_version = MODULE_VERSION;
 }
 export class MousePositionView extends BaseControlView {
-  render() {
-    super.render();
-    this.element = document.createElement('div');
-    this.createObj();
-  }
   createObj() {
     this.obj = new MousePosition({
       className: 'ol-mouse-position',

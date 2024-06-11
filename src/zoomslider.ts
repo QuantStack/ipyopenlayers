@@ -34,11 +34,6 @@ export class ZoomSliderModel extends BaseControlModel {
   static view_module_version = MODULE_VERSION;
 }
 export class ZoomSliderView extends BaseControlView {
-  render() {
-    super.render();
-    this.element = document.createElement('div');
-    this.createObj();
-  }
   createObj() {
     this.obj = new ZoomSlider({
       className: 'ol-zoomslider',

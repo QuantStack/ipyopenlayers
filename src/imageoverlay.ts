@@ -2,6 +2,7 @@
 // Distributed under the terms of the Modified BSD License.
 import { DOMWidgetModel, ISerializers } from '@jupyter-widgets/base';
 import { BaseOverlayModel, BaseOverlayView } from './baseoverlay';
+
 import 'ol/ol.css';
 import { MODULE_NAME, MODULE_VERSION } from './version';
 import '../css/widget.css';
@@ -35,8 +36,8 @@ export class ImageOverlayModel extends BaseOverlayModel {
 
 export class ImageOverlayView extends BaseOverlayView {
   render() {
-    super.render();
     this.element = document.createElement('img');
+    super.render();
     this.updateImageElement();
   }
 

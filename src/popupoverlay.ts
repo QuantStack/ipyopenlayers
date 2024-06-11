@@ -17,7 +17,6 @@ export class PopupOverlayModel extends BaseOverlayModel {
       _view_name: PopupOverlayModel.view_name,
       _view_module: PopupOverlayModel.view_module,
       _view_module_version: PopupOverlayModel.view_module_version,
-      image_url: '',
     };
   }
 
@@ -35,8 +34,8 @@ export class PopupOverlayModel extends BaseOverlayModel {
 }
 export class PopupOverlayView extends BaseOverlayView {
   render() {
-    super.render();
     this.element = document.createElement('div');
+    super.render();
     this.updatePopupElement();
   }
 

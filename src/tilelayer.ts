@@ -5,7 +5,6 @@ import TileLayer from 'ol/layer/Tile';
 import XYZ from 'ol/source/XYZ';
 import OSM from 'ol/source/OSM';
 import { MODULE_NAME, MODULE_VERSION } from './version';
-import { MapView } from './widget';
 
 export class TileLayerModel extends WidgetModel {
   defaults() {
@@ -35,7 +34,6 @@ export class TileLayerModel extends WidgetModel {
 }
 
 export class TileLayerView extends WidgetView {
-  map: MapView;
   render() {
     super.render();
     const url = this.model.get('url');
