@@ -56,8 +56,6 @@ class BaseControl(DOMWidget):
    _view_module = Unicode(module_name).tag(sync=True)
    _view_module_version = Unicode(module_version).tag(sync=True)
    
-   control_name = Unicode().tag(sync=True)
-
 class ZoomSlider(BaseControl):
    _view_name = Unicode('ZoomSliderView').tag(sync=True)
    _model_name = Unicode('ZoomSliderModel').tag(sync=True)
