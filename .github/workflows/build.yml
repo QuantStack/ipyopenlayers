@@ -24,7 +24,9 @@ jobs:
         run: python -m pip install build jupyterlab==4
 
       - name: Install yarn dependencies
-        run: yarn run build
+        run: |
+          yarn install
+          yarn run build
 
       - name: Linting
         run: yarn run lint:check
