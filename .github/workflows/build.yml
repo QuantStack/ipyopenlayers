@@ -55,6 +55,9 @@ jobs:
           name: dist ${{ github.run_number }}
           path: ./dist
 
+      - name: Install dependencies
+        run: python -m pip install jupyterlab==4
+
       - name: Install the package
         run: pip install -vv ipyopenlayers*.whl
         working-directory: dist
