@@ -25,11 +25,11 @@ jobs:
 
       - name: Install yarn dependencies
         run: |
-          yarn install
-          yarn run build
+          jlpm install
+          jlpm run build
 
       - name: Linting
-        run: yarn run lint:check
+        run: jlpm run lint:check
 
       - name: Build Python package
         run: python -m build
