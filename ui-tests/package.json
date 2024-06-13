@@ -1,0 +1,22 @@
+{
+  "name": "ipyopenlayers-ui-tests",
+  "version": "1.0.0",
+  "description": "ipyopenlayers UI Tests",
+  "private": true,
+  "scripts": {
+    "start": "jupyter lab --config jupyter_server_config.py",
+    "test": "playwright test",
+    "test:update": "playwright test --update-snapshots",
+    "test:debug": "PWDEBUG=1 playwright test"
+  },
+  "author": "ipyopenlayers",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@jupyterlab/galata": "^5.0.1",
+    "@playwright/test": "^1.32.0"
+  },
+  "dependencies": {
+    "@types/klaw-sync": "^6.0.1",
+    "klaw-sync": "^6.0.0"
+  }
+}
