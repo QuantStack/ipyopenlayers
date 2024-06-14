@@ -14,6 +14,7 @@ export class LayerModel extends WidgetModel {
       _view_name: LayerModel.view_name,
       _view_module: LayerModel.view_module,
       _view_module_version: LayerModel.view_module_version,
+      value: 'Hello World',
     };
   }
 
