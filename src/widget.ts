@@ -13,6 +13,7 @@ import { BaseControlModel, BaseControlView } from './basecontrol';
 
 import { Map } from 'ol';
 import TileLayer from 'ol/layer/Tile';
+
 import View from 'ol/View';
 import 'ol/ol.css';
 import { MODULE_NAME, MODULE_VERSION } from './version';
@@ -28,6 +29,7 @@ export * from './fullscreen';
 export * from './scaleline';
 export * from './mouseposition';
 export * from './tilelayer';
+export * from './geojson';
 
 const DEFAULT_LOCATION = [0.0, 0.0];
 

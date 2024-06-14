@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkipyopenlayers=self.webpackChunkipyopenlayers||[]).push([[124],{2124:(e,r,s)=>{s.r(r),s.d(r,{default:()=>l});var a=s(3075),n=s(708);class l extends n.A{decodeBlock(e){return(0,a.UD)(new Uint8Array(e)).buffer}}}}]);
+//# sourceMappingURL=124.index.js.map
