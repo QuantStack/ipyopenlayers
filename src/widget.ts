@@ -13,6 +13,7 @@ import { BaseControlModel, BaseControlView } from './basecontrol';
 
 import { Map } from 'ol';
 import TileLayer from 'ol/layer/Tile';
+
 import View from 'ol/View';
 import 'ol/ol.css';
 import { MODULE_NAME, MODULE_VERSION } from './version';
@@ -20,6 +21,7 @@ import '../css/widget.css';
 import { useGeographic } from 'ol/proj';
 
 export * from './imageoverlay';
+export * from './geojson';
 export * from './video_overlay';
 export * from './popupoverlay';
 export * from './zoomslider';
@@ -27,6 +29,7 @@ export * from './fullscreen';
 export * from './scaleline';
 export * from './mouseposition';
 export * from './tilelayer';
+export * from './geojson';
 
 const DEFAULT_LOCATION = [0.0, 0.0];
 
@@ -40,8 +43,9 @@ export class MapModel extends DOMWidgetModel {
       _view_name: MapModel.view_name,
       _view_module: MapModel.view_module,
       _view_module_version: MapModel.view_module_version,
-      value: 'Hello World',
       layers: [],
+      controls: [],
+      overlays: [],
       zoom: 2,
       center: DEFAULT_LOCATION,
     };
@@ -71,6 +75,7 @@ export class MapView extends DOMWidgetView {
 
     this.mapContainer = document.createElement('div');
     this.mapContainer.style.height = '500px';
+    this.mapContainer.style.width = '100%';
     this.el.appendChild(this.mapContainer);
 
     this.layerViews = new ViewList(
@@ -100,6 +105,8 @@ export class MapView extends DOMWidgetView {
     });
 
     this.layersChanged();
+    this.overlayChanged();
+    this.controlChanged();
     this.model.on('change:layers', this.layersChanged, this);
     this.model.on('change:overlays', this.overlayChanged, this);
     this.model.on('change:controls', this.controlChanged, this);
@@ -137,7 +144,7 @@ export class MapView extends DOMWidgetView {
   }
 
   removeLayerView(child_view: TileLayerView) {
-    this.map.removeLayer(child_view.tileLayer);
+    this.map.removeLayer(child_view.obj);
     child_view.remove();
   }
 
@@ -157,7 +164,7 @@ export class MapView extends DOMWidgetView {
     const view = await this.create_child_view<TileLayerView>(child_model, {
       map_view: this,
     });
-    this.map.addLayer(view.tileLayer);
+    this.map.addLayer(view.obj);
     this.displayed.then(() => {
       view.trigger('displayed', this);
     });

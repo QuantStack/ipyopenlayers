@@ -35,7 +35,7 @@ export class ScaleLineModel extends BaseControlModel {
 export class ScaleLineView extends BaseControlView {
   createObj() {
     this.obj = new ScaleLine({
-      className: 'ol-scale-bar',
+      className: 'ol-scale-line',
     });
   }
 }

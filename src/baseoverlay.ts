@@ -15,11 +15,12 @@ export class BaseOverlayModel extends DOMWidgetModel {
   defaults() {
     return {
       ...super.defaults(),
+      _model_name: BaseOverlayModel.model_name,
       _model_module: BaseOverlayModel.model_module,
       _model_module_version: BaseOverlayModel.model_module_version,
+      _view_name: BaseOverlayModel.view_name,
       _view_module: BaseOverlayModel.view_module,
       _view_module_version: BaseOverlayModel.view_module_version,
-      position: [0, 0],
     };
   }
 
@@ -27,8 +28,10 @@ export class BaseOverlayModel extends DOMWidgetModel {
     ...DOMWidgetModel.serializers,
   };
 
+  static model_name = 'BaseOverlayModel';
   static model_module = MODULE_NAME;
   static model_module_version = MODULE_VERSION;
+  static view_name = 'BaseOverlayView';
   static view_module = MODULE_NAME;
   static view_module_version = MODULE_VERSION;
 }
