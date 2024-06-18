@@ -29,7 +29,6 @@ export * from './fullscreen';
 export * from './scaleline';
 export * from './mouseposition';
 export * from './tilelayer';
-export * from './geojson';
 
 const DEFAULT_LOCATION = [0.0, 0.0];
 
