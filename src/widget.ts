@@ -13,7 +13,6 @@ import { BaseControlModel, BaseControlView } from './basecontrol';
 
 import { Map } from 'ol';
 import TileLayer from 'ol/layer/Tile';
-
 import View from 'ol/View';
 import 'ol/ol.css';
 import { MODULE_NAME, MODULE_VERSION } from './version';
