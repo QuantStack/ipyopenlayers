@@ -5,15 +5,21 @@ import { expect, IJupyterLabPageFixture, test } from '@jupyterlab/galata';
 import * as path from 'path';
 const klaw = require('klaw-sync');
 
-
-const filterUpdateNotebooks = item => {
+const filterUpdateNotebooks = (item) => {
   const basename = path.basename(item.path);
   return basename.includes('_update');
-}
+};
 
-const testCellOutputs = async (page: IJupyterLabPageFixture, tmpPath: string, theme: 'JupyterLab Light' | 'JupyterLab Dark') => {
-  const paths = klaw(path.resolve(__dirname, './notebooks'), {filter: item => !filterUpdateNotebooks(item), nodir: true});
-  const notebooks = paths.map(item => path.basename(item.path));
+const testCellOutputs = async (
+  page: IJupyterLabPageFixture,
+  tmpPath: string,
+  theme: 'JupyterLab Light' | 'JupyterLab Dark',
+) => {
+  const paths = klaw(path.resolve(__dirname, './notebooks'), {
+    filter: (item) => !filterUpdateNotebooks(item),
+    nodir: true,
+  });
+  const notebooks = paths.map((item) => path.basename(item.path));
 
   const contextPrefix = theme == 'JupyterLab Dark' ? 'light' : 'dark';
   if (theme == 'JupyterLab Dark') {
@@ -28,7 +34,11 @@ const testCellOutputs = async (page: IJupyterLabPageFixture, tmpPath: string, th
 
     let numCellImages = 0;
 
-    const getCaptureImageName = (contextPrefix: string, notebook: string, id: number): string => {
+    const getCaptureImageName = (
+      contextPrefix: string,
+      notebook: string,
+      id: number,
+    ): string => {
       return `${contextPrefix}-${notebook}-cell-${id}.png`;
     };
 
@@ -39,22 +49,32 @@ const testCellOutputs = async (page: IJupyterLabPageFixture, tmpPath: string, th
           results.push(await cell.screenshot());
           numCellImages++;
         }
-      }
+      },
     });
 
     await page.notebook.save();
 
     for (let c = 0; c < numCellImages; ++c) {
-      expect(results[c]).toMatchSnapshot(getCaptureImageName(contextPrefix, notebook, c), {threshold: 0.3});
+      expect(results[c]).toMatchSnapshot(
+        getCaptureImageName(contextPrefix, notebook, c),
+        { threshold: 0.3 },
+      );
     }
 
     await page.notebook.close(true);
   }
-}
+};
 
-const testPlotUpdates = async (page: IJupyterLabPageFixture, tmpPath: string, theme: 'JupyterLab Light' | 'JupyterLab Dark') => {
-  const paths = klaw(path.resolve(__dirname, './notebooks'), {filter: item => filterUpdateNotebooks(item), nodir: true});
-  const notebooks = paths.map(item => path.basename(item.path));
+const testPlotUpdates = async (
+  page: IJupyterLabPageFixture,
+  tmpPath: string,
+  theme: 'JupyterLab Light' | 'JupyterLab Dark',
+) => {
+  const paths = klaw(path.resolve(__dirname, './notebooks'), {
+    filter: (item) => filterUpdateNotebooks(item),
+    nodir: true,
+  });
+  const notebooks = paths.map((item) => path.basename(item.path));
 
   const contextPrefix = theme == 'JupyterLab Light' ? 'light' : 'dark';
   if (theme == 'JupyterLab Dark') {
@@ -67,7 +87,11 @@ const testPlotUpdates = async (page: IJupyterLabPageFixture, tmpPath: string, th
     await page.notebook.openByPath(`${tmpPath}/${notebook}`);
     await page.notebook.activate(notebook);
 
-    const getCaptureImageName = (contextPrefix: string, notebook: string, id: number): string => {
+    const getCaptureImageName = (
+      contextPrefix: string,
+      notebook: string,
+      id: number,
+    ): string => {
       return `${contextPrefix}-${notebook}-cell-${id}.png`;
     };
 
@@ -80,13 +104,16 @@ const testPlotUpdates = async (page: IJupyterLabPageFixture, tmpPath: string, th
           results.push(await cell.screenshot());
           cellCount++;
         }
-      }
+      },
     });
 
     await page.notebook.save();
 
     for (let i = 0; i < cellCount; i++) {
-      expect(results[i]).toMatchSnapshot(getCaptureImageName(contextPrefix, notebook, i), {threshold: 0.3});
+      expect(results[i]).toMatchSnapshot(
+        getCaptureImageName(contextPrefix, notebook, i),
+        { threshold: 0.3 },
+      );
     }
 
     await page.notebook.close(true);
@@ -95,13 +122,13 @@ const testPlotUpdates = async (page: IJupyterLabPageFixture, tmpPath: string, th
 
 test.describe('ipyopenlayers Visual Regression', () => {
   test.beforeEach(async ({ page, tmpPath }) => {
-    page.on("console", (message) => {
+    page.on('console', (message) => {
       console.log('CONSOLE MSG ---', message.text());
     });
 
     await page.contents.uploadDirectory(
       path.resolve(__dirname, './notebooks'),
-      tmpPath
+      tmpPath,
     );
     await page.filebrowser.openDirectory(tmpPath);
   });

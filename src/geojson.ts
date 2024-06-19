@@ -1,3 +1,5 @@
+// Copyright (c) QuantStack
+// Distributed under the terms of the Modified BSD License.
 import { StyleFunction } from 'ol/style/Style';
 import { DOMWidgetModel, ISerializers } from '@jupyter-widgets/base';
 import 'ol/ol.css';

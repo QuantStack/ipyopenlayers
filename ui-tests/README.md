@@ -11,23 +11,26 @@ jlpm install
 ```
 
 Then start JupyterLab in one terminal (you need to check that it properly starts on port 8888):
+
 ```bash
 jlpm run start-jlab
 ```
 
 Finally, run the galata tests:
+
 ```bash
 jlpm run test
 ```
 
 If ipyopenlayers visuals change, you can re-generate reference images by running:
+
 ```bash
 jlpm run update-references
 ```
 
 ## Notebooks directory
 
-The `tests/notebooks` directory contains the test notebooks. For most notebooks (*e.g.* `bars.ipynb`, `scatter.ipynb`) Galata will run them cell by cell and take a screenshot of each output, comparing with the reference images.
+The `tests/notebooks` directory contains the test notebooks. For most notebooks (_e.g._ `bars.ipynb`, `scatter.ipynb`) Galata will run them cell by cell and take a screenshot of each output, comparing with the reference images.
 
 When running notebooks named `*_update.ipynb`, Galata will always take the first cell output as reference which must contain the plot, later cells will only be used to update the plot, those notebooks are checking that ipyopenlayers is properly taking updates into account on already-created plots.
 
