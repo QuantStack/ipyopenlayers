@@ -1,12 +1,14 @@
 // Copyright (c) QuantStack
 // Distributed under the terms of the Modified BSD License.
-import { WidgetModel, WidgetView, ISerializers } from '@jupyter-widgets/base';
+import { WidgetModel, ISerializers } from '@jupyter-widgets/base';
 import TileLayer from 'ol/layer/Tile';
 import XYZ from 'ol/source/XYZ';
 import OSM from 'ol/source/OSM';
 import { MODULE_NAME, MODULE_VERSION } from './version';
+import { MapView } from './widget';
+import { LayerModel, LayerView } from './layer';
 
-export class TileLayerModel extends WidgetModel {
+export class TileLayerModel extends LayerModel {
   defaults() {
     return {
       ...super.defaults(),
@@ -16,7 +18,6 @@ export class TileLayerModel extends WidgetModel {
       _view_name: TileLayerModel.view_name,
       _view_module: TileLayerModel.view_module,
       _view_module_version: TileLayerModel.view_module_version,
-      value: 'Hello World',
     };
   }
 
@@ -33,7 +34,9 @@ export class TileLayerModel extends WidgetModel {
   static view_module_version = MODULE_VERSION;
 }
 
-export class TileLayerView extends WidgetView {
+export class TileLayerView extends LayerView {
+  map_view: MapView;
+
   render() {
     super.render();
     const url = this.model.get('url');
@@ -43,9 +46,13 @@ export class TileLayerView extends WidgetView {
         url: url,
       }),
     });
-
+    this.create_obj();
     this.urlChanged();
     this.model.on('change:url', this.urlChanged, this);
+  }
+
+  create_obj() {
+    this.obj = this.tileLayer;
   }
 
   urlChanged() {
