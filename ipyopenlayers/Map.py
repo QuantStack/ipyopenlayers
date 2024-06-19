@@ -38,6 +38,38 @@ class GeoJSON(Layer):
     data = Dict({}).tag(sync=True)
     style = Dict({}).tag(sync=True)
     visible = Bool(True).tag(sync=True)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        self.points = kwargs.get('points', [])
+        self.blur = kwargs.get('blur', 15)
+        self.radius = kwargs.get('radius', 8)
+
+class HeatmapLayer(Layer):
+
+    _view_name = Unicode('HeatmapLayerView').tag(sync=True)
+    _model_name = Unicode('HeatmapLayerModel').tag(sync=True)
+    points= List([]).tag(sync=True)
+    blur =Int(15).tag(sync=True)
+    radius = Int(8).tag(sync=True)
+
+
+
+class HeatmapLayer(Layer):
+
+    _view_name = Unicode('HeatmapLayerView').tag(sync=True)
+    _model_name = Unicode('HeatmapLayerModel').tag(sync=True)
+    points= List([]).tag(sync=True)
+    blur =Int(15).tag(sync=True)
+    radius = Int(8).tag(sync=True)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        self.points = kwargs.get('points', [])
+        self.blur = kwargs.get('blur', 15)
+        self.radius = kwargs.get('radius', 8)
+
+
 
 
 class HeatmapLayer(Layer):
