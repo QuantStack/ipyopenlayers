@@ -156,4 +156,6 @@ ipyopenlayers/nbextension/index.*
 ipyopenlayers/labextension
 ipyopenlayers/nbextension
 
+!ipyopenlayers/nbextension/extensions.js
+
 .yarn
