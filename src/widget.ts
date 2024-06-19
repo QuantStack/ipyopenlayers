@@ -70,11 +70,10 @@ export class MapView extends DOMWidgetView {
   render() {
     useGeographic();
     this.el.classList.add('custom-widget');
-
     this.mapContainer = document.createElement('div');
-    this.mapContainer.style.height = '500px';
-    this.mapContainer.style.width = '100%';
+    this.mapContainer.className = 'ol-container';
     this.el.appendChild(this.mapContainer);
+    console.log(this.el);
 
     this.layerViews = new ViewList(
       this.addLayerModel,
