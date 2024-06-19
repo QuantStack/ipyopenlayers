@@ -157,7 +157,6 @@ ipyopenlayers/labextension
 ipyopenlayers/nbextension
 
 
-!ipyopenlayers/nbextension/
 !ipyopenlayers/nbextension/extension.js
 
 
