@@ -35,14 +35,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install Conda environment with Micromamba
-        uses: mamba-org/setup-micromamba@main
-        with:
-          environment-file: test-environment.yml
-          channels: conda-forge
+      - uses: jupyterlab/maintainer-tools/.github/actions/base-setup@v1
 
       - name: Install
-        run: pip install .
+        run: pip install jupyterlab==4 .
 
       - name: Install dependencies
         shell: bash -l {0}
