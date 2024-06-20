@@ -9,6 +9,12 @@
   flex: 1 1 auto;
 }
 
+.lm-Widget.lm-Panel.jp-OutputArea-output {
+  height: 100%;
+  overflow: hidden;
+  flex: 1 1 auto;
+}
+
 .lm-Widget.custom-widget {
   width: 100%;
   height: 100%;
