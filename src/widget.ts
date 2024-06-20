@@ -10,6 +10,7 @@ import {
 import { TileLayerModel, TileLayerView } from './tilelayer';
 import { BaseOverlayModel, BaseOverlayView } from './baseoverlay';
 import { BaseControlModel, BaseControlView } from './basecontrol';
+import { ViewObjectEventTypes } from 'ol/View';
 
 import { Map } from 'ol';
 import TileLayer from 'ol/layer/Tile';
@@ -18,7 +19,7 @@ import 'ol/ol.css';
 import { MODULE_NAME, MODULE_VERSION } from './version';
 import '../css/widget.css';
 import { useGeographic } from 'ol/proj';
-
+import { ObjectEvent } from 'ol/Object';
 export * from './imageoverlay';
 export * from './geojson';
 export * from './video_overlay';
@@ -101,6 +102,18 @@ export class MapView extends DOMWidgetView {
       }),
       layers: [new TileLayer()],
     });
+
+    this.map.getView().on('change:center', () => {
+      this.model.set('center', this.map.getView().getCenter());
+      this.model.save_changes();
+    });
+
+    this.map
+      .getView()
+      .on('change:resolution' as ViewObjectEventTypes, (event: ObjectEvent) => {
+        this.model.set('zoom', this.map.getView().getZoom());
+        this.model.save_changes();
+      });
 
     this.layersChanged();
     this.overlayChanged();

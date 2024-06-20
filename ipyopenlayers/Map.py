@@ -9,7 +9,7 @@ TODO: Add module docstring
 """
 
 from ipywidgets import DOMWidget, Widget, widget_serialization, CallbackDispatcher
-from traitlets import Unicode, List, Instance, CFloat, Bool, Dict, Any
+from traitlets import Unicode, List, Instance, Float, Bool, Dict, Any
 from ._frontend import module_name, module_version
 
 def_loc = [0.0, 0.0]
@@ -102,7 +102,7 @@ class Map(DOMWidget):
     _view_module_version = Unicode(module_version).tag(sync=True)
 
     center = List(def_loc).tag(sync=True, o=True)
-    zoom = CFloat(2).tag(sync=True, o=True)
+    zoom = Float(2).tag(sync=True, o=True)
     layers = List(Instance(Layer)).tag(sync=True, **widget_serialization)
     overlays=List(Instance(BaseOverlay)).tag(sync=True, **widget_serialization)
     controls=List(Instance(BaseControl)).tag(sync=True, **widget_serialization)
