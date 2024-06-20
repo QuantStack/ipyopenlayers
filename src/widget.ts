@@ -10,7 +10,8 @@ import {
 import { TileLayerModel, TileLayerView } from './tilelayer';
 import { BaseOverlayModel, BaseOverlayView } from './baseoverlay';
 import { BaseControlModel, BaseControlView } from './basecontrol';
-
+import { ObjectEvent } from 'ol/Object';
+import { ViewObjectEventTypes } from 'ol/View';
 import { Map } from 'ol';
 import TileLayer from 'ol/layer/Tile';
 import View from 'ol/View';
@@ -73,7 +74,6 @@ export class MapView extends DOMWidgetView {
     this.mapContainer = document.createElement('div');
     this.mapContainer.className = 'ol-container';
     this.el.appendChild(this.mapContainer);
-    console.log(this.el);
 
     this.layerViews = new ViewList(
       this.addLayerModel,
@@ -100,6 +100,17 @@ export class MapView extends DOMWidgetView {
       }),
       layers: [new TileLayer()],
     });
+    this.map.getView().on('change:center', () => {
+      this.model.set('center', this.map.getView().getCenter());
+      this.model.save_changes();
+    });
+
+    this.map
+      .getView()
+      .on('change:resolution' as ViewObjectEventTypes, (event: ObjectEvent) => {
+        this.model.set('zoom', this.map.getView().getZoom());
+        this.model.save_changes();
+      });
 
     this.layersChanged();
     this.overlayChanged();

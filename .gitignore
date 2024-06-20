@@ -148,6 +148,9 @@ $RECYCLE.BIN/
 **/node_modules/
 ipyopenlayers/nbextension/index.*
 
+# Ignoring the package-lock.json file
+package-lock.json
+
 # Coverage data
 # -------------
 **/coverage/
@@ -155,7 +158,6 @@ ipyopenlayers/nbextension/index.*
 # Packed lab extensions
 ipyopenlayers/labextension
 ipyopenlayers/nbextension
-
 
 !ipyopenlayers/nbextension/extension.js
 
