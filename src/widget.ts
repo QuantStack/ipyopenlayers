@@ -7,7 +7,7 @@ import {
   unpack_models,
   ViewList,
 } from '@jupyter-widgets/base';
-import { LayerModel, LayerView } from './layer';
+import { TileLayerModel, TileLayerView } from './tilelayer';
 import { BaseOverlayModel, BaseOverlayView } from './baseoverlay';
 import { BaseControlModel, BaseControlView } from './basecontrol';
 import { ViewObjectEventTypes } from 'ol/View';
@@ -124,7 +124,7 @@ export class MapView extends DOMWidgetView {
   }
 
   layersChanged() {
-    const layers = this.model.get('layers') as LayerModel[];
+    const layers = this.model.get('layers') as TileLayerModel[];
     this.layerViews.update(layers);
   }
 
@@ -152,7 +152,7 @@ export class MapView extends DOMWidgetView {
     }
   }
 
-  removeLayerView(child_view: LayerView) {
+  removeLayerView(child_view: TileLayerView) {
     this.map.removeLayer(child_view.obj);
     child_view.remove();
   }
@@ -169,8 +169,8 @@ export class MapView extends DOMWidgetView {
     child_view.remove();
   }
 
-  async addLayerModel(child_model: LayerModel) {
-    const view = await this.create_child_view<LayerView>(child_model, {
+  async addLayerModel(child_model: TileLayerModel) {
+    const view = await this.create_child_view<TileLayerView>(child_model, {
       map_view: this,
     });
     this.map.addLayer(view.obj);
@@ -209,7 +209,7 @@ export class MapView extends DOMWidgetView {
   imageElement: HTMLImageElement;
   mapContainer: HTMLDivElement;
   map: Map;
-  layerViews: ViewList<LayerView>;
+  layerViews: ViewList<TileLayerView>;
   overlayViews: ViewList<BaseOverlayView>;
   controlViews: ViewList<BaseControlView>;
 }
