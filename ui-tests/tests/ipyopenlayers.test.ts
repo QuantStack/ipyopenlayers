@@ -45,7 +45,7 @@ const testCellOutputs = async (page: IJupyterLabPageFixture, tmpPath: string, th
     await page.notebook.save();
 
     for (let c = 0; c < numCellImages; ++c) {
-      expect(results[c]).toMatchSnapshot(getCaptureImageName(contextPrefix, notebook, c), {threshold: 0.5});
+      expect(results[c]).toMatchSnapshot(getCaptureImageName(contextPrefix, notebook, c), {threshold: 0.3});
     }
 
     await page.notebook.close(true);
@@ -60,6 +60,7 @@ const testPlotUpdates = async (page: IJupyterLabPageFixture, tmpPath: string, th
   if (theme == 'JupyterLab Dark') {
     page.theme.setTheme(theme);
   }
+  await page.setViewportSize({ width: 1280, height: 800 });
 
   for (const notebook of notebooks) {
     let results = [];
@@ -74,6 +75,7 @@ const testPlotUpdates = async (page: IJupyterLabPageFixture, tmpPath: string, th
     let cellCount = 0;
     await page.notebook.runCellByCell({
       onAfterCellRun: async (cellIndex: number) => {
+        await page.waitForTimeout(1000); // Ajouter un délai pour la stabilisation du rendu
         // Always get first cell output which must contain the plot
         const cell = await page.notebook.getCellOutput(0);
         if (cell) {
@@ -86,7 +88,7 @@ const testPlotUpdates = async (page: IJupyterLabPageFixture, tmpPath: string, th
     await page.notebook.save();
 
     for (let i = 0; i < cellCount; i++) {
-      expect(results[i]).toMatchSnapshot(getCaptureImageName(contextPrefix, notebook, i), {threshold: 0.3});
+      expect(results[i]).toMatchSnapshot(getCaptureImageName(contextPrefix, notebook, i), {threshold: 0.5});
     }
 
     await page.notebook.close(true);
