@@ -7,7 +7,7 @@ import {
   unpack_models,
   ViewList,
 } from '@jupyter-widgets/base';
-import { TileLayerModel, TileLayerView } from './tilelayer';
+import { LayerModel, LayerView } from './layer';
 import { BaseOverlayModel, BaseOverlayView } from './baseoverlay';
 import { BaseControlModel, BaseControlView } from './basecontrol';
 import { ViewObjectEventTypes } from 'ol/View';
@@ -71,10 +71,8 @@ export class MapView extends DOMWidgetView {
   render() {
     useGeographic();
     this.el.classList.add('custom-widget');
-
     this.mapContainer = document.createElement('div');
-    this.mapContainer.style.height = '500px';
-    this.mapContainer.style.width = '100%';
+    this.mapContainer.className = 'ol-container';
     this.el.appendChild(this.mapContainer);
 
     this.layerViews = new ViewList(
@@ -126,7 +124,7 @@ export class MapView extends DOMWidgetView {
   }
 
   layersChanged() {
-    const layers = this.model.get('layers') as TileLayerModel[];
+    const layers = this.model.get('layers') as LayerModel[];
     this.layerViews.update(layers);
   }
 
@@ -154,7 +152,7 @@ export class MapView extends DOMWidgetView {
     }
   }
 
-  removeLayerView(child_view: TileLayerView) {
+  removeLayerView(child_view: LayerView) {
     this.map.removeLayer(child_view.obj);
     child_view.remove();
   }
@@ -171,8 +169,8 @@ export class MapView extends DOMWidgetView {
     child_view.remove();
   }
 
-  async addLayerModel(child_model: TileLayerModel) {
-    const view = await this.create_child_view<TileLayerView>(child_model, {
+  async addLayerModel(child_model: LayerModel) {
+    const view = await this.create_child_view<LayerView>(child_model, {
       map_view: this,
     });
     this.map.addLayer(view.obj);
@@ -211,7 +209,7 @@ export class MapView extends DOMWidgetView {
   imageElement: HTMLImageElement;
   mapContainer: HTMLDivElement;
   map: Map;
-  layerViews: ViewList<TileLayerView>;
+  layerViews: ViewList<LayerView>;
   overlayViews: ViewList<BaseOverlayView>;
   controlViews: ViewList<BaseControlView>;
 }
