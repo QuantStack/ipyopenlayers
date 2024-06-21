@@ -10,7 +10,6 @@ const filterUpdateNotebooks = item => {
   const basename = path.basename(item.path);
   return basename.includes('_update');
 }
-
 const testCellOutputs = async (page: IJupyterLabPageFixture, tmpPath: string, theme: 'JupyterLab Light' | 'JupyterLab Dark') => {
   const paths = klaw(path.resolve(__dirname, './notebooks'), {filter: item => !filterUpdateNotebooks(item), nodir: true});
   const notebooks = paths.map(item => path.basename(item.path));
@@ -21,16 +20,15 @@ const testCellOutputs = async (page: IJupyterLabPageFixture, tmpPath: string, th
   }
 
   for (const notebook of notebooks) {
-    let results = [];
-
     await page.notebook.openByPath(`${tmpPath}/${notebook}`);
     await page.notebook.activate(notebook);
 
-    let numCellImages = 0;
+    // Scroll to top of the page
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForFunction('window.scrollY === 0');
 
-    const getCaptureImageName = (contextPrefix: string, notebook: string, id: number): string => {
-      return `${contextPrefix}-${notebook}-cell-${id}.png`;
-    };
+    let results = [];
+    let numCellImages = 0;
 
     await page.notebook.runCellByCell({
       onAfterCellRun: async (cellIndex: number) => {
@@ -45,7 +43,7 @@ const testCellOutputs = async (page: IJupyterLabPageFixture, tmpPath: string, th
     await page.notebook.save();
 
     for (let c = 0; c < numCellImages; ++c) {
-      expect(results[c]).toMatchSnapshot(getCaptureImageName(contextPrefix, notebook, c), {threshold: 0.3});
+      expect(results[c]).toMatchSnapshot(`${contextPrefix}-${notebook}-cell-${c}.png`, {threshold: 0.3});
     }
 
     await page.notebook.close(true);
@@ -62,16 +60,16 @@ const testPlotUpdates = async (page: IJupyterLabPageFixture, tmpPath: string, th
   }
 
   for (const notebook of notebooks) {
-    let results = [];
-
     await page.notebook.openByPath(`${tmpPath}/${notebook}`);
     await page.notebook.activate(notebook);
 
-    const getCaptureImageName = (contextPrefix: string, notebook: string, id: number): string => {
-      return `${contextPrefix}-${notebook}-cell-${id}.png`;
-    };
+    // Scroll to top of the page
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForFunction('window.scrollY === 0');
 
+    let results = [];
     let cellCount = 0;
+
     await page.notebook.runCellByCell({
       onAfterCellRun: async (cellIndex: number) => {
         // Always get first cell output which must contain the plot
@@ -86,7 +84,7 @@ const testPlotUpdates = async (page: IJupyterLabPageFixture, tmpPath: string, th
     await page.notebook.save();
 
     for (let i = 0; i < cellCount; i++) {
-      expect(results[i]).toMatchSnapshot(getCaptureImageName(contextPrefix, notebook, i), {threshold: 0.3});
+      expect(results[i]).toMatchSnapshot(`${contextPrefix}-${notebook}-cell-${i}.png`, {threshold: 0.3});
     }
 
     await page.notebook.close(true);
