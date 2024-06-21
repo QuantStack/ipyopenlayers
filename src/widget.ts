@@ -70,11 +70,11 @@ export class MapModel extends DOMWidgetModel {
 export class MapView extends DOMWidgetView {
   render() {
     useGeographic();
-    this.el.classList.add('custom-widget');
-    this.mapContainer = document.createElement('div');
-    this.mapContainer.className = 'ol-container';
-    this.mapContainer.className = 'ol-container';
-    this.el.appendChild(this.mapContainer);
+    this.el.classList.add('jupyter-widgets');
+    this.el.classList.add('ipyopenlayer-widgets');
+    this.map_container = document.createElement('div');
+    this.map_container.classList.add('ol-container');
+    this.el.appendChild(this.map_container);
     this.layerViews = new ViewList(
       this.addLayerModel,
       this.removeLayerView,
@@ -93,7 +93,7 @@ export class MapView extends DOMWidgetView {
       this,
     );
     this.map = new Map({
-      target: this.mapContainer,
+      target: this.map_container,
       view: new View({
         center: this.model.get('center'),
         zoom: this.model.get('zoom'),
@@ -207,7 +207,8 @@ export class MapView extends DOMWidgetView {
   }
 
   imageElement: HTMLImageElement;
-  mapContainer: HTMLDivElement;
+  map_container: HTMLDivElement;
+  map_child: HTMLDivElement;
   map: Map;
   layerViews: ViewList<LayerView>;
   overlayViews: ViewList<BaseOverlayView>;
