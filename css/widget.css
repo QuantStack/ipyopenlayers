@@ -1,7 +1,8 @@
 .ol-container {
-  height: 100%;
-  width: 100%;
+  width: 656px;
+  height: 501px; 
 }
+
 
 .lm-Widget.lm-Panel.jp-OutputArea-child.jp-OutputArea-executeResult{
   height: 100%;

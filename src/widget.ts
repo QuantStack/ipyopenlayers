@@ -74,7 +74,13 @@ export class MapView extends DOMWidgetView {
     this.mapContainer = document.createElement('div');
     this.mapContainer.className = 'ol-container';
     this.el.appendChild(this.mapContainer);
-
+    requestAnimationFrame(() => {
+      console.log(
+        'Map container dimensions after render:',
+        this.mapContainer.offsetWidth,
+        this.mapContainer.offsetHeight,
+      );
+    });
     this.layerViews = new ViewList(
       this.addLayerModel,
       this.removeLayerView,
