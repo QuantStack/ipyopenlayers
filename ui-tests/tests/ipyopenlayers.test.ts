@@ -76,11 +76,15 @@ const testPlotUpdates = async (page: IJupyterLabPageFixture, tmpPath: string, th
     await page.notebook.runCellByCell({
       onAfterCellRun: async (cellIndex: number) => {
         await page.waitForTimeout(1000); // Ajouter un délai pour la stabilisation du rendu
-        // Always get first cell output which must contain the plot
+        
+        // Capturer toujours la première sortie de cellule qui doit contenir le graphique
         const cell = await page.notebook.getCellOutput(0);
         if (cell) {
-          results.push(await cell.screenshot());
-          cellCount++;
+          const box = await cell.boundingBox(); // Obtenir la boîte englobante de la cellule
+          if (box) {
+            results.push(await page.screenshot({ clip: box })); // Capturer l'écran avec clip: box
+            cellCount++;
+          }
         }
       }
     });
