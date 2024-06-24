@@ -1,16 +1,25 @@
-/* Dans widget.css */
+.lm-Widget.lm-Panel.jp-OutputArea-child.jp-OutputArea-executeResult{
+  height: 100%;
+}
+/* Styles pour le conteneur de la carte OpenLayers */
 .ol-container {
   height: 100%;
   width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
-
-.jupyter-widgets.ipyopenlayer-widgets  {
-  height: 400px;
-  overflow: hidden;
-  flex: 1 1 auto;
-}
-
+/* Styles pour le conteneur de la vue liée */
 .jp-LinkedOutputView .jupyter-widgets.ipyopenlayer-widgets {
-  min-height: 360px; /* Min-height nécessaire pour la sortie miroir dans jlab < 0.31.6 */
-  height: 100%;
+  min-height: 500px; /* Assure que la vue liée a une hauteur minimale */
+  height: 100%;      /* Remplit toute la hauteur disponible */
+}
+
+/* Styles pour le conteneur sous la cellule */
+.jupyter-widgets.ipyopenlayer-widgets {
+  height: 400px; /* Hauteur fixe pour le conteneur sous la cellule */
+  overflow: hidden; /* Cache tout débordement */
+  flex: 1 1 auto; /* Flexbox: grandit et rétrécit automatiquement */
 }
