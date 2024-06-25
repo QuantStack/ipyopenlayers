@@ -8,7 +8,7 @@ const filterUpdateNotebooks = item => {
 }
 
 const testCellOutputs = async (page: IJupyterLabPageFixture, tmpPath: string, theme: 'JupyterLab Light' | 'JupyterLab Dark') => {
-  const paths = klaw(path.resolve(__dirname, './notebooks'), { filter: item => !filterUpdateNotebooks(item), nodir: true });
+  const paths = klaw(path.resolve(__dirname, './notebooks'), {filter: item => !filterUpdateNotebooks(item), nodir: true});
   const notebooks = paths.map(item => path.basename(item.path));
 
   const contextPrefix = theme == 'JupyterLab Dark' ? 'light' : 'dark';
@@ -41,7 +41,7 @@ const testCellOutputs = async (page: IJupyterLabPageFixture, tmpPath: string, th
     await page.notebook.save();
 
     for (let c = 0; c < numCellImages; ++c) {
-      expect(results[c]).toMatchSnapshot(getCaptureImageName(contextPrefix, notebook, c), { threshold: 0.3 });
+      expect(results[c]).toMatchSnapshot(getCaptureImageName(contextPrefix, notebook, c), {threshold: 0.3});
     }
 
     await page.notebook.close(true);
@@ -49,7 +49,7 @@ const testCellOutputs = async (page: IJupyterLabPageFixture, tmpPath: string, th
 }
 
 const testPlotUpdates = async (page: IJupyterLabPageFixture, tmpPath: string, theme: 'JupyterLab Light' | 'JupyterLab Dark') => {
-  const paths = klaw(path.resolve(__dirname, './notebooks'), { filter: item => filterUpdateNotebooks(item), nodir: true });
+  const paths = klaw(path.resolve(__dirname, './notebooks'), {filter: item => filterUpdateNotebooks(item), nodir: true});
   const notebooks = paths.map(item => path.basename(item.path));
 
   const contextPrefix = theme == 'JupyterLab Light' ? 'light' : 'dark';
@@ -89,7 +89,7 @@ const testPlotUpdates = async (page: IJupyterLabPageFixture, tmpPath: string, th
     await page.notebook.save();
 
     for (let i = 0; i < cellCount; i++) {
-      expect(results[i]).toMatchSnapshot(getCaptureImageName(contextPrefix, notebook, i), { threshold: 0.3 });
+      expect(results[i]).toMatchSnapshot(getCaptureImageName(contextPrefix, notebook, i), {threshold: 0.3});
     }
 
     await page.notebook.close(true);
@@ -115,6 +115,12 @@ test.describe('ipyopenlayers Visual Regression', () => {
   }) => {
     await testCellOutputs(page, tmpPath, 'JupyterLab Light');
   });
+  // test('Dark theme: Check ipyopenlayers first renders', async ({	
+  //   page,	
+  //   tmpPath,	
+  // }) => {	
+  //   await testCellOutputs(page, tmpPath, 'JupyterLab Dark');	
+  // });	
 
   test('Light theme: Check ipyopenlayers update plot properties', async ({
     page,
@@ -122,4 +128,10 @@ test.describe('ipyopenlayers Visual Regression', () => {
   }) => {
     await testPlotUpdates(page, tmpPath, 'JupyterLab Light');
   });
+    // test('Dark theme: Check ipyopenlayers update plot properties', async ({	
+  //   page,	
+  //   tmpPath,	
+  // }) => {	
+  //   await testPlotUpdates(page, tmpPath, 'JupyterLab Dark');	
+  // });
 });
