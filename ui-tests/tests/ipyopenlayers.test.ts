@@ -60,7 +60,6 @@ const testPlotUpdates = async (page: IJupyterLabPageFixture, tmpPath: string, th
   if (theme == 'JupyterLab Dark') {
     page.theme.setTheme(theme);
   }
-  await page.setViewportSize({ width: 1280, height: 800 });
 
   for (const notebook of notebooks) {
     let results = [];
@@ -75,16 +74,11 @@ const testPlotUpdates = async (page: IJupyterLabPageFixture, tmpPath: string, th
     let cellCount = 0;
     await page.notebook.runCellByCell({
       onAfterCellRun: async (cellIndex: number) => {
-        await page.waitForTimeout(1000); // Ajouter un délai pour la stabilisation du rendu
-        
-        // Capturer toujours la première sortie de cellule qui doit contenir le graphique
+        // Always get first cell output which must contain the plot
         const cell = await page.notebook.getCellOutput(0);
         if (cell) {
-          const box = await cell.boundingBox(); // Obtenir la boîte englobante de la cellule
-          if (box) {
-            results.push(await page.screenshot({ clip: box })); // Capturer l'écran avec clip: box
-            cellCount++;
-          }
+          results.push(await cell.screenshot());
+          cellCount++;
         }
       }
     });
@@ -92,7 +86,7 @@ const testPlotUpdates = async (page: IJupyterLabPageFixture, tmpPath: string, th
     await page.notebook.save();
 
     for (let i = 0; i < cellCount; i++) {
-      expect(results[i]).toMatchSnapshot(getCaptureImageName(contextPrefix, notebook, i), {threshold: 0.5});
+      expect(results[i]).toMatchSnapshot(getCaptureImageName(contextPrefix, notebook, i), {threshold: 0.3});
     }
 
     await page.notebook.close(true);

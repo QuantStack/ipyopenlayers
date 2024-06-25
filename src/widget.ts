@@ -208,7 +208,6 @@ export class MapView extends DOMWidgetView {
 
   imageElement: HTMLImageElement;
   map_container: HTMLDivElement;
-  map_child: HTMLDivElement;
   map: Map;
   layerViews: ViewList<LayerView>;
   overlayViews: ViewList<BaseOverlayView>;
