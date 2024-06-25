@@ -213,4 +213,3 @@ export class MapView extends DOMWidgetView {
   overlayViews: ViewList<BaseOverlayView>;
   controlViews: ViewList<BaseControlView>;
 }
-
