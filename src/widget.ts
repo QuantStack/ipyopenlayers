@@ -74,7 +74,7 @@ export class MapView extends DOMWidgetView {
     this.el.classList.add('ipyopenlayer-widgets');
     this.map_container = document.createElement('div');
     this.map_container.classList.add('ol-container');
-    this.el.appendChild(this.map_container);
+    this.el.appendChild(this.map_container);   
     this.layerViews = new ViewList(
       this.addLayerModel,
       this.removeLayerView,

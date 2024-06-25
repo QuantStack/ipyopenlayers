@@ -1,10 +1,6 @@
-// Copyright (c) Jupyter Development Team.
-// Distributed under the terms of the Modified BSD License.
-
 import { expect, IJupyterLabPageFixture, test } from '@jupyterlab/galata';
 import * as path from 'path';
 const klaw = require('klaw-sync');
-
 
 const filterUpdateNotebooks = item => {
   const basename = path.basename(item.path);
@@ -12,7 +8,7 @@ const filterUpdateNotebooks = item => {
 }
 
 const testCellOutputs = async (page: IJupyterLabPageFixture, tmpPath: string, theme: 'JupyterLab Light' | 'JupyterLab Dark') => {
-  const paths = klaw(path.resolve(__dirname, './notebooks'), {filter: item => !filterUpdateNotebooks(item), nodir: true});
+  const paths = klaw(path.resolve(__dirname, './notebooks'), { filter: item => !filterUpdateNotebooks(item), nodir: true });
   const notebooks = paths.map(item => path.basename(item.path));
 
   const contextPrefix = theme == 'JupyterLab Dark' ? 'light' : 'dark';
@@ -45,7 +41,7 @@ const testCellOutputs = async (page: IJupyterLabPageFixture, tmpPath: string, th
     await page.notebook.save();
 
     for (let c = 0; c < numCellImages; ++c) {
-      expect(results[c]).toMatchSnapshot(getCaptureImageName(contextPrefix, notebook, c), {threshold: 0.3});
+      expect(results[c]).toMatchSnapshot(getCaptureImageName(contextPrefix, notebook, c), { threshold: 0.3 });
     }
 
     await page.notebook.close(true);
@@ -53,7 +49,7 @@ const testCellOutputs = async (page: IJupyterLabPageFixture, tmpPath: string, th
 }
 
 const testPlotUpdates = async (page: IJupyterLabPageFixture, tmpPath: string, theme: 'JupyterLab Light' | 'JupyterLab Dark') => {
-  const paths = klaw(path.resolve(__dirname, './notebooks'), {filter: item => filterUpdateNotebooks(item), nodir: true});
+  const paths = klaw(path.resolve(__dirname, './notebooks'), { filter: item => filterUpdateNotebooks(item), nodir: true });
   const notebooks = paths.map(item => path.basename(item.path));
 
   const contextPrefix = theme == 'JupyterLab Light' ? 'light' : 'dark';
@@ -77,7 +73,14 @@ const testPlotUpdates = async (page: IJupyterLabPageFixture, tmpPath: string, th
         // Always get first cell output which must contain the plot
         const cell = await page.notebook.getCellOutput(0);
         if (cell) {
-          results.push(await cell.screenshot());
+          const box = await cell.boundingBox();
+          const roundedBox = {
+            x: Math.round(box.x),
+            y: Math.round(box.y),
+            width: Math.round(box.width),
+            height: Math.round(box.height)
+          };
+          results.push(await cell.screenshot({ clip: roundedBox }));
           cellCount++;
         }
       }
@@ -86,7 +89,7 @@ const testPlotUpdates = async (page: IJupyterLabPageFixture, tmpPath: string, th
     await page.notebook.save();
 
     for (let i = 0; i < cellCount; i++) {
-      expect(results[i]).toMatchSnapshot(getCaptureImageName(contextPrefix, notebook, i), {threshold: 0.5});
+      expect(results[i]).toMatchSnapshot(getCaptureImageName(contextPrefix, notebook, i), { threshold: 0.3 });
     }
 
     await page.notebook.close(true);
@@ -113,24 +116,10 @@ test.describe('ipyopenlayers Visual Regression', () => {
     await testCellOutputs(page, tmpPath, 'JupyterLab Light');
   });
 
-  // test('Dark theme: Check ipyopenlayers first renders', async ({
-  //   page,
-  //   tmpPath,
-  // }) => {
-  //   await testCellOutputs(page, tmpPath, 'JupyterLab Dark');
-  // });
-
   test('Light theme: Check ipyopenlayers update plot properties', async ({
     page,
     tmpPath,
   }) => {
     await testPlotUpdates(page, tmpPath, 'JupyterLab Light');
   });
-
-  // test('Dark theme: Check ipyopenlayers update plot properties', async ({
-  //   page,
-  //   tmpPath,
-  // }) => {
-  //   await testPlotUpdates(page, tmpPath, 'JupyterLab Dark');
-  // });
 });
