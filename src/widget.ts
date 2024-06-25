@@ -7,11 +7,11 @@ import {
   unpack_models,
   ViewList,
 } from '@jupyter-widgets/base';
-import { TileLayerModel, TileLayerView } from './tilelayer';
+import { LayerModel, LayerView } from './layer';
 import { BaseOverlayModel, BaseOverlayView } from './baseoverlay';
 import { BaseControlModel, BaseControlView } from './basecontrol';
-import { ObjectEvent } from 'ol/Object';
 import { ViewObjectEventTypes } from 'ol/View';
+
 import { Map } from 'ol';
 import TileLayer from 'ol/layer/Tile';
 import View from 'ol/View';
@@ -19,7 +19,7 @@ import 'ol/ol.css';
 import { MODULE_NAME, MODULE_VERSION } from './version';
 import '../css/widget.css';
 import { useGeographic } from 'ol/proj';
-
+import { ObjectEvent } from 'ol/Object';
 export * from './imageoverlay';
 export * from './geojson';
 export * from './video_overlay';
@@ -70,11 +70,11 @@ export class MapModel extends DOMWidgetModel {
 export class MapView extends DOMWidgetView {
   render() {
     useGeographic();
-    this.el.classList.add('custom-widget');
-    this.mapContainer = document.createElement('div');
-    this.mapContainer.className = 'ol-container';
-    this.el.appendChild(this.mapContainer);
-
+    this.el.classList.add('jupyter-widgets');
+    this.el.classList.add('ipyopenlayer-widgets');
+    this.map_container = document.createElement('div');
+    this.map_container.classList.add('ol-container');
+    this.el.appendChild(this.map_container);
     this.layerViews = new ViewList(
       this.addLayerModel,
       this.removeLayerView,
@@ -93,13 +93,14 @@ export class MapView extends DOMWidgetView {
       this,
     );
     this.map = new Map({
-      target: this.mapContainer,
+      target: this.map_container,
       view: new View({
         center: this.model.get('center'),
         zoom: this.model.get('zoom'),
       }),
       layers: [new TileLayer()],
     });
+
     this.map.getView().on('change:center', () => {
       this.model.set('center', this.map.getView().getCenter());
       this.model.save_changes();
@@ -123,7 +124,7 @@ export class MapView extends DOMWidgetView {
   }
 
   layersChanged() {
-    const layers = this.model.get('layers') as TileLayerModel[];
+    const layers = this.model.get('layers') as LayerModel[];
     this.layerViews.update(layers);
   }
 
@@ -151,7 +152,7 @@ export class MapView extends DOMWidgetView {
     }
   }
 
-  removeLayerView(child_view: TileLayerView) {
+  removeLayerView(child_view: LayerView) {
     this.map.removeLayer(child_view.obj);
     child_view.remove();
   }
@@ -168,8 +169,8 @@ export class MapView extends DOMWidgetView {
     child_view.remove();
   }
 
-  async addLayerModel(child_model: TileLayerModel) {
-    const view = await this.create_child_view<TileLayerView>(child_model, {
+  async addLayerModel(child_model: LayerModel) {
+    const view = await this.create_child_view<LayerView>(child_model, {
       map_view: this,
     });
     this.map.addLayer(view.obj);
@@ -206,9 +207,9 @@ export class MapView extends DOMWidgetView {
   }
 
   imageElement: HTMLImageElement;
-  mapContainer: HTMLDivElement;
+  map_container: HTMLDivElement;
   map: Map;
-  layerViews: ViewList<TileLayerView>;
+  layerViews: ViewList<LayerView>;
   overlayViews: ViewList<BaseOverlayView>;
   controlViews: ViewList<BaseControlView>;
 }
