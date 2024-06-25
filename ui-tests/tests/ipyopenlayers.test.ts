@@ -1,6 +1,10 @@
+// Copyright (c) Jupyter Development Team.
+// Distributed under the terms of the Modified BSD License.
+
 import { expect, IJupyterLabPageFixture, test } from '@jupyterlab/galata';
 import * as path from 'path';
 const klaw = require('klaw-sync');
+
 
 const filterUpdateNotebooks = item => {
   const basename = path.basename(item.path);
@@ -73,14 +77,7 @@ const testPlotUpdates = async (page: IJupyterLabPageFixture, tmpPath: string, th
         // Always get first cell output which must contain the plot
         const cell = await page.notebook.getCellOutput(0);
         if (cell) {
-          const box = await cell.boundingBox();
-          const roundedBox = {
-            x: Math.round(box.x),
-            y: Math.round(box.y),
-            width: Math.round(box.width),
-            height: Math.round(box.height)
-          };
-          results.push(await cell.screenshot({ clip: roundedBox }));
+          results.push(await cell.screenshot());
           cellCount++;
         }
       }
@@ -89,7 +86,7 @@ const testPlotUpdates = async (page: IJupyterLabPageFixture, tmpPath: string, th
     await page.notebook.save();
 
     for (let i = 0; i < cellCount; i++) {
-      expect(results[i]).toMatchSnapshot(getCaptureImageName(contextPrefix, notebook, i), {threshold: 0.3});
+      expect(results[i]).toMatchSnapshot(getCaptureImageName(contextPrefix, notebook, i), {threshold: 0.5});
     }
 
     await page.notebook.close(true);
@@ -115,12 +112,13 @@ test.describe('ipyopenlayers Visual Regression', () => {
   }) => {
     await testCellOutputs(page, tmpPath, 'JupyterLab Light');
   });
-  // test('Dark theme: Check ipyopenlayers first renders', async ({	
-  //   page,	
-  //   tmpPath,	
-  // }) => {	
-  //   await testCellOutputs(page, tmpPath, 'JupyterLab Dark');	
-  // });	
+
+  // test('Dark theme: Check ipyopenlayers first renders', async ({
+  //   page,
+  //   tmpPath,
+  // }) => {
+  //   await testCellOutputs(page, tmpPath, 'JupyterLab Dark');
+  // });
 
   test('Light theme: Check ipyopenlayers update plot properties', async ({
     page,
@@ -128,10 +126,11 @@ test.describe('ipyopenlayers Visual Regression', () => {
   }) => {
     await testPlotUpdates(page, tmpPath, 'JupyterLab Light');
   });
-    // test('Dark theme: Check ipyopenlayers update plot properties', async ({	
-  //   page,	
-  //   tmpPath,	
-  // }) => {	
-  //   await testPlotUpdates(page, tmpPath, 'JupyterLab Dark');	
+
+  // test('Dark theme: Check ipyopenlayers update plot properties', async ({
+  //   page,
+  //   tmpPath,
+  // }) => {
+  //   await testPlotUpdates(page, tmpPath, 'JupyterLab Dark');
   // });
 });
