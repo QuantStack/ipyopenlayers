@@ -86,6 +86,7 @@ export class MapView extends DOMWidgetView {
           );
         }
       }
+      }
     });
     this.el.appendChild(this.map_container);
 
