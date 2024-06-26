@@ -75,15 +75,19 @@ export class MapView extends DOMWidgetView {
 
     this.map_container = document.createElement('div');
     this.map_container.classList.add('ol-container');
-
     requestAnimationFrame(() => {
-      if (this.el.parentElement) {
-        this.el.parentElement.classList.add('ipyopenlayer-map-container-wrapper');
-        
-        if (this.el.parentElement.parentElement) {
-          this.el.parentElement.parentElement.classList.add('ipyopenlayer-map-container-wrapper-parent');
+      const parentElement = this.el.parentElement;
+      if (parentElement) {
+        parentElement.classList.add(
+          'ipyopenlayer-map-container-wrapper',
+        );
+        const grandParentElement = parentElement.parentElement;
+        if (grandParentElement) {
+          grandParentElement.classList.add(
+            'ipyopenlayer-map-container-wrapper-parent',
+          );
         }
-      } 
+      }
     });
     this.el.appendChild(this.map_container);
 
