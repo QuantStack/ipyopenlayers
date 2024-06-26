@@ -1,14 +1,14 @@
-.lm-Widget.lm-Panel.jp-OutputArea-child.jp-OutputArea-executeResult{
-  height: 100%;
+
+.lm-Widget.lm-Panel.jp-OutputArea-output.ipyopenlayer-map-container-wrapper{
+height: 100%;
 }
+.lm-Widget.lm-Panel.jp-OutputArea-child.jp-OutputArea-executeResult.ipyopenlayer-map-container-wrapper-parent{
+   height: 100%;
+}
+
 .ol-container {
   height: 100%;
   width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
 }
 .jp-LinkedOutputView .jupyter-widgets.ipyopenlayer-widgets {
   min-height: 500px; 

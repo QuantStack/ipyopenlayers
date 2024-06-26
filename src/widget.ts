@@ -72,9 +72,21 @@ export class MapView extends DOMWidgetView {
     useGeographic();
     this.el.classList.add('jupyter-widgets');
     this.el.classList.add('ipyopenlayer-widgets');
+
     this.map_container = document.createElement('div');
     this.map_container.classList.add('ol-container');
+
+    requestAnimationFrame(() => {
+      if (this.el.parentElement) {
+        this.el.parentElement.classList.add('ipyopenlayer-map-container-wrapper');
+        
+        if (this.el.parentElement.parentElement) {
+          this.el.parentElement.parentElement.classList.add('ipyopenlayer-map-container-wrapper-parent');
+        }
+      } 
+    });
     this.el.appendChild(this.map_container);
+
     this.layerViews = new ViewList(
       this.addLayerModel,
       this.removeLayerView,
