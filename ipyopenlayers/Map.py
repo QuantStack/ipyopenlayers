@@ -46,17 +46,6 @@ class GeoJSON(Layer):
         self.radius = kwargs.get('radius', 8)
 
 class HeatmapLayer(Layer):
-
-    _view_name = Unicode('HeatmapLayerView').tag(sync=True)
-    _model_name = Unicode('HeatmapLayerModel').tag(sync=True)
-    points= List([]).tag(sync=True)
-    blur =Int(15).tag(sync=True)
-    radius = Int(8).tag(sync=True)
-
-
-
-class HeatmapLayer(Layer):
-
     _view_name = Unicode('HeatmapLayerView').tag(sync=True)
     _model_name = Unicode('HeatmapLayerModel').tag(sync=True)
     points= List([]).tag(sync=True)
