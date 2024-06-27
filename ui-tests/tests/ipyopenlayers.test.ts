@@ -103,7 +103,7 @@ const testPlotUpdates = async (
     let cellCount = 0;
     await page.notebook.runCellByCell({
       onAfterCellRun: async (cellIndex: number) => {
-        // Always get first cell output which must contain the plot
+
         const cell = await page.notebook.getCellOutput(0);
         if (cell) {
           results.push(await cell.screenshot());
@@ -111,7 +111,7 @@ const testPlotUpdates = async (
         }
       },
     });
-
+    await page.waitForTimeout(1000); 
     await page.notebook.save();
 
     for (let i = 0; i < cellCount; i++) {
