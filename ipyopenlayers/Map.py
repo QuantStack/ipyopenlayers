@@ -14,6 +14,7 @@ from ._frontend import module_name, module_version
 
 def_loc = [0.0, 0.0]
 
+
 class Layer(Widget):
 
     _model_name = Unicode('LayerModel').tag(sync=True)
