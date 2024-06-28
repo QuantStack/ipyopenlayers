@@ -30,7 +30,6 @@ class TileLayer(Layer):
 
     url = Unicode('https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png').tag(sync=True)
 
-
 class GeoJSON(Layer):
 
     _view_name = Unicode('OpenLayersGeoJSONView').tag(sync=True)
