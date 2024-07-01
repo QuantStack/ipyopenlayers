@@ -36,6 +36,11 @@ const testCellOutputs = async (page: IJupyterLabPageFixture, tmpPath: string, th
       onAfterCellRun: async (cellIndex: number) => {
         const cell = await page.notebook.getCellOutput(cellIndex);
         if (cell) {
+          const map = await cell.$("div.ol-container");
+
+          if (map) {
+            await new Promise((_) => setTimeout(_, 1000));
+          }
           results.push(await cell.screenshot());
           numCellImages++;
         }
