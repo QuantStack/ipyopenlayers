@@ -8,8 +8,8 @@
 TODO: Add module docstring
 """
 
-from ipywidgets import DOMWidget, Widget, widget_serialization, CallbackDispatcher
-from traitlets import Unicode, List, Instance, CFloat, Bool, Dict, Int
+from ipywidgets import DOMWidget, Widget, widget_serialization
+from traitlets import Unicode, List, Instance, CFloat, Bool, Dict, Int, Tuple, Float
 from ._frontend import module_name, module_version
 
 def_loc = [0.0, 0.0]
@@ -38,12 +38,6 @@ class GeoJSON(Layer):
     data = Dict({}).tag(sync=True)
     style = Dict({}).tag(sync=True)
     visible = Bool(True).tag(sync=True)
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-        self.points = kwargs.get('points', [])
-        self.blur = kwargs.get('blur', 15)
-        self.radius = kwargs.get('radius', 8)
 
 
 class HeatmapLayer(Layer):
@@ -52,13 +46,22 @@ class HeatmapLayer(Layer):
     points= List([]).tag(sync=True)
     blur =Int(15).tag(sync=True)
     radius = Int(8).tag(sync=True)
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
 
-        self.points = kwargs.get('points', [])
-        self.blur = kwargs.get('blur', 15)
-        self.radius = kwargs.get('radius', 8)
+class ArrowLayer(Layer):
+    _view_name = Unicode('ArrowLayerView').tag(sync=True)
+    _model_name = Unicode('ArrowLayerModel').tag(sync=True)
+    opacity = Float(1.0).tag(sync=True)
+    data = List([]).tag(sync=True)
 
+class WindLayer(Layer):
+    _view_name = Unicode('WindLayerView').tag(sync=True)
+    _model_name = Unicode('WindLayerModel').tag(sync=True)
+    metadata = Dict().tag(sync=True)
+    opacity = Float(1.0).tag(sync=True)
+    updateWhileInteracting = Bool(True).tag(sync=True)
+    style = Unicode('barbs').tag(sync=True)
+    ufile =Dict().tag(sync=True)
+    vfile =Dict().tag(sync=True)
 
 
 
