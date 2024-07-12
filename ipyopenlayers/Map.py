@@ -173,23 +173,4 @@ class Map(DOMWidget):
     def clear_layers(self):
         self.layers = []
 
-    def _handle_clicked_coordinates(self):
-        coordinates = self.coordinates
-        print(f'Clicked coordinates: {coordinates}')
-        #country = self.get_country_from_coordinates(coordinates)
-        #print(f'Country: {country}')
-'''
-    def get_country_from_coordinates(self, coordinates):
-        try:
-            lat, lon = coordinates
-            url = f'https://nominatim.openstreetmap.org/reverse?format=json&lat={lat}&lon={lon}'
-            response = requests.get(url)
-            if response.status_code == 200:
-                data = response.json()
-                address = data.get('address', {})
-                return address.get('country', 'Unknown')
-            else:
-                return 'Unknown'
-        except Exception as e:
-            return 'Unknown'
-        '''
+

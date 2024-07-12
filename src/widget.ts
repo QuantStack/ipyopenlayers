@@ -11,10 +11,7 @@ import { MapBrowserEvent } from 'ol';
 import { LayerModel, LayerView } from './layer';
 import { BaseOverlayModel, BaseOverlayView } from './baseoverlay';
 import { BaseControlModel, BaseControlView } from './basecontrol';
-//import { ArrowLayerModel, ArrowLayerView } from './arrowlayer';
 import { ViewObjectEventTypes } from 'ol/View';
-//import Point from 'ol/geom/Point';
-//import Feature from 'ol/Feature';
 import { Map } from 'ol';
 import TileLayer from 'ol/layer/Tile';
 import View from 'ol/View';
@@ -125,8 +122,6 @@ export class MapView extends DOMWidgetView {
       this.model.set('center', this.map.getView().getCenter());
       this.model.save_changes();
     });
-    this.map.on('click', this.handleMapClick.bind(this));
-    this.initializeMapClickListener();
 
     this.map
       .getView()
@@ -143,15 +138,6 @@ export class MapView extends DOMWidgetView {
     this.model.on('change:controls', this.controlChanged, this);
     this.model.on('change:zoom', this.zoomChanged, this);
     this.model.on('change:center', this.centerChanged, this);
-  }
-  initializeMapClickListener() {
-    this.map.on('click', this.handleMapClick.bind(this));
-  }
-
-  handleMapClick(event: MapBrowserEvent<MouseEvent>) {
-    const coordinates = event.coordinate;
-    this.model.set('coordinates', coordinates);
-    console.log('Clicked coordinates:', coordinates);
   }
 
   layersChanged() {
@@ -204,10 +190,6 @@ export class MapView extends DOMWidgetView {
     const view = await this.create_child_view<LayerView>(child_model, {
       map_view: this,
     });
-
-    /*if (child_model instanceof ArrowLayerModel) {
-      await this.animateArrowLayer(view as ArrowLayerView);
-    }*/
     this.map.addLayer(view.obj);
     this.displayed.then(() => {
       view.trigger('displayed', this);
@@ -215,51 +197,7 @@ export class MapView extends DOMWidgetView {
     return view;
   }
 
-  /*  async animateArrowLayer(view: ArrowLayerView) {
-    const source = view.vectorLayer.getSource();
-    if (source) {
-      const features = source.getFeatures();
-      for (const feature of features) {
-        const windProperties = feature.getProperties().wind;
-        const windDirection = windProperties?.deg;
-        const windSpeed = windProperties?.speed;
-        if (windDirection !== undefined && windSpeed !== undefined) {
-          const distance = windSpeed * 1;
-          this.animateFeature(feature, windDirection, distance, 1000);
-        }
-      }
-    }
-  }
-  animateFeature(
-    feature: Feature,
-    windDirection: number,
-    distance: number,
-    duration: number,
-  ) {
-    const startCoords = (feature.getGeometry() as Point).getCoordinates();
-    const dx = distance * Math.cos((windDirection - 180) * (Math.PI / 180));
-    const dy = distance * Math.sin((windDirection - 180) * (Math.PI / 180));
 
-    const startTime = Date.now();
-
-    const translateStep = () => {
-      const elapsed = Date.now() - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-
-      const newX = startCoords[0] + dx * progress;
-      const newY = startCoords[1] + dy * progress;
-      (feature.getGeometry() as Point).setCoordinates([newX, newY]);
-
-      if (progress < 1) {
-        requestAnimationFrame(translateStep);
-      } else {
-        this.animateFeature(feature, windDirection, distance, duration);
-      }
-    };
-
-    translateStep();
-  }
-*/
   async addOverlayModel(child_model: BaseOverlayModel) {
     const view = await this.create_child_view<BaseOverlayView>(child_model, {
       map_view: this,
