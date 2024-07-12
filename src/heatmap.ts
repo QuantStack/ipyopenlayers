@@ -36,7 +36,7 @@ export class HeatmapLayerModel extends LayerModel {
 }
 
 export class HeatmapLayerView extends LayerView {
-  obj: Heatmap<Feature>;
+  obj: Heatmap;
 
   render() {
     this.create_obj();

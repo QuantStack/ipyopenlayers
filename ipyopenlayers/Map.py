@@ -7,7 +7,7 @@
 """
 TODO: Add module docstring
 """
-
+import requests
 from ipywidgets import DOMWidget, Widget, widget_serialization
 from traitlets import Unicode, List, Instance, CFloat, Bool, Dict, Int, Tuple, Float
 from ._frontend import module_name, module_version
@@ -139,6 +139,7 @@ class Map(DOMWidget):
     layers = List(Instance(Layer)).tag(sync=True, **widget_serialization)
     overlays=List(Instance(BaseOverlay)).tag(sync=True, **widget_serialization)
     controls=List(Instance(BaseControl)).tag(sync=True, **widget_serialization)
+    coordinates=List([0,0]).tag(sync=True, o=True)
 
 
 
@@ -171,3 +172,24 @@ class Map(DOMWidget):
 
     def clear_layers(self):
         self.layers = []
+
+    def _handle_clicked_coordinates(self):
+        coordinates = self.coordinates
+        print(f'Clicked coordinates: {coordinates}')
+        #country = self.get_country_from_coordinates(coordinates)
+        #print(f'Country: {country}')
+'''
+    def get_country_from_coordinates(self, coordinates):
+        try:
+            lat, lon = coordinates
+            url = f'https://nominatim.openstreetmap.org/reverse?format=json&lat={lat}&lon={lon}'
+            response = requests.get(url)
+            if response.status_code == 200:
+                data = response.json()
+                address = data.get('address', {})
+                return address.get('country', 'Unknown')
+            else:
+                return 'Unknown'
+        except Exception as e:
+            return 'Unknown'
+        '''
