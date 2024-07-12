@@ -143,7 +143,6 @@ export class MapView extends DOMWidgetView {
     this.model.on('change:controls', this.controlChanged, this);
     this.model.on('change:zoom', this.zoomChanged, this);
     this.model.on('change:center', this.centerChanged, this);
-
   }
   initializeMapClickListener() {
     this.map.on('click', this.handleMapClick.bind(this));
@@ -154,7 +153,6 @@ export class MapView extends DOMWidgetView {
     this.model.set('coordinates', coordinates);
     console.log('Clicked coordinates:', coordinates);
   }
-
 
   layersChanged() {
     const layers = this.model.get('layers') as LayerModel[];
