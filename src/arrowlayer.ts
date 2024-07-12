@@ -37,7 +37,8 @@ export class ArrowLayerModel extends LayerModel {
 }
 
 export class ArrowLayerView extends LayerView {
-  obj: VectorLayer<Feature>;
+  // @ts-expect-error type not assignable
+  obj: VectorLayer;
 
   render() {
     this.initVectorLayer();
@@ -137,7 +138,7 @@ export class ArrowLayerView extends LayerView {
       this.vectorLayer.setOpacity(this.model.get('opacity'));
     });
   }
-
-  vectorLayer: VectorLayer<Feature>;
+  // @ts-expect-error type not assignable
+  vectorLayer: VectorLayer;
   vectorSource: VectorSource;
 }

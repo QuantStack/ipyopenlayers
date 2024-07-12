@@ -10,7 +10,6 @@ import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style.js';
 import { Vector as VectorSource } from 'ol/source.js';
 import { Vector as VectorLayer } from 'ol/layer.js';
 import { LayerModel, LayerView } from './layer';
-import { Feature } from 'ol';
 
 export class OpenLayersGeoJSONModel extends LayerModel {
   defaults() {
@@ -40,7 +39,8 @@ export class OpenLayersGeoJSONModel extends LayerModel {
 }
 
 export class OpenLayersGeoJSONView extends LayerView {
-  obj: VectorLayer<Feature>;
+  // @ts-expect-error test
+  obj: VectorLayer;
   render() {
     this.initVectorLayer();
     this.create_obj();
@@ -110,6 +110,7 @@ export class OpenLayersGeoJSONView extends LayerView {
     this.listenTo(this.model, 'change:data', this.updateData);
     this.listenTo(this.model, 'change:visible', this.updateVisibility);
   }
-  vectorLayer: VectorLayer<Feature>;
+  // @ts-expect-error test
+  vectorLayer: VectorLayer;
   vectorSource: VectorSource;
 }

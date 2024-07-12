@@ -14,34 +14,34 @@ import { createStupidStyle, createBarbsStyle } from 'olwind/src/styling';
 // @ts-expect-error use of a java script arrow
 import { ArrowLayer } from 'olwind/src/ArrowLayer';
 // @ts-expect-error use of a java script uvbuffer
-import  UVBuffer  from 'olwind/src/UVBuffer';
+import UVBuffer from 'olwind/src/UVBuffer';
 
 export class WindLayerModel extends LayerModel {
-    defaults() {
-        return {
-          ...super.defaults(),
-          _model_name: WindLayerModel.model_name,
-          _model_module: WindLayerModel.model_module,
-          _model_module_version: WindLayerModel.model_module_version,
-          _view_name: WindLayerModel.view_name,
-          _view_module: WindLayerModel.view_module,
-          _view_module_version: WindLayerModel.view_module_version,
-        };
-      }
-    
-      static serializers: ISerializers = {
-        ...DOMWidgetModel.serializers,
-        // Add any extra serializers here
-      };
-    
-      static model_name = 'WindLayerModel';
-      static model_module = MODULE_NAME;
-      static model_module_version = MODULE_VERSION;
-      static view_name = 'WindLayerView';
-      static view_module = MODULE_NAME;
-      static view_module_version = MODULE_VERSION;
-    }
- 
+  defaults() {
+    return {
+      ...super.defaults(),
+      _model_name: WindLayerModel.model_name,
+      _model_module: WindLayerModel.model_module,
+      _model_module_version: WindLayerModel.model_module_version,
+      _view_name: WindLayerModel.view_name,
+      _view_module: WindLayerModel.view_module,
+      _view_module_version: WindLayerModel.view_module_version,
+    };
+  }
+
+  static serializers: ISerializers = {
+    ...DOMWidgetModel.serializers,
+    // Add any extra serializers here
+  };
+
+  static model_name = 'WindLayerModel';
+  static model_module = MODULE_NAME;
+  static model_module_version = MODULE_VERSION;
+  static view_name = 'WindLayerView';
+  static view_module = MODULE_NAME;
+  static view_module_version = MODULE_VERSION;
+}
+
 export class WindLayerView extends LayerView {
   obj: ArrowLayer;
   vectorSource: VectorSource;
