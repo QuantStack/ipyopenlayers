@@ -35,7 +35,6 @@ export class HeatmapLayerModel extends LayerModel {
   static view_module_version = MODULE_VERSION;
 }
 
-
 export class HeatmapLayerView extends LayerView {
   obj: Heatmap<Feature>;
 
