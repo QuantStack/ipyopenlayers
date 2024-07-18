@@ -1,9 +1,8 @@
 // Copyright (c) QuantStack
 // Distributed under the terms of the Modified BSD License.
-import { WidgetModel, ISerializers } from '@jupyter-widgets/base';
-import TileLayer from 'ol/layer/Tile';
-import XYZ from 'ol/source/XYZ';
-import OSM from 'ol/source/OSM';
+import { DOMWidgetModel, ISerializers } from '@jupyter-widgets/base';
+import TileLayer from 'ol/layer/WebGLTile.js';
+import XYZ from 'ol/source/XYZ.js';
 import { MODULE_NAME, MODULE_VERSION } from './version';
 import { MapView } from './widget';
 import { LayerModel, LayerView } from './layer';
@@ -18,11 +17,17 @@ export class RasterTileLayerModel extends LayerModel {
       _view_name: RasterTileLayerModel.view_name,
       _view_module: RasterTileLayerModel.view_module,
       _view_module_version: RasterTileLayerModel.view_module_version,
+      layers: [],
+      url: '',
+      attributions: [],
+      tileSize: 256,
+      max_zoom: 19,
+      min_zoom: 0,
     };
   }
 
   static serializers: ISerializers = {
-    ...WidgetModel.serializers,
+    ...DOMWidgetModel.serializers,
     // Add any extra serializers here
   };
 
@@ -39,20 +44,20 @@ export class RasterTileLayerView extends LayerView {
 
   render() {
     super.render();
-    const url = this.model.get('url');
-
-    this.tileLayer = new TileLayer({
-      source: new XYZ({
-        url: url,
-      }),
-    });
-    this.create_obj();
     this.urlChanged();
     this.model.on('change:url', this.urlChanged, this);
   }
 
   create_obj() {
-    this.obj = this.tileLayer;
+    this.obj = this.tileLayer = new TileLayer({
+      source: new XYZ({
+        url: this.model.get('url'),
+        attributions: this.model.get('attributions'),
+        tileSize: this.model.get('tileSize'),
+        maxZoom: this.model.get('max_zoom'),
+        minZoom: this.model.get('min_zoom'),
+      }),
+    });
   }
 
   urlChanged() {
@@ -60,10 +65,14 @@ export class RasterTileLayerView extends LayerView {
     if (newUrl) {
       const newSource = new XYZ({
         url: newUrl,
+        attributions: this.model.get('attributions'),
+        tileSize: this.model.get('tileSize'),
+        maxZoom: this.model.get('max_zoom'),
+        minZoom: this.model.get('min_zoom'),
       });
       this.tileLayer.setSource(newSource);
     }
   }
 
-  tileLayer: TileLayer<OSM>;
+  tileLayer: TileLayer;
 }

@@ -7,9 +7,8 @@
 """
 TODO: Add module docstring
 """
-
-from ipywidgets import DOMWidget, Widget, widget_serialization, CallbackDispatcher
-from traitlets import Unicode, List, Instance, CFloat, Bool, Dict, Int
+from ipywidgets import DOMWidget, Widget, widget_serialization
+from traitlets import Unicode, List, Instance, CFloat, Bool, Dict, Int, Float
 from ._frontend import module_name, module_version
 
 def_loc = [0.0, 0.0]
@@ -24,12 +23,33 @@ class Layer(Widget):
     _view_module = Unicode(module_name).tag(sync=True)
     _view_module_version = Unicode(module_version).tag(sync=True)
 
-class RasterTileLayer(Layer):
-
-    _model_name = Unicode('RasterTileLayerModel').tag(sync=True)
-    _view_name = Unicode('RasterTileLayerView').tag(sync=True)
+class TileLayer(Layer):
 
     url = Unicode('https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png').tag(sync=True)
+    attribution = Unicode("").tag(sync=True)
+    opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True)
+    visible = Bool(True).tag(sync=True)
+    min_zoom = Int(0).tag(sync=True)
+    max_zoom = Int(18).tag(sync=True)
+    source_format = Dict().tag(sync=True)
+    
+class GeoTIFFTileLayer(Layer):
+   _model_name = Unicode('GeoTIFFTileLayerModel').tag(sync=True)
+   _view_name = Unicode('GeoTIFFTileLayerView').tag(sync=True)
+   url = Unicode('').tag(sync=True)
+
+
+class RasterTileLayer(TileLayer):
+
+    _view_name = Unicode('RasterTileLayerView').tag(sync=True)
+    _model_name = Unicode('RasterTileLayerModel').tag(sync=True)
+
+
+class VectorTileLayer(TileLayer):
+
+    _view_name = Unicode('VectorTileLayerView').tag(sync=True)
+    _model_name = Unicode('VectorTileLayerModel').tag(sync=True)
+    style = Dict({}).tag(sync=True)  
 
 class GeoJSON(Layer):
 
@@ -39,10 +59,6 @@ class GeoJSON(Layer):
     style = Dict({}).tag(sync=True)
     visible = Bool(True).tag(sync=True)
 
-class GeoTIFFTileLayer(Layer):
-   _model_name = Unicode('GeoTIFFTileLayerModel').tag(sync=True)
-   _view_name = Unicode('GeoTIFFTileLayerView').tag(sync=True)
-   url = Unicode('').tag(sync=True)
 
 class HeatmapLayer(Layer):
     _view_name = Unicode('HeatmapLayerView').tag(sync=True)
@@ -50,6 +66,8 @@ class HeatmapLayer(Layer):
     points= List([]).tag(sync=True)
     blur =Int(15).tag(sync=True)
     radius = Int(8).tag(sync=True)
+
+
 
 
 class BaseOverlay(DOMWidget): 
