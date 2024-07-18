@@ -7,7 +7,6 @@ import {
   unpack_models,
   ViewList,
 } from '@jupyter-widgets/base';
-import { MapBrowserEvent } from 'ol';
 import { LayerModel, LayerView } from './layer';
 import { BaseOverlayModel, BaseOverlayView } from './baseoverlay';
 import { BaseControlModel, BaseControlView } from './basecontrol';
