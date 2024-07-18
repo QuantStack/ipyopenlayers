@@ -1,7 +1,7 @@
 import { ISerializers } from '@jupyter-widgets/base';
 import { LayerModel, LayerView } from './layer';
 import { MODULE_NAME, MODULE_VERSION } from './version';
-import Heatmap from 'ol/layer/Heatmap';
+import Heatmap from 'ol/layer/Heatmap.js';
 import { Vector as VectorSource } from 'ol/source';
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
@@ -36,7 +36,7 @@ export class HeatmapLayerModel extends LayerModel {
 }
 
 export class HeatmapLayerView extends LayerView {
-  obj: Heatmap;
+  obj: Heatmap<Feature>;
 
   render() {
     this.create_obj();

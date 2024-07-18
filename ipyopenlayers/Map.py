@@ -7,13 +7,12 @@
 """
 TODO: Add module docstring
 """
-
-from ipywidgets import DOMWidget, Widget, widget_serialization, CallbackDispatcher
-from traitlets import Unicode, List, Instance, CFloat, Bool, Dict, Int
+import requests
+from ipywidgets import DOMWidget, Widget, widget_serialization
+from traitlets import Unicode, List, Instance, CFloat, Bool, Dict, Int, Tuple, Float
 from ._frontend import module_name, module_version
 
 def_loc = [0.0, 0.0]
-
 
 class Layer(Widget):
 
@@ -38,6 +37,31 @@ class GeoJSON(Layer):
     data = Dict({}).tag(sync=True)
     style = Dict({}).tag(sync=True)
     visible = Bool(True).tag(sync=True)
+
+
+class HeatmapLayer(Layer):
+    _view_name = Unicode('HeatmapLayerView').tag(sync=True)
+    _model_name = Unicode('HeatmapLayerModel').tag(sync=True)
+    points= List([]).tag(sync=True)
+    blur =Int(15).tag(sync=True)
+    radius = Int(8).tag(sync=True)
+
+class ArrowLayer(Layer):
+    _view_name = Unicode('ArrowLayerView').tag(sync=True)
+    _model_name = Unicode('ArrowLayerModel').tag(sync=True)
+    opacity = Float(1.0).tag(sync=True)
+    data = List([]).tag(sync=True)
+
+class WindLayer(Layer):
+    _view_name = Unicode('WindLayerView').tag(sync=True)
+    _model_name = Unicode('WindLayerModel').tag(sync=True)
+    metadata = Dict().tag(sync=True)
+    opacity = Float(1.0).tag(sync=True)
+    updateWhileInteracting = Bool(True).tag(sync=True)
+    style = Unicode('barbs').tag(sync=True)
+    ufile =Dict().tag(sync=True)
+    vfile =Dict().tag(sync=True)
+
 
 
 class HeatmapLayer(Layer):
@@ -115,6 +139,7 @@ class Map(DOMWidget):
     layers = List(Instance(Layer)).tag(sync=True, **widget_serialization)
     overlays=List(Instance(BaseOverlay)).tag(sync=True, **widget_serialization)
     controls=List(Instance(BaseControl)).tag(sync=True, **widget_serialization)
+    coordinates=List([0,0]).tag(sync=True, o=True)
 
 
 
@@ -147,3 +172,5 @@ class Map(DOMWidget):
 
     def clear_layers(self):
         self.layers = []
+
+

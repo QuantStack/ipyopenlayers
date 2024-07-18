@@ -11,7 +11,6 @@ import { LayerModel, LayerView } from './layer';
 import { BaseOverlayModel, BaseOverlayView } from './baseoverlay';
 import { BaseControlModel, BaseControlView } from './basecontrol';
 import { ViewObjectEventTypes } from 'ol/View';
-
 import { Map } from 'ol';
 import TileLayer from 'ol/layer/Tile';
 import View from 'ol/View';
@@ -30,6 +29,8 @@ export * from './scaleline';
 export * from './mouseposition';
 export * from './tilelayer';
 export * from './heatmap';
+export * from './windlayer';
+export * from './arrowlayer';
 
 const DEFAULT_LOCATION = [0.0, 0.0];
 
@@ -137,6 +138,7 @@ export class MapView extends DOMWidgetView {
     this.model.on('change:zoom', this.zoomChanged, this);
     this.model.on('change:center', this.centerChanged, this);
   }
+
   layersChanged() {
     const layers = this.model.get('layers') as LayerModel[];
     this.layerViews.update(layers);
@@ -193,6 +195,7 @@ export class MapView extends DOMWidgetView {
     });
     return view;
   }
+
 
   async addOverlayModel(child_model: BaseOverlayModel) {
     const view = await this.create_child_view<BaseOverlayView>(child_model, {
