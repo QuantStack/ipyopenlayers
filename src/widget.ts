@@ -32,7 +32,6 @@ export * from './rastertilelayer';
 export * from './heatmap';
 export * from './geotifflayer';
 
-
 const DEFAULT_LOCATION = [0.0, 0.0];
 
 export class MapModel extends DOMWidgetModel {
