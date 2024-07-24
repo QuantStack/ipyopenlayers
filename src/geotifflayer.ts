@@ -16,7 +16,7 @@ export class GeoTIFFTileLayerModel extends LayerModel {
       _view_name: GeoTIFFTileLayerModel.view_name,
       _view_module: GeoTIFFTileLayerModel.view_module,
       _view_module_version: GeoTIFFTileLayerModel.view_module_version,
-      source: [],
+      url: '',
     };
   }
 
@@ -37,33 +37,30 @@ export class GeoTIFFTileLayerView extends LayerView {
   render() {
     super.render();
     this.sourcesChanged();
-    this.model.on('change:sources', this.sourcesChanged, this);
+    this.model.on('change:url', this.sourcesChanged, this);
   }
 
   create_obj() {
-    const sources = this.model.get('sources').map((source: any) => ({
-      url: source.url,
-    }));
+    const url = this.model.get('url');
 
-    this.obj = this.tileLayer = new WebGLTileLayer({
-      source: new GeoTIFF({
-        sources: sources,
-      }),
-    });
-  }
-
-  sourcesChanged() {
-    const newSources = this.model.get('sources').map((source: any) => ({
-      url: source.url,
-    }));
-
-    if (newSources) {
-      const newSource = new GeoTIFF({
-        sources: newSources,
+    if (url) {
+      this.obj = new WebGLTileLayer({
+        source: new GeoTIFF({
+          sources: [{ url: url }],
+        }),
       });
-      this.tileLayer.setSource(newSource);
+    }
+  }
+  sourcesChanged() {
+    const newUrl = this.model.get('url');
+
+    if (newUrl) {
+      const newSource = new GeoTIFF({
+        sources: [{ url: newUrl }],
+      });
+      this.obj.setSource(newSource);
     }
   }
 
-  tileLayer: WebGLTileLayer;
+  obj: WebGLTileLayer;
 }

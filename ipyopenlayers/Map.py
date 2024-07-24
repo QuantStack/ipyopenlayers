@@ -42,7 +42,7 @@ class GeoJSON(Layer):
 class GeoTIFFTileLayer(Layer):
    _model_name = Unicode('GeoTIFFTileLayerModel').tag(sync=True)
    _view_name = Unicode('GeoTIFFTileLayerView').tag(sync=True)
-   sources = List(Dict).tag(sync=True)
+   url = Unicode('').tag(sync=True)
 
 class HeatmapLayer(Layer):
     _view_name = Unicode('HeatmapLayerView').tag(sync=True)
@@ -50,8 +50,6 @@ class HeatmapLayer(Layer):
     points= List([]).tag(sync=True)
     blur =Int(15).tag(sync=True)
     radius = Int(8).tag(sync=True)
-
-
 
 
 class BaseOverlay(DOMWidget): 
