@@ -24,10 +24,10 @@ class Layer(Widget):
     _view_module = Unicode(module_name).tag(sync=True)
     _view_module_version = Unicode(module_version).tag(sync=True)
 
-class RasterTileLayer(Layer):
+class TileLayer(Layer):
 
-    _model_name = Unicode('RasterTileLayerModel').tag(sync=True)
-    _view_name = Unicode('RasterTileLayerView').tag(sync=True)
+    _model_name = Unicode('TileLayerModel').tag(sync=True)
+    _view_name = Unicode('TileLayerView').tag(sync=True)
 
     url = Unicode('https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png').tag(sync=True)
 
@@ -39,10 +39,6 @@ class GeoJSON(Layer):
     style = Dict({}).tag(sync=True)
     visible = Bool(True).tag(sync=True)
 
-class GeoTIFFTileLayer(Layer):
-   _model_name = Unicode('GeoTIFFTileLayerModel').tag(sync=True)
-   _view_name = Unicode('GeoTIFFTileLayerView').tag(sync=True)
-   sources = List(Dict).tag(sync=True)
 
 class HeatmapLayer(Layer):
     _view_name = Unicode('HeatmapLayerView').tag(sync=True)

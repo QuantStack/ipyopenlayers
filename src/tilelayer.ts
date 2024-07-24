@@ -8,16 +8,16 @@ import { MODULE_NAME, MODULE_VERSION } from './version';
 import { MapView } from './widget';
 import { LayerModel, LayerView } from './layer';
 
-export class RasterTileLayerModel extends LayerModel {
+export class TileLayerModel extends LayerModel {
   defaults() {
     return {
       ...super.defaults(),
-      _model_name: RasterTileLayerModel.model_name,
-      _model_module: RasterTileLayerModel.model_module,
-      _model_module_version: RasterTileLayerModel.model_module_version,
-      _view_name: RasterTileLayerModel.view_name,
-      _view_module: RasterTileLayerModel.view_module,
-      _view_module_version: RasterTileLayerModel.view_module_version,
+      _model_name: TileLayerModel.model_name,
+      _model_module: TileLayerModel.model_module,
+      _model_module_version: TileLayerModel.model_module_version,
+      _view_name: TileLayerModel.view_name,
+      _view_module: TileLayerModel.view_module,
+      _view_module_version: TileLayerModel.view_module_version,
     };
   }
 
@@ -26,15 +26,15 @@ export class RasterTileLayerModel extends LayerModel {
     // Add any extra serializers here
   };
 
-  static model_name = 'RasterTileLayerModel';
+  static model_name = 'TileLayerModel';
   static model_module = MODULE_NAME;
   static model_module_version = MODULE_VERSION;
-  static view_name = 'RasterTileLayerView';
+  static view_name = 'TileLayerView';
   static view_module = MODULE_NAME;
   static view_module_version = MODULE_VERSION;
 }
 
-export class RasterTileLayerView extends LayerView {
+export class TileLayerView extends LayerView {
   map_view: MapView;
 
   render() {

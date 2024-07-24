@@ -28,9 +28,8 @@ export * from './zoomslider';
 export * from './fullscreen';
 export * from './scaleline';
 export * from './mouseposition';
-export * from './rastertilelayer';
+export * from './tilelayer';
 export * from './heatmap';
-export * from './geotifflayer';
 
 const DEFAULT_LOCATION = [0.0, 0.0];
 
