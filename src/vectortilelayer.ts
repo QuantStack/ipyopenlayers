@@ -40,7 +40,7 @@ export class VectorTileLayerModel extends LayerModel {
 }
 
 export class VectorTileLayerView extends LayerView {
-  obj: VectorTileLayer;
+  obj: VectorTileLayer<any>;
   render() {
     super.render();
     this.model.on('change:url', this.urlChanged, this);
@@ -113,7 +113,8 @@ export class VectorTileLayerView extends LayerView {
         this.obj = new VectorTileLayer({
           source: vectorTileSource,
           visible: this.model.get('visible'),
-          opacity: this.model.get('opacity'), // style: this.model.get('style'),
+          opacity: this.model.get('opacity'),
+          style: this.createStyleFunction(),
         });
       }
     }
@@ -183,9 +184,9 @@ export class VectorTileLayerView extends LayerView {
           color: modelStyle.fillColor || 'rgba(255, 255, 255, 0.4)',
         }),
         image: new CircleStyle({
-          radius: modelStyle.pointRadius || 5, // Rayon du cercle
+          radius: modelStyle.pointRadius || 5,
           fill: new Fill({
-            color: modelStyle.pointFillColor || '#0000FF', // Couleur de remplissage du cercle
+            color: modelStyle.pointFillColor || '#0000FF',
           }),
           stroke: new Stroke({
             color: modelStyle.pointStrokeColor || '#000000',
