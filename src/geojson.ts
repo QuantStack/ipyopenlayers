@@ -39,7 +39,7 @@ export class OpenLayersGeoJSONModel extends LayerModel {
 }
 
 export class OpenLayersGeoJSONView extends LayerView {
-  obj: VectorLayer<VectorSource>;
+  obj: VectorLayer<any>;
   render() {
     this.initVectorLayer();
     this.create_obj();
@@ -109,6 +109,6 @@ export class OpenLayersGeoJSONView extends LayerView {
     this.listenTo(this.model, 'change:data', this.updateData);
     this.listenTo(this.model, 'change:visible', this.updateVisibility);
   }
-  vectorLayer: VectorLayer<VectorSource>;
+  vectorLayer: VectorLayer<any>;
   vectorSource: VectorSource;
 }

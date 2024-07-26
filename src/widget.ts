@@ -13,7 +13,6 @@ import { BaseControlModel, BaseControlView } from './basecontrol';
 import { ViewObjectEventTypes } from 'ol/View';
 
 import { Map } from 'ol';
-import TileLayer from 'ol/layer/Tile';
 import View from 'ol/View';
 import 'ol/ol.css';
 import { MODULE_NAME, MODULE_VERSION } from './version';
@@ -28,9 +27,10 @@ export * from './zoomslider';
 export * from './fullscreen';
 export * from './scaleline';
 export * from './mouseposition';
-export * from './rastertilelayer';
 export * from './heatmap';
+export * from './rastertilelayer';
 export * from './geotifflayer';
+export * from './vectortilelayer';
 
 const DEFAULT_LOCATION = [0.0, 0.0];
 
@@ -114,7 +114,7 @@ export class MapView extends DOMWidgetView {
         center: this.model.get('center'),
         zoom: this.model.get('zoom'),
       }),
-      layers: [new TileLayer()],
+      layers: [],
     });
 
     this.map.getView().on('change:center', () => {
