@@ -8,6 +8,8 @@ import {
   ViewList,
 } from '@jupyter-widgets/base';
 import { LayerModel, LayerView } from './layer';
+import { RasterTileLayerView } from './rastertilelayer';
+
 import { BaseOverlayModel, BaseOverlayView } from './baseoverlay';
 import { BaseControlModel, BaseControlView } from './basecontrol';
 import { ViewObjectEventTypes } from 'ol/View';
@@ -31,7 +33,9 @@ export * from './heatmap';
 export * from './rastertilelayer';
 export * from './geotifflayer';
 export * from './vectortilelayer';
-
+type WebGLEvent = {
+  context: WebGLRenderingContext;
+};
 const DEFAULT_LOCATION = [0.0, 0.0];
 
 export class MapModel extends DOMWidgetModel {
@@ -49,6 +53,7 @@ export class MapModel extends DOMWidgetModel {
       overlays: [],
       zoom: 2,
       center: DEFAULT_LOCATION,
+      swipe_position: 0,
     };
   }
 
@@ -132,12 +137,44 @@ export class MapView extends DOMWidgetView {
     this.layersChanged();
     this.overlayChanged();
     this.controlChanged();
+    this.handleSwipePositionChanged();
     this.model.on('change:layers', this.layersChanged, this);
     this.model.on('change:overlays', this.overlayChanged, this);
     this.model.on('change:controls', this.controlChanged, this);
     this.model.on('change:zoom', this.zoomChanged, this);
     this.model.on('change:center', this.centerChanged, this);
+    this.model.on(
+      'change:swipe_position',
+      this.handleSwipePositionChanged,
+      this,
+    );
   }
+  handleSwipePositionChanged() {
+    const swipePosition = this.model.get('swipe_position');
+    console.log('Swipe Position Changed:', swipePosition);
+    this.updateEventListeners();
+    this.map.render();
+  }
+
+  async updateEventListeners() {
+    const layers = this.model.get('layers') as LayerModel[];
+    for (const layerModel of layers) {
+      const layerView = await this.findLayerView(layerModel);
+      if (layerView) {
+        layerView.updateEventListeners();
+      }
+    }
+  }
+
+  async findLayerView(
+    layerModel: LayerModel,
+  ): Promise<RasterTileLayerView | undefined> {
+    const views = await Promise.all(this.layerViews.views);
+    return views.find((view: LayerView) => view.model === layerModel) as
+      | RasterTileLayerView
+      | undefined;
+  }
+
   layersChanged() {
     const layers = this.model.get('layers') as LayerModel[];
     this.layerViews.update(layers);
@@ -158,6 +195,10 @@ export class MapView extends DOMWidgetView {
     if (newZoom !== undefined && newZoom !== null) {
       this.map.getView().setZoom(newZoom);
     }
+  }
+  getSize() {
+    const size = this.map.getSize();
+    return size;
   }
 
   centerChanged() {
@@ -184,17 +225,77 @@ export class MapView extends DOMWidgetView {
     child_view.remove();
   }
 
+  handlePrerender(event: WebGLEvent) {
+    console.log('handlePrerender triggered');
+    const gl = event.context;
+
+    if (!gl) {
+      console.error('WebGL context is undefined');
+      return;
+    }
+
+    try {
+      // Enable the scissor test
+      gl.enable(gl.SCISSOR_TEST);
+      console.log('Scissor test enabled');
+
+      const mapSize = this.map.getSize();
+      if (!mapSize) {
+        console.error('Map size is undefined');
+        return;
+      }
+
+      const swipePosition = this.model.get('swipe_position') || 0;
+      const bottomLeft = [0, mapSize[1]];
+      const topRight = [mapSize[0], 0];
+
+      // Calculate width and height for scissor box
+      const width = Math.max(
+        0,
+        Math.round((topRight[0] - bottomLeft[0]) * (swipePosition / 100)),
+      );
+      const height = Math.max(0, topRight[1] - bottomLeft[1]);
+
+      // Log values for debugging
+      console.log(
+        `Scissor box - bottomLeft: ${bottomLeft}, topRight: ${topRight}, width: ${width}, height: ${height}`,
+      );
+
+      // Set the scissor box
+      gl.scissor(bottomLeft[0], bottomLeft[1], width, height);
+    } catch (error) {
+      console.error(
+        'Error enabling scissor test or setting scissor box:',
+        error,
+      );
+    }
+  }
+
+  handlePostrender(event: WebGLEvent) {
+    console.log('handlePostrender triggered');
+    console.log('Event object:', event);
+
+    const gl = event.context;
+    console.log('GL context:', gl);
+    gl.disable(gl.SCISSOR_TEST);
+  }
+
   async addLayerModel(child_model: LayerModel) {
     const view = await this.create_child_view<LayerView>(child_model, {
       map_view: this,
     });
+    console.log('add');
+    console.log(view.obj);
     this.map.addLayer(view.obj);
+    console.log(view);
+    console.log(this.map);
     this.displayed.then(() => {
       view.trigger('displayed', this);
     });
+    console.log(view);
+
     return view;
   }
-
   async addOverlayModel(child_model: BaseOverlayModel) {
     const view = await this.create_child_view<BaseOverlayView>(child_model, {
       map_view: this,
@@ -224,6 +325,7 @@ export class MapView extends DOMWidgetView {
   imageElement: HTMLImageElement;
   map_container: HTMLDivElement;
   map: Map;
+  map_view: MapView;
   layerViews: ViewList<LayerView>;
   overlayViews: ViewList<BaseOverlayView>;
   controlViews: ViewList<BaseControlView>;
