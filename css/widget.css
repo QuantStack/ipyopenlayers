@@ -19,3 +19,18 @@
   overflow: hidden;
   flex: 1 1 auto;
 }
+
+.swiper-container {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 5px;
+  border-radius: 4px;
+}
+
+.swipe {
+  width: 100%;
+  margin: 0;
+}

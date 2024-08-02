@@ -67,9 +67,6 @@ class HeatmapLayer(Layer):
     blur =Int(15).tag(sync=True)
     radius = Int(8).tag(sync=True)
 
-
-
-
 class BaseOverlay(DOMWidget): 
    
    _model_module = Unicode(module_name).tag(sync=True)
@@ -121,6 +118,14 @@ class MousePosition(BaseControl):
     _view_name = Unicode('MousePositionView').tag(sync=True)
     _model_name = Unicode('MousePositionModel').tag(sync=True)
 
+class SplitMapControl(BaseControl):
+    _model_name = Unicode('SplitMapControlModel').tag(sync=True)
+    _view_name = Unicode('SplitMapControlView').tag(sync=True)
+    left_layer = Instance(Layer).tag(sync=True, **widget_serialization)
+    right_layer = Instance(Layer).tag(sync=True, **widget_serialization)
+    swipe_position = Int(50).tag(sync=True)
+
+
 
 class Map(DOMWidget):
     _model_name = Unicode('MapModel').tag(sync=True)
@@ -135,7 +140,6 @@ class Map(DOMWidget):
     layers = List(Instance(Layer)).tag(sync=True, **widget_serialization)
     overlays=List(Instance(BaseOverlay)).tag(sync=True, **widget_serialization)
     controls=List(Instance(BaseControl)).tag(sync=True, **widget_serialization)
-
 
 
     def __init__(self, center=None, zoom=None, **kwargs):
@@ -167,3 +171,7 @@ class Map(DOMWidget):
 
     def clear_layers(self):
         self.layers = []
+
+
+
+        

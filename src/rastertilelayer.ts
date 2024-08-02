@@ -5,10 +5,11 @@ import { MODULE_NAME, MODULE_VERSION } from './version';
 import { MapView } from './widget';
 import { LayerModel, LayerView } from './layer';
 
+/*
 type WebGLEvent = {
   context: WebGLRenderingContext;
 };
-
+*/
 export class RasterTileLayerModel extends LayerModel {
   defaults() {
     return {
@@ -44,12 +45,12 @@ export class RasterTileLayerModel extends LayerModel {
 export class RasterTileLayerView extends LayerView {
   map_view: MapView;
   tileLayer: WebGLTileLayer;
-
+  /*
   private prerenderListener: (event: WebGLEvent) => void;
   private postrenderListener: (event: WebGLEvent) => void;
   private previousSwipePosition: number | undefined;
 
-  constructor(options: any) {
+   constructor(options: any) {
     super(options);
     this.map_view = options.options.map_view;
     this.prerenderListener = this.map_view.handlePrerender.bind(this.map_view);
@@ -57,18 +58,18 @@ export class RasterTileLayerView extends LayerView {
       this.map_view,
     );
     this.previousSwipePosition = undefined;
-  }
+  }*/
 
   render() {
     super.render();
     this.urlChanged();
     this.model.on('change:url', this.urlChanged, this);
-    this.model.on(
+    /*this.model.on(
       'change:swipe_position',
       this.handleSwipePositionChanged,
       this,
-    );
-    this.updateEventListeners();
+    );*/
+    //this.updateEventListeners();
   }
 
   create_obj() {
@@ -97,7 +98,7 @@ export class RasterTileLayerView extends LayerView {
     }
   }
 
-  handleSwipePositionChanged() {
+  /*handleSwipePositionChanged() {
     const swipePosition = this.model.get('swipe_position');
     console.log('Swipe Position Changed:', swipePosition);
 
@@ -119,5 +120,5 @@ export class RasterTileLayerView extends LayerView {
       (this.tileLayer as any).on('postcompose', this.postrenderListener);
     }
     console.log('Event listeners updated');
-  }
+  }*/
 }
