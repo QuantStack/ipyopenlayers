@@ -131,7 +131,7 @@ class Map(DOMWidget):
     _view_module_version = Unicode(module_version).tag(sync=True)
 
     center = List(def_loc).tag(sync=True, o=True)
-    zoom = CFloat(2).tag(sync=True, o=True)
+    zoom = CFloat(0).tag(sync=True, o=True)
     layers = List(Instance(Layer)).tag(sync=True, **widget_serialization)
     overlays=List(Instance(BaseOverlay)).tag(sync=True, **widget_serialization)
     controls=List(Instance(BaseControl)).tag(sync=True, **widget_serialization)
@@ -140,12 +140,14 @@ class Map(DOMWidget):
 
     def __init__(self, center=None, zoom=None, **kwargs):
         super().__init__(**kwargs)
-        
         if center is not None:
             self.center = center
         if zoom is not None:
             self.zoom = zoom
 
+    def __repr__(self):
+        return f"Map(center={self.center}, zoom={self.zoom})"
+    
     def add_layer(self, layer):
         self.layers = self.layers + [layer]
 
