@@ -11,7 +11,7 @@ import { LayerModel, LayerView } from './layer';
 import { BaseOverlayModel, BaseOverlayView } from './baseoverlay';
 import { BaseControlModel, BaseControlView } from './basecontrol';
 import { ViewObjectEventTypes } from 'ol/View';
-
+import TileLayer from 'ol/layer/Tile';
 import { Map } from 'ol';
 import View from 'ol/View';
 import 'ol/ol.css';
@@ -19,6 +19,7 @@ import { MODULE_NAME, MODULE_VERSION } from './version';
 import '../css/widget.css';
 import { useGeographic } from 'ol/proj';
 import { ObjectEvent } from 'ol/Object';
+import { OSM } from 'ol/source';
 export * from './imageoverlay';
 export * from './geojson';
 export * from './video_overlay';
@@ -114,7 +115,11 @@ export class MapView extends DOMWidgetView {
         center: this.model.get('center'),
         zoom: this.model.get('zoom'),
       }),
-      layers: [],
+      layers: [
+        new TileLayer({
+          source: new OSM(), // Utiliser la source OSM pour les tuiles OpenStreetMap
+        }),
+      ],
     });
 
     this.map.getView().on('change:center', () => {
