@@ -11,10 +11,8 @@ import { LayerModel, LayerView } from './layer';
 import { BaseOverlayModel, BaseOverlayView } from './baseoverlay';
 import { BaseControlModel, BaseControlView } from './basecontrol';
 import { ViewObjectEventTypes } from 'ol/View';
-// widget.ts
 import { SplitMapControlModel, SplitMapControlView } from './splitmapcontrol';
 export { SplitMapControlModel, SplitMapControlView };
-
 import { Map } from 'ol';
 import View from 'ol/View';
 import 'ol/ol.css';
@@ -35,10 +33,9 @@ export * from './rastertilelayer';
 export * from './geotifflayer';
 export * from './vectortilelayer';
 export * from './splitmapcontrol';
+export * from './splitcontrol';
 
-/*type WebGLEvent = {
-  context: WebGLRenderingContext;
-};*/
+
 const DEFAULT_LOCATION = [0.0, 0.0];
 
 export class MapModel extends DOMWidgetModel {
@@ -135,10 +132,11 @@ export class MapView extends DOMWidgetView {
         this.model.set('zoom', this.map.getView().getZoom());
         this.model.save_changes();
       });
-
     this.layersChanged();
-    this.overlayChanged();
     this.controlChanged();
+    this.overlayChanged();
+    this.zoomChanged();
+    this.centerChanged();
     this.model.on('change:layers', this.layersChanged, this);
     this.model.on('change:overlays', this.overlayChanged, this);
     this.model.on('change:controls', this.controlChanged, this);
@@ -194,17 +192,15 @@ export class MapView extends DOMWidgetView {
     this.map.removeControl(child_view.obj);
     child_view.remove();
   }
-
+  
   async addLayerModel(child_model: LayerModel) {
     const view = await this.create_child_view<LayerView>(child_model, {
       map_view: this,
     });
     this.map.addLayer(view.obj);
-    console.log(this.map);
     this.displayed.then(() => {
       view.trigger('displayed', this);
     });
-    console.log(view);
 
     return view;
   }

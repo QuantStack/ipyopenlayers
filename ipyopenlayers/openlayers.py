@@ -84,7 +84,6 @@ class ImageOverlay (BaseOverlay):
 class VideoOverlay (BaseOverlay):
    _view_name = Unicode('VideoOverlayView').tag(sync=True)
    _model_name = Unicode('VideoOverlayModel').tag(sync=True)
-   
    video_url = Unicode('').tag(sync=True)
 
 class PopupOverlay (BaseOverlay):
@@ -122,7 +121,7 @@ class SplitMapControl(BaseControl):
     _model_name = Unicode('SplitMapControlModel').tag(sync=True)
     _view_name = Unicode('SplitMapControlView').tag(sync=True)
     left_layer = Instance(Layer).tag(sync=True, **widget_serialization)
-    right_layer = Instance(Layer).tag(sync=True, **widget_serialization)
+    #right_layer = Instance(Layer).tag(sync=True, **widget_serialization)
     swipe_position = Int(50).tag(sync=True)
 
 
