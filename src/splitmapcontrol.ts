@@ -49,7 +49,9 @@ export class SplitMapControlView extends BaseControlView {
     this.map_view = this.options.map_view;
     this.map_view.layer_views = this.options.map_view.layerViews;
     if (this.map_view && !this.map_view.layerViews) {
-      console.warn('Layer views is not initialized. Ensure it is properly set.');
+      console.warn(
+        'Layer views is not initialized. Ensure it is properly set.',
+      );
     }
   }
 

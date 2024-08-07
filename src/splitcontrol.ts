@@ -62,7 +62,9 @@ export default class SplitMapControl extends Control {
         const bottomLeft = getRenderPixel(event, [0, mapSize[1]]);
         const topRight = getRenderPixel(event, [mapSize[0], 0]);
 
-        const width = Math.round((topRight[0] - bottomLeft[0]) * (this._swipe_position / 100));
+        const width = Math.round(
+          (topRight[0] - bottomLeft[0]) * (this._swipe_position / 100),
+        );
         const height = topRight[1] - bottomLeft[1];
 
         gl.scissor(bottomLeft[0], bottomLeft[1], width, height);

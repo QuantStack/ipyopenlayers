@@ -166,8 +166,31 @@ class Map(DOMWidget):
 
     def remove_control(self, control):
         self.controls = [x for x in self.controls if x != control]
-    
 
+    
+    def remove(self, item):
+        """Remove an item from the map : either a layer or a control.
+
+        Parameters
+        ----------
+        item: Layer or Control instance
+            The layer or control to remove.
+        """
+        if isinstance(item, Layer):
+            self.layers = tuple(
+                [layer for layer in self.layers if layer.model_id != item.model_id]
+            )
+
+        elif isinstance(item, BaseControl):
+            self.controls = tuple(
+                [
+                    control
+                    for control in self.controls
+                    if control.model_id != item.model_id
+                ]
+            )
+        return self
+    
     def clear_layers(self):
         self.layers = []
 

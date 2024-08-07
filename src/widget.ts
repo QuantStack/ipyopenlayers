@@ -35,7 +35,6 @@ export * from './vectortilelayer';
 export * from './splitmapcontrol';
 export * from './splitcontrol';
 
-
 const DEFAULT_LOCATION = [0.0, 0.0];
 
 export class MapModel extends DOMWidgetModel {
@@ -192,7 +191,7 @@ export class MapView extends DOMWidgetView {
     this.map.removeControl(child_view.obj);
     child_view.remove();
   }
-  
+
   async addLayerModel(child_model: LayerModel) {
     const view = await this.create_child_view<LayerView>(child_model, {
       map_view: this,
