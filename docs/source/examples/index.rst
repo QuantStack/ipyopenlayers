@@ -11,7 +11,6 @@ The widgets have been embedded into the page for demonstrative purposes.
     one. This is a manual step to ensure only those examples that
     are suited for inclusion are used.
 
-
 .. toctree::
     :glob:
 

@@ -20,13 +20,13 @@ Below is an example of how to use the `PopupOverlay` class to add a popup to you
     from ipyopenlayers import Map, TileLayer, PopupOverlay
 
     # Create a map centered at coordinates [0.0, 0.0] with zoom level 2
-    m = Map(center=[0.0, 0.0], zoom=2)
+    m = Map(center=[-11.844178003179724, 37.31477334221525], zoom=0)
     
     # Display the map
     display(m)
 
     # Create a PopupOverlay and set its position and content
-    popup = PopupOverlay(position=[48.8566, 2.3522], popup_content = 'France')
+    popup = PopupOverlay(position=[-120.06694821433305, 40.70520249808547], popup_content = 'United States of America')
 
     # Add the PopupOverlay to the map
     m.add_overlay(popup)

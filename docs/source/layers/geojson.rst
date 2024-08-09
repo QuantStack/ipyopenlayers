@@ -184,13 +184,7 @@ Below is second example of how to use the `GeoJSON` class to add a Json file dat
 
     # Add the GeoJSON layer with the defined style
     geo_json = GeoJSON(
-        data=data,
-        style_callback=lambda feature: point_to_circle_style(feature) if feature['geometry']['type'] == 'Point' else {},  # Style only for points
-        hover_style={
-            'color': 'orange',
-            'fillColor': 'orange',
-            'fillOpacity': 0.7  # Increase opacity on hover for better visibility
-        }
+        data=data
     )
 
     # Add the GeoJSON layer to the map
