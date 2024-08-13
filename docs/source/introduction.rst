@@ -6,7 +6,14 @@ ipyopenlayers is a Jupyter widget for OpenLayers, a robust open-source JavaScrip
 
 Every object in ipyopenlayers (including the Map, TileLayers, Layers, Controls, etc.) is interactive, allowing users to dynamically update attributes from Python or directly from the browser. This interactivity makes ipyopenlayers a powerful tool for creating sophisticated and responsive GIS applications within Jupyter notebooks.
 
+
 Try it online
 -------------
 
-You can try ipyopenlayers below, or open many other live examples in a new browser tab with : JupyterLite or RetroLite.
+You can try ipyopenlayers below, or open many other live examples in a new browser tab with : JupyterLite.
+
+- `JupyterLite <http://127.0.0.1:8000/lab/index.html>`_
+
+.. image:: https://jupyterlite.rtfd.io/en/latest/_static/badge.svg
+   :target: http://127.0.0.1:8000/lab/index.html
+

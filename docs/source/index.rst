@@ -5,7 +5,6 @@ Version: |release|
 
 OpenLayers Jupyter Widget
 
-
 Quickstart
 ----------
 
@@ -17,45 +16,37 @@ Contents
 --------
 
 .. toctree::
-  :maxdepth: 2
-  :caption: Installation and usage
+   :maxdepth: 2
+   :caption: Installation and usage
 
-  introduction
-  installing
-  develop-install
-
-.. toctree::
-  :maxdepth: 2
-  :caption: Map
-
-  map/index
-
+   introduction
+   installing
+   develop-install
 
 .. toctree::
-  :maxdepth: 2
-  :caption: Layers and Overlays
+   :maxdepth: 2
+   :caption: Map
 
-  layers/index
-  overlay/index
-
-.. toctree::
-  :maxdepth: 2
-  :caption: Controls
-
-
-  controls/index
+   map/index
 
 .. toctree::
-  :maxdepth: 2
-  :caption: API
+   :maxdepth: 2
+   :caption: Layers and Overlays
 
-  api_reference/index
+   layers/index
+   overlay/index
 
 .. toctree::
-  :maxdepth: 1
+   :maxdepth: 2
+   :caption: Controls
 
+   controls/index
 
-  examples/index
+.. toctree::
+   :maxdepth: 2
+   :caption: API
+
+   api_reference/index
 
 
 Indices and tables

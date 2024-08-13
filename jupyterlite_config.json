@@ -1,0 +1,10 @@
+{
+    "jupyter_config_data": {
+      "appName": "JupyterLite",
+      "version": "1.0.0"
+    },
+    "apps": [
+      "lab"
+    ]
+  }
+  
