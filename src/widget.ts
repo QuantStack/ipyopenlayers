@@ -11,7 +11,8 @@ import { LayerModel, LayerView } from './layer';
 import { BaseOverlayModel, BaseOverlayView } from './baseoverlay';
 import { BaseControlModel, BaseControlView } from './basecontrol';
 import { ViewObjectEventTypes } from 'ol/View';
-
+import { SplitMapControlModel, SplitMapControlView } from './splitmapcontrol';
+export { SplitMapControlModel, SplitMapControlView };
 import { Map } from 'ol';
 import View from 'ol/View';
 import 'ol/ol.css';
@@ -31,6 +32,8 @@ export * from './heatmap';
 export * from './rastertilelayer';
 export * from './geotifflayer';
 export * from './vectortilelayer';
+export * from './splitmapcontrol';
+export * from './splitcontrol';
 
 const DEFAULT_LOCATION = [0.0, 0.0];
 
@@ -49,6 +52,7 @@ export class MapModel extends DOMWidgetModel {
       overlays: [],
       zoom: 2,
       center: DEFAULT_LOCATION,
+      swipe_position: 0,
     };
   }
 
@@ -96,7 +100,6 @@ export class MapView extends DOMWidgetView {
       this.removeLayerView,
       this,
     );
-
     this.overlayViews = new ViewList<BaseOverlayView>(
       this.addOverlayModel,
       this.removeOverlayView,
@@ -128,21 +131,22 @@ export class MapView extends DOMWidgetView {
         this.model.set('zoom', this.map.getView().getZoom());
         this.model.save_changes();
       });
-
     this.layersChanged();
-    this.overlayChanged();
     this.controlChanged();
+    this.overlayChanged();
+    this.zoomChanged();
+    this.centerChanged();
     this.model.on('change:layers', this.layersChanged, this);
     this.model.on('change:overlays', this.overlayChanged, this);
     this.model.on('change:controls', this.controlChanged, this);
     this.model.on('change:zoom', this.zoomChanged, this);
     this.model.on('change:center', this.centerChanged, this);
   }
+
   layersChanged() {
     const layers = this.model.get('layers') as LayerModel[];
     this.layerViews.update(layers);
   }
-
   overlayChanged() {
     const overlay = this.model.get('overlays') as BaseOverlayModel[];
     this.overlayViews.update(overlay);
@@ -158,6 +162,10 @@ export class MapView extends DOMWidgetView {
     if (newZoom !== undefined && newZoom !== null) {
       this.map.getView().setZoom(newZoom);
     }
+  }
+  getSize() {
+    const size = this.map.getSize();
+    return size;
   }
 
   centerChanged() {
@@ -192,9 +200,9 @@ export class MapView extends DOMWidgetView {
     this.displayed.then(() => {
       view.trigger('displayed', this);
     });
+
     return view;
   }
-
   async addOverlayModel(child_model: BaseOverlayModel) {
     const view = await this.create_child_view<BaseOverlayView>(child_model, {
       map_view: this,
@@ -224,6 +232,7 @@ export class MapView extends DOMWidgetView {
   imageElement: HTMLImageElement;
   map_container: HTMLDivElement;
   map: Map;
+  map_view: MapView;
   layerViews: ViewList<LayerView>;
   overlayViews: ViewList<BaseOverlayView>;
   controlViews: ViewList<BaseControlView>;

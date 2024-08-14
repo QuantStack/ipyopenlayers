@@ -67,9 +67,6 @@ class HeatmapLayer(Layer):
     blur =Int(15).tag(sync=True)
     radius = Int(8).tag(sync=True)
 
-
-
-
 class BaseOverlay(DOMWidget): 
    
    _model_module = Unicode(module_name).tag(sync=True)
@@ -87,7 +84,6 @@ class ImageOverlay (BaseOverlay):
 class VideoOverlay (BaseOverlay):
    _view_name = Unicode('VideoOverlayView').tag(sync=True)
    _model_name = Unicode('VideoOverlayModel').tag(sync=True)
-   
    video_url = Unicode('').tag(sync=True)
 
 class PopupOverlay (BaseOverlay):
@@ -121,6 +117,14 @@ class MousePosition(BaseControl):
     _view_name = Unicode('MousePositionView').tag(sync=True)
     _model_name = Unicode('MousePositionModel').tag(sync=True)
 
+class SplitMapControl(BaseControl):
+    _model_name = Unicode('SplitMapControlModel').tag(sync=True)
+    _view_name = Unicode('SplitMapControlView').tag(sync=True)
+    left_layer = Instance(Layer).tag(sync=True, **widget_serialization)
+    #right_layer = Instance(Layer).tag(sync=True, **widget_serialization)
+    swipe_position = Int(50).tag(sync=True)
+
+
 
 class Map(DOMWidget):
     _model_name = Unicode('MapModel').tag(sync=True)
@@ -135,7 +139,6 @@ class Map(DOMWidget):
     layers = List(Instance(Layer)).tag(sync=True, **widget_serialization)
     overlays=List(Instance(BaseOverlay)).tag(sync=True, **widget_serialization)
     controls=List(Instance(BaseControl)).tag(sync=True, **widget_serialization)
-
 
 
     def __init__(self, center=None, zoom=None, **kwargs):
@@ -163,7 +166,34 @@ class Map(DOMWidget):
 
     def remove_control(self, control):
         self.controls = [x for x in self.controls if x != control]
-    
 
+    
+    def remove(self, item):
+        """Remove an item from the map : either a layer or a control.
+
+        Parameters
+        ----------
+        item: Layer or Control instance
+            The layer or control to remove.
+        """
+        if isinstance(item, Layer):
+            self.layers = tuple(
+                [layer for layer in self.layers if layer.model_id != item.model_id]
+            )
+
+        elif isinstance(item, BaseControl):
+            self.controls = tuple(
+                [
+                    control
+                    for control in self.controls
+                    if control.model_id != item.model_id
+                ]
+            )
+        return self
+    
     def clear_layers(self):
         self.layers = []
+
+
+
+        
