@@ -163,11 +163,9 @@ Below is second example of how to use the `GeoJSON` class to add a Json file dat
 .. jupyter-execute::
 
     import os
-    import requests
     import json
     from ipyopenlayers import Map, GeoJSON
-    import random
-
+    
     # the GeoJSON file
     if not os.path.exists('europe_110.geo.json'):
         url = 'https://raw.githubusercontent.com/jupyter-widgets/ipyleaflet/master/examples/europe_110.geo.json'

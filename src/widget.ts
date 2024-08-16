@@ -117,7 +117,7 @@ export class MapView extends DOMWidgetView {
       }),
       layers: [
         new TileLayer({
-          source: new OSM(), // Utiliser la source OSM pour les tuiles OpenStreetMap
+          source: new OSM(),
         }),
       ],
     });
