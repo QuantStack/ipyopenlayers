@@ -16,7 +16,7 @@ Example
 -------
 Below is an example of how to use the `GeoTIFFTileLayer` class to add a GeoTIFF layer to your map:
 
-.. jupyter-execute::
+.. code-block:: python
 
     from ipyopenlayers import Map, GeoTIFFTileLayer
 
@@ -29,6 +29,7 @@ Below is an example of how to use the `GeoTIFFTileLayer` class to add a GeoTIFF 
 
     # Display the map
     m
+
 
 Attributes
 ----------

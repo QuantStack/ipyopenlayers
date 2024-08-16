@@ -28,7 +28,7 @@
       {
         "extension": "./extension",
         "liteExtension": false,
-        "load": "static/remoteEntry.f3636e463a37c56199fb.js",
+        "load": "static/remoteEntry.41b29ae03d1de10a0e22.js",
         "name": "ipyopenlayers"
       },
       {
