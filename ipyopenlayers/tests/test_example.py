@@ -6,18 +6,23 @@
 
 import pytest
 from traitlets import TraitError  
-
-from ..Map import Map, RasterTileLayer, GeoTIFFTileLayer, VectorTileLayer, GeoJSON, HeatmapLayer, ImageOverlay, VideoOverlay, PopupOverlay, ZoomSlider, FullScreen, ScaleLine, MousePosition
+from ..openlayers import (
+    Map, RasterTileLayer, GeoTIFFTileLayer, VectorTileLayer, 
+    GeoJSON, HeatmapLayer, ImageOverlay, VideoOverlay, 
+    PopupOverlay, ZoomSlider, FullScreen, ScaleLine, MousePosition
+)
 
 def test_example_creation_blank():
     w = Map()
     assert w.zoom == 0
+    assert w.center == [0, 0]  # Add assertion for center if needed
 
 def test_add_layer():
     m = Map()
     m.add_layer(RasterTileLayer())
     assert m.zoom == 0
     assert len(m.layers) == 1
+    assert isinstance(m.layers[0], RasterTileLayer)
 
 def test_add_multiple_layers():
     m = Map()
@@ -25,6 +30,9 @@ def test_add_multiple_layers():
     m.add_layer(GeoTIFFTileLayer())
     m.add_layer(VectorTileLayer())
     assert len(m.layers) == 3
+    assert isinstance(m.layers[0], RasterTileLayer)
+    assert isinstance(m.layers[1], GeoTIFFTileLayer)
+    assert isinstance(m.layers[2], VectorTileLayer)
 
 def test_remove_layer():
     m = Map()
@@ -48,6 +56,7 @@ def test_add_overlay():
     overlay = ImageOverlay()
     m.add_overlay(overlay)
     assert len(m.overlays) == 1
+    assert isinstance(m.overlays[0], ImageOverlay)  # Ensure correct overlay type
 
 def test_remove_overlay():
     m = Map()
@@ -62,6 +71,7 @@ def test_add_control():
     control = ZoomSlider()
     m.add_control(control)
     assert len(m.controls) == 1
+    assert isinstance(m.controls[0], ZoomSlider)  # Ensure correct control type
 
 def test_remove_control():
     m = Map()
@@ -78,13 +88,10 @@ def test_add_multiple_controls():
     m.add_control(ScaleLine())
     m.add_control(MousePosition())
     assert len(m.controls) == 4
-
-'''def test_initialize_with_center_and_zoom():
-    center = [10.0, 20.0]
-    zoom = 5
-    m = Map(center=center, zoom=zoom)
-    assert m.center == center
-    assert m.zoom == zoom '''
+    assert isinstance(m.controls[0], ZoomSlider)
+    assert isinstance(m.controls[1], FullScreen)
+    assert isinstance(m.controls[2], ScaleLine)
+    assert isinstance(m.controls[3], MousePosition)
 
 def test_update_center():
     m = Map()
@@ -112,4 +119,3 @@ def test_adding_invalid_control_raises_error():
     m = Map()
     with pytest.raises(TraitError):
         m.add_control("invalid control")
-

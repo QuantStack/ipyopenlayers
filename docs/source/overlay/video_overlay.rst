@@ -3,7 +3,8 @@ Video Overlay
 
 The `VideoOverlay` class in `ipyopenlayers` allows you to overlay videos on your map. This feature is useful for adding dynamic visual content, such as animated data visualizations, real-time footage, or other video elements to your map. The `VideoOverlay` provides options to specify the geographic position and the URL of the video to be displayed.
 
-### Key Features
+Key Features
+------------
 
 - **Dynamic Content**: Overlay videos on the map to display animated data, real-time footage, or any other video content.
 - **Flexible Positioning**: Specify the geographic position where the video should be displayed.

@@ -65,9 +65,6 @@ docs/source/_static/
 docs/source/_static/embed-bundle.js
 docs/source/_static/embed-bundle.js.map
 docs/build
-docs/content
-docs/.jupyterlite.doit.db
-docs/jupyterlite_config.json
 
 
 # PyBuilder
@@ -164,12 +161,12 @@ package-lock.json
 # Packed lab extensions
 ipyopenlayers/labextension
 ipyopenlayers/nbextension
-
 !ipyopenlayers/nbextension/extension.js
 
 
 .yarn
 
 #jupyter lite
-_output
 .jupyterlite.doit.db
+lite_build_output/dist
+lite_build_output/.jupyterlite.doit.db

@@ -4,9 +4,6 @@
 # Copyright (c) QuantStack.
 # Distributed under the terms of the Modified BSD License.
 
-"""
-TODO: Add module docstring
-"""
 from ipywidgets import DOMWidget, Widget, widget_serialization
 from traitlets import Unicode, List, Instance, CFloat, Bool, Dict, Int, Float
 from ._frontend import module_name, module_version
@@ -196,7 +193,7 @@ class PopupOverlay (BaseOverlay):
 class BaseControl(DOMWidget):
     """BaseControl abstract class.
 
-    This is the base class for all ipyleaflet controls. A control is additional
+    This is the base class for all ipyopenlayers controls. A control is additional
     UI components on top of the Map.
 
     """
@@ -239,7 +236,7 @@ class MousePosition(BaseControl):
 class Map(DOMWidget):
     """Map class.
 
-    The Map class is the main widget in ipyleaflet.
+    The Map class is the main widget in ipyopenlayers.
 
     Attributes
     ----------
