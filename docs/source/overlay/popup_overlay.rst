@@ -17,10 +17,14 @@ Below is an example of how to use the `PopupOverlay` class to add a popup to you
 
 .. jupyter-execute::
 
-    from ipyopenlayers import Map, TileLayer, PopupOverlay
+    from ipyopenlayers import Map, PopupOverlay,RasterTileLayer
 
     # Create a map centered at coordinates [0.0, 0.0] with zoom level 2
     m = Map(center=[-11.844178003179724, 37.31477334221525], zoom=0)
+
+    # Add layer
+    layer=RasterTileLayer()
+    m.add_layer(layer)
     
     # Display the map
     display(m)

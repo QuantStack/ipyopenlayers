@@ -165,6 +165,7 @@ ipyopenlayers/nbextension
 
 
 .yarn
+.vscode/
 
 #jupyter lite
 .jupyterlite.doit.db

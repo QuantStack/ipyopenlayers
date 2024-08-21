@@ -21,10 +21,14 @@ Below is an example of how to use the `GeoJSON` class to add a GeoJSON layer to 
 
 .. jupyter-execute::
 
-    from ipyopenlayers import Map, GeoJSON
+    from ipyopenlayers import Map, GeoJSON,RasterTileLayer
 
     # Create a map centered at the specified coordinates with a zoom level of 4
     m = Map(center=[-75.05936205186516, 41.214094701931344], zoom=4)
+
+    # Add layer
+    layer=RasterTileLayer()
+    m.add_layer(layer)
 
     # Define GeoJSON data and style
     geojson_data = {
@@ -164,7 +168,7 @@ Below is second example of how to use the `GeoJSON` class to add a Json file dat
 
     import os
     import json
-    from ipyopenlayers import Map, GeoJSON
+    from ipyopenlayers import Map, GeoJSON,RasterTileLayer
     
     # the GeoJSON file
     if not os.path.exists('europe_110.geo.json'):
@@ -184,6 +188,11 @@ Below is second example of how to use the `GeoJSON` class to add a Json file dat
     geo_json = GeoJSON(
         data=data
     )
+
+    # Add layer
+    layer=RasterTileLayer()
+    m.add_layer(layer)
+    
 
     # Add the GeoJSON layer to the map
     m.add_layer(geo_json)

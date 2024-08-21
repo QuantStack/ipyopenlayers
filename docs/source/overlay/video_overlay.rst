@@ -17,10 +17,13 @@ Below is an example of how to use the `VideoOverlay` class to add a video to you
 
 .. jupyter-execute::
 
-    from ipyopenlayers import Map, TileLayer, VideoOverlay
+    from ipyopenlayers import Map, RasterTileLayer, VideoOverlay
 
     # Create a map centered at coordinates [0.0, 0.0] with zoom level 2
     m = Map(center=[0.0, 0.0], zoom=2)
+    # Add layer
+    layer=RasterTileLayer()
+    m.add_layer(layer)
     
     # Display the map
     display(m)

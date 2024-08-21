@@ -19,10 +19,13 @@ Below is an example of how to use the `ImageOverlay` class to add an image to yo
 
 .. jupyter-execute::
 
-    from ipyopenlayers import Map, TileLayer, ImageOverlay
+    from ipyopenlayers import Map, TileLayer, ImageOverlay,RasterTileLayer
 
     # Create a map centered at coordinates [0.0, 0.0] with zoom level 2
     m = Map(center=[0.0, 0.0], zoom=2)
+    # Add layer
+    layer=RasterTileLayer()
+    m.add_layer(layer)
     
     # Display the map
     display(m)

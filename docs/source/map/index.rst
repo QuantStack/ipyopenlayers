@@ -8,12 +8,16 @@ Example
 
 .. jupyter-execute::
 
-    from ipyopenlayers import Map
+    from ipyopenlayers import Map,RasterTileLayer
 
     m = Map(
         center=[0, 0],
         zoom=2
     )
+    # Add layer
+    layer=RasterTileLayer()
+    m.add_layer(layer)
+    
 
     # Display the map
     m

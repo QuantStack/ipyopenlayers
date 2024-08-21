@@ -17,10 +17,14 @@ Below is an example of how to use the `HeatmapLayer` class to add a heatmap to y
 
 .. jupyter-execute::
 
-    from ipyopenlayers import Map, HeatmapLayer
+    from ipyopenlayers import Map, HeatmapLayer,RasterTileLayer
 
     # Create a map centered at coordinates [0, 0] with zoom level 0
     m = Map(center=[1.9700427801608893, 46.241720565969274], zoom=4)
+
+    # Add layer
+    layer=RasterTileLayer()
+    m.add_layer(layer)
 
     # Define data points for the heatmap: [latitude, longitude, weight]
     data_points = [
