@@ -209,7 +209,7 @@ def setup(app):
     app.connect('builder-inited', add_scripts)
 
 jupyterlite_dir = "."
-jupyterlite_contents = "../../examples/"
+jupyterlite_contents = "../examples/"
 jupyterlite_silence = False
 jupyterlite_bind_ipynb_suffix = False
 
