@@ -73,7 +73,7 @@ author = 'QuantStack'
 # get version from python package:
 import os
 here = os.path.dirname(__file__)
-repo = os.path.join(here, '..', '..')
+repo = os.path.join(here, '..')
 _version_py = os.path.join(repo, 'ipyopenlayers', '_version.py')
 version_ns = {}
 with open(_version_py) as f:

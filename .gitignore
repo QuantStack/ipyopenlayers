@@ -65,6 +65,8 @@ docs/_static/
 docs/_static/embed-bundle.js
 docs/_static/embed-bundle.js.map
 docs/build
+docs/output
+docs/jupyter_execute
 
 
 # PyBuilder

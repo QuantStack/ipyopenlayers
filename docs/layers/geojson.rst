@@ -117,15 +117,15 @@ Below is an example of how to use the `GeoJSON` class to add a GeoJSON layer to 
         ],
     }
 
-    
+
     geojson_style = {
         'Point': {
-            'radius': 8,  
-            'fillColor': '#ff7800', 
-            'color': '#000', 
-            'weight': 2,  
-            'opacity': 1,  
-            'fillOpacity': 0.8,  
+            'radius': 8,
+            'fillColor': '#ff7800',
+            'color': '#000',
+            'weight': 2,
+            'opacity': 1,
+            'fillOpacity': 0.8,
         },
         'LineString': {
             'color': '#00f',
@@ -147,7 +147,7 @@ Below is an example of how to use the `GeoJSON` class to add a GeoJSON layer to 
             'fillOpacity': 0.4,
         },
     }
-    
+
     # Create and add a GeoJSON layer to the map
     widget = GeoJSON(
         data=geojson_data,
@@ -166,10 +166,11 @@ Below is second example of how to use the `GeoJSON` class to add a Json file dat
 
 .. jupyter-execute::
 
+    import requests
     import os
     import json
     from ipyopenlayers import Map, GeoJSON,RasterTileLayer
-    
+
     # the GeoJSON file
     if not os.path.exists('europe_110.geo.json'):
         url = 'https://raw.githubusercontent.com/jupyter-widgets/ipyleaflet/master/examples/europe_110.geo.json'
@@ -192,7 +193,7 @@ Below is second example of how to use the `GeoJSON` class to add a Json file dat
     # Add layer
     layer=RasterTileLayer()
     m.add_layer(layer)
-    
+
 
     # Add the GeoJSON layer to the map
     m.add_layer(geo_json)
