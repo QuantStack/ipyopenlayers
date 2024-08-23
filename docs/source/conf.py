@@ -31,7 +31,7 @@ extensions = [
     'nbsphinx',
     'jupyter_sphinx',
     'nbsphinx_link',
-    'jupyterlite-sphinx',
+    'jupyterlite_sphinx',
 ]
 
 # Set the nbsphinx JS path to empty to avoid showing twice of the widgets
@@ -115,7 +115,7 @@ todo_include_todos = False
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = []
 
 
 # -- Options for HTMLHelp output ------------------------------------------
@@ -209,8 +209,8 @@ def setup(app):
     app.connect('builder-inited', add_scripts)
 
 jupyterlite_dir = "."
-jupyterlite_contents = ["../examples/*"]
+jupyterlite_contents = "../../examples/"
+jupyterlite_silence = False
 
 html_theme = "pydata_sphinx_theme"
 htmlhelp_basename = "ipyopenlayersdoc"
-html_static_path = ["_static"]

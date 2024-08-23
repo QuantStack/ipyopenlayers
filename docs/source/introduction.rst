@@ -12,8 +12,8 @@ Try it online
 
 You can try ipyopenlayers below, or open many other live examples in a new browser tab with : JupyterLite.
 
-- `JupyterLite <http://127.0.0.1:8000/lab/index.html>`_
+- `JupyterLite <./lite/lab/index.html>`_
 
 .. image:: https://jupyterlite.rtfd.io/en/latest/_static/badge.svg
-   :target: http://127.0.0.1:8000/lab/index.html
+   :target: ./lite/lab/index.html
 
