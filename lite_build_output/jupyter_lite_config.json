@@ -1,6 +1,0 @@
-{
-  "LiteBuildConfig": {
-    "contents": ["/home/nourcheour/Ipy-openlayers/docs/content"],
-    "output_dir": "/home/nourcheour/Ipy-openlayers/lite_build_output/dist"
-  }
-}

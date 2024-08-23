@@ -3,9 +3,8 @@ channels:
   - https://repo.mamba.pm/emscripten-forge
   - conda-forge
 dependencies:
-  - xeus-python=0.15.10
-  - python=3.11
+  - xeus-python
   - ipywidgets
   - traitlets
   - pip:
-    - ipyopenlayers
+    - ..

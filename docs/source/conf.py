@@ -31,6 +31,7 @@ extensions = [
     'nbsphinx',
     'jupyter_sphinx',
     'nbsphinx_link',
+    'jupyterlite-sphinx',
 ]
 
 # Set the nbsphinx JS path to empty to avoid showing twice of the widgets
@@ -188,11 +189,6 @@ intersphinx_mapping = {'python': ('https://docs.python.org/3/', None)}
 # docs.readthedocs.org
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 
-if not on_rtd:  # only import and set the theme if we're building docs locally
-    import sphinx_rtd_theme
-    html_theme = 'sphinx_rtd_theme'
-    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
-
 # otherwise, readthedocs.org uses their theme by default, so no need to specify it
 
 
@@ -211,3 +207,10 @@ def setup(app):
                 logger.warning('missing javascript file: %s' % fname)
             app.add_js_file(fname)
     app.connect('builder-inited', add_scripts)
+
+jupyterlite_dir = "."
+jupyterlite_contents = ["../examples/*"]
+
+html_theme = "pydata_sphinx_theme"
+htmlhelp_basename = "ipyopenlayersdoc"
+html_static_path = ["_static"]
