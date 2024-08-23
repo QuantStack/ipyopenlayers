@@ -211,6 +211,7 @@ def setup(app):
 jupyterlite_dir = "."
 jupyterlite_contents = "../../examples/"
 jupyterlite_silence = False
+jupyterlite_bind_ipynb_suffix = False
 
 html_theme = "pydata_sphinx_theme"
 htmlhelp_basename = "ipyopenlayersdoc"
