@@ -61,7 +61,7 @@ instance/
 
 # Sphinx documentation
 docs/_build/
-docs/_static/
+docs/source/_static/
 docs/_static/embed-bundle.js
 docs/_static/embed-bundle.js.map
 docs/build
@@ -133,6 +133,8 @@ ehthumbs.db
 # Folder config file
 Desktop.ini
 .config.ini
+.env.ini
+
 
 # Recycle Bin used on file shares
 $RECYCLE.BIN/

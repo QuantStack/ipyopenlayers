@@ -4,9 +4,13 @@
 # Copyright (c) QuantStack.
 # Distributed under the terms of the Modified BSD License.
 
-from ipywidgets import DOMWidget, Widget, widget_serialization
+from ipywidgets import DOMWidget, Widget, widget_serialization, CallbackDispatcher
+
 from traitlets import Unicode, List, Instance, CFloat, Bool, Dict, Int, Float
 from ._frontend import module_name, module_version
+import requests
+import unicodedata
+import configparser
 
 def_loc = [0.0, 0.0]
 
@@ -43,7 +47,7 @@ class TileLayer(Layer):
         Additional format options for the tile source.
     """
 
-    url = Unicode('').tag(sync=True)
+    url = Unicode('https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png').tag(sync=True)
     attribution = Unicode("").tag(sync=True)
     opacity = Float(1.0, min=0.0, max=1.0).tag(sync=True)
     visible = Bool(True).tag(sync=True)
@@ -263,6 +267,8 @@ class Map(DOMWidget):
     layers = List(Instance(Layer)).tag(sync=True, **widget_serialization)
     overlays=List(Instance(BaseOverlay)).tag(sync=True, **widget_serialization)
     controls=List(Instance(BaseControl)).tag(sync=True, **widget_serialization)
+    _click_callbacks = Instance(CallbackDispatcher, ())
+
 
 
 
@@ -277,6 +283,7 @@ class Map(DOMWidget):
             The initial zoom level of the map.
         """
         super().__init__(**kwargs)
+        self.on_msg(self._handle_mouse_events)
         if center is not None:
             self.center = center
         if zoom is not None:
@@ -352,3 +359,18 @@ class Map(DOMWidget):
 
         """
         self.layers = []
+
+    def _handle_mouse_events(self, _, content, buffers):
+        """Handle mouse events and trigger click callbacks.
+        """
+        event_type = content.get("type", "")
+        if event_type == "click":
+            self._click_callbacks(**content)
+
+    def on_click(self, callback, remove=False):
+        """Add a click event listener.
+        """
+        self._click_callbacks.register_callback(callback, remove=remove)
+
+
+
