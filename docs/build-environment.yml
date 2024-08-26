@@ -9,7 +9,7 @@ dependencies:
   - jupyter-packaging~=0.12
   - jupyter-sphinx
   - nbsphinx-link
-  - build
+  - python-build
   - branca
   - requests
   - hatch
