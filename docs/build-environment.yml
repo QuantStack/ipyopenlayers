@@ -7,6 +7,7 @@ dependencies:
   - yarn~=3.0
   - jupyterlab~=4.0
   - jupyter-packaging~=0.12
+  - micromamba
   - sphinx
   - jupyter-sphinx
   - nbsphinx
