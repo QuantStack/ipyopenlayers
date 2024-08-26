@@ -18,6 +18,6 @@ dependencies:
   - hatch
   - pydata-sphinx-theme
   - jupyterlite-sphinx
-  - jupyterlite-xeus
   - pip:
-      - ..
+    - jupyterlite-xeus==0.1.11
+    - ..
