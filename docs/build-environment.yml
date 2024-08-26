@@ -1,0 +1,22 @@
+name: ipyopenlayers-docs
+
+channels:
+  - conda-forge
+
+dependencies:
+  - yarn~=3.0
+  - jupyterlab~=4.0
+  - jupyter-packaging~=0.12
+  - sphinx
+  - jupyter-sphinx
+  - nbsphinx
+  - nbsphinx-link
+  - python-build
+  - branca
+  - requests
+  - hatch
+  - pydata-sphinx-theme
+  - jupyterlite-sphinx
+  - jupyterlite-xeus
+  - pip:
+      - ..

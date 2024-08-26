@@ -6,4 +6,4 @@ python:
     - examples
     - docs
 conda:
-  file: docs/environment.yml
+  file: docs/source/build-environment.yml

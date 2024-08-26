@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: '*'
 
+defaults:
+  run:
+    shell: bash -l {0}
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -39,6 +43,20 @@ jobs:
         with:
           name: dist ${{ github.run_number }}
           path: ./dist
+
+  build-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: mamba-org/setup-micromamba@v1
+        with:
+          environment-file: docs/build-environment.yml
+
+      - name: Build
+        run: sphinx-build . output
+        working-directory: docs
 
   visual-regression-tests:
     runs-on: ubuntu-latest

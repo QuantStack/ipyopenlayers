@@ -31,6 +31,7 @@ extensions = [
     'nbsphinx',
     'jupyter_sphinx',
     'nbsphinx_link',
+    'jupyterlite_sphinx',
 ]
 
 # Set the nbsphinx JS path to empty to avoid showing twice of the widgets
@@ -72,7 +73,7 @@ author = 'QuantStack'
 # get version from python package:
 import os
 here = os.path.dirname(__file__)
-repo = os.path.join(here, '..', '..')
+repo = os.path.join(here, '..')
 _version_py = os.path.join(repo, 'ipyopenlayers', '_version.py')
 version_ns = {}
 with open(_version_py) as f:
@@ -114,7 +115,7 @@ todo_include_todos = False
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = []
 
 
 # -- Options for HTMLHelp output ------------------------------------------
@@ -181,17 +182,12 @@ texinfo_documents = [
 
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'https://docs.python.org/': None}
+intersphinx_mapping = {'python': ('https://docs.python.org/3/', None)}
 
 # Read The Docs
 # on_rtd is whether we are on readthedocs.org, this line of code grabbed from
 # docs.readthedocs.org
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
-
-if not on_rtd:  # only import and set the theme if we're building docs locally
-    import sphinx_rtd_theme
-    html_theme = 'sphinx_rtd_theme'
-    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 # otherwise, readthedocs.org uses their theme by default, so no need to specify it
 
@@ -211,3 +207,11 @@ def setup(app):
                 logger.warning('missing javascript file: %s' % fname)
             app.add_js_file(fname)
     app.connect('builder-inited', add_scripts)
+
+jupyterlite_dir = "."
+jupyterlite_contents = "../examples/"
+jupyterlite_silence = False
+jupyterlite_bind_ipynb_suffix = False
+
+html_theme = "pydata_sphinx_theme"
+htmlhelp_basename = "ipyopenlayersdoc"

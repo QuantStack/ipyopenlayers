@@ -1,11 +1,11 @@
-name: ipyopenlayers_docs
+name: xeus-python-kernel
 channels:
+  - https://repo.mamba.pm/emscripten-forge
   - conda-forge
 dependencies:
-  - python=3.*
-  - nodejs
-  - jupyter_sphinx
-  - sphinx
-  - sphinx_rtd_theme
-  - nbsphinx
-  - nbsphinx-link
+  - python=3.11
+  - xeus-python
+  - ipywidgets
+  - traitlets
+  - pip:
+    - ..
