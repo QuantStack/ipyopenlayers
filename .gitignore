@@ -62,8 +62,6 @@ instance/
 # Sphinx documentation
 docs/_build/
 docs/_static/
-docs/_static/embed-bundle.js
-docs/_static/embed-bundle.js.map
 docs/build
 docs/output
 docs/jupyter_execute
@@ -169,9 +167,5 @@ ipyopenlayers/nbextension
 
 
 .yarn
-.vscode/
-
 #jupyter lite
 .jupyterlite.doit.db
-lite_build_output/dist
-lite_build_output/.jupyterlite.doit.db
