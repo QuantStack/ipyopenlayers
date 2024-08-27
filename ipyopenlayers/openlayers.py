@@ -5,12 +5,8 @@
 # Distributed under the terms of the Modified BSD License.
 
 from ipywidgets import DOMWidget, Widget, widget_serialization, CallbackDispatcher
-
 from traitlets import Unicode, List, Instance, CFloat, Bool, Dict, Int, Float
 from ._frontend import module_name, module_version
-import requests
-import unicodedata
-import configparser
 
 def_loc = [0.0, 0.0]
 
