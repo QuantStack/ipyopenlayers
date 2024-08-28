@@ -9,5 +9,5 @@ Information about the frontend package of the widgets.
 """
 
 module_name = "ipyopenlayers"
-module_version = "^0.1.0"
+module_version = "^0.2.1"
 
