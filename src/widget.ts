@@ -12,6 +12,7 @@ import { BaseOverlayModel, BaseOverlayView } from './baseoverlay';
 import { BaseControlModel, BaseControlView } from './basecontrol';
 import { ViewObjectEventTypes } from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
+import MapBrowserEvent from 'ol/MapBrowserEvent';
 import { Map } from 'ol';
 import View from 'ol/View';
 import 'ol/ol.css';
@@ -122,6 +123,10 @@ export class MapView extends DOMWidgetView {
       ],
     });
 
+    this.map.on('click', (event: MapBrowserEvent<MouseEvent>) => {
+      this.handleMapClick(event);
+    });
+
     this.map.getView().on('change:center', () => {
       this.model.set('center', this.map.getView().getCenter());
       this.model.save_changes();
@@ -142,6 +147,12 @@ export class MapView extends DOMWidgetView {
     this.model.on('change:controls', this.controlChanged, this);
     this.model.on('change:zoom', this.zoomChanged, this);
     this.model.on('change:center', this.centerChanged, this);
+  }
+
+  handleMapClick(event: MapBrowserEvent<MouseEvent>) {
+    const coordinate = event.coordinate;
+    const [lon, lat] = coordinate;
+    this.send({ type: 'click', lon, lat });
   }
   layersChanged() {
     const layers = this.model.get('layers') as LayerModel[];
