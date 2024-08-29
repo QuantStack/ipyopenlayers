@@ -169,3 +169,6 @@ ipyopenlayers/nbextension
 .yarn
 #jupyter lite
 .jupyterlite.doit.db
+
+#Readme
+media

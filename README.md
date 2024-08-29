@@ -3,7 +3,33 @@
 [![Build Status](https://travis-ci.org/QuantStack/ipyopenlayers.svg?branch=master)](https://travis-ci.org/QuantStack/ipyopenlayers)
 [![codecov](https://codecov.io/gh/QuantStack/ipyopenlayers/branch/master/graph/badge.svg)](https://codecov.io/gh/QuantStack/ipyopenlayers)
 
-OpenLayers Jupyter Widget
+A Jupyter / Openlayers bridge enabling interactive maps in the Jupyter notebook.
+
+## Usage
+
+### Adding Raster Tile Layers and Controlling Zoom on the Map
+
+![Zoom Raster](./media/RasterZoom.gif)
+
+This GIF demonstrates how to add Raster Tile layers to the map and control the zoom functionality.
+
+### Adding Vector Tile Layers and Changing Their Style
+
+![Exemple de Vecteur](./media/Vector.gif)
+
+This GIF shows how to add Vector Tile layers to the map and modify their style.
+
+## GeoJSON Layer
+
+![Exemple GeoJson](./media/GeoJson.png)
+
+This image illustrates how to add a GeoJSON layer to the map.
+
+## Example Repository
+
+For a real-world example of how to use `ipyopenlayers`, check out this [electricity dashboard project](https://github.com/Nour-Cheour10/electricitymap_dashboard.git).
+
+This project showcases the integration of `ipyopenlayers` in an electricity dashboard application, demonstrating practical use cases and various features of the library.
 
 ## Installation
 
