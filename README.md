@@ -9,21 +9,22 @@ A Jupyter / Openlayers bridge enabling interactive maps in the Jupyter notebook.
 
 ### Adding Raster Tile Layers and Controlling Zoom on the Map
 
-![Zoom Raster](./media/RasterZoom.gif)
+![Zoom Raster](https://github.com/Nour-Cheour10/Ipy-openlayers/blob/Readme/media/RasterZoom.gif)
 
 This GIF demonstrates how to add Raster Tile layers to the map and control the zoom functionality.
 
 ### Adding Vector Tile Layers and Changing Their Style
 
-![Exemple de Vecteur](./media/Vector.gif)
+![Exemple de Vecteur](https://github.com/Nour-Cheour10/Ipy-openlayers/blob/Readme/media/Vector.gif)
 
 This GIF shows how to add Vector Tile layers to the map and modify their style.
 
-## GeoJSON Layer
+### GeoJSON Layer
 
-![Exemple GeoJson](./media/GeoJson.png)
+![Exemple GeoJson](https://github.com/Nour-Cheour10/Ipy-openlayers/blob/Readme/media/GeoJson.png)
 
 This image illustrates how to add a GeoJSON layer to the map.
+
 
 ## Example Repository
 
