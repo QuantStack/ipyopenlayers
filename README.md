@@ -1,9 +1,36 @@
 # ipyopenlayers
 
-[![Build Status](https://travis-ci.org/QuantStack/ipyopenlayers.svg?branch=master)](https://travis-ci.org/QuantStack/ipyopenlayers)
-[![codecov](https://codecov.io/gh/QuantStack/ipyopenlayers/branch/master/graph/badge.svg)](https://codecov.io/gh/QuantStack/ipyopenlayers)
+[![Documentation](http://readthedocs.org/projects/ipyopenlayers/badge/?version=latest)](https://ipyopenlayers.readthedocs.io/en/latest/?badge=latest)
+[![JupyterLite Badge](https://jupyterlite.rtfd.io/en/latest/_static/badge.svg)](https://ipyopenlayers.readthedocs.io/en/latest/lite/lab/index.html)
 
-OpenLayers Jupyter Widget
+A Jupyter / Openlayers bridge enabling interactive maps in the Jupyter notebook.
+
+## Usage
+
+### Adding Raster Tile Layers and Controlling Zoom on the Map
+
+![Zoom Raster](https://github.com/Nour-Cheour10/Ipy-openlayers/blob/Readme/media/RasterZoom.gif)
+
+This GIF demonstrates how to add Raster Tile layers to the map and control the zoom functionality.
+
+### Adding Vector Tile Layers and Changing Their Style
+
+![Exemple de Vecteur](https://github.com/Nour-Cheour10/Ipy-openlayers/blob/Readme/media/Vector.gif)
+
+This GIF shows how to add Vector Tile layers to the map and modify their style.
+
+### GeoJSON Layer
+
+![Exemple GeoJson](https://github.com/Nour-Cheour10/Ipy-openlayers/blob/Readme/media/GeoJson.png)
+
+This image illustrates how to add a GeoJSON layer to the map.
+
+
+## Example Repository
+
+For a real-world example of how to use `ipyopenlayers`, check out this [electricity dashboard project](https://github.com/Nour-Cheour10/electricitymap_dashboard.git).
+
+This project showcases the integration of `ipyopenlayers` in an electricity dashboard application, demonstrating a use case of the library.
 
 ## Installation
 
@@ -74,6 +101,22 @@ After a change wait for the build to finish and then refresh your browser and th
 #### Python:
 
 If you make a change to the python code then you will need to restart the notebook kernel to have it take effect.
+
+## Documentation
+
+To get started with using `ipyopenlayers`, check out the full documentation
+
+https://ipyopenlayers.readthedocs.io/
+
+## Try it Online
+
+You can try ipyopenlayers below, or open many other live examples in a new browser tab with JupyterLite.
+
+- [JupyterLite](https://ipyopenlayers.readthedocs.io/en/latest/lite/lab/index.html)
+
+[![JupyterLite Badge](https://jupyterlite.rtfd.io/en/latest/_static/badge.svg)](https://ipyopenlayers.readthedocs.io/en/latest/lite/lab/index.html)
+
+
 
 ## Updating the version
 
